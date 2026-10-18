@@ -1,0 +1,20 @@
+
+3. Printing statistics.
+
+=== pwm_led ===
+
+        +----------Local Count, excluding submodules.
+        | 
+      210 wires
+      269 wire bits
+      210 public wires
+      269 public wire bits
+        3 ports
+       10 port bits
+      150 cells
+       52   CCU2C
+        3   L6MUX21
+       48   LUT4
+        6   PFUMX
+       41   TRELLIS_FF
+

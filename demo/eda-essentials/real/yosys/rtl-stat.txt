@@ -1,0 +1,27 @@
+
+7. Printing statistics.
+
+=== pwm_led ===
+
+        +----------Local Count, excluding submodules.
+        | 
+       39 wires
+      167 wire bits
+        7 public wires
+       43 public wire bits
+        3 ports
+       10 port bits
+       44 cells
+       10   $add
+        1   $eq
+        2   $logic_and
+        2   $logic_not
+        8   $lt
+        3   $mux
+        2   $not
+        2   $reduce_and
+        1   $reduce_bool
+       10   $sdff
+        2   $sdffe
+        1   $sub
+

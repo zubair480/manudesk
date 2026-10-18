@@ -1,0 +1,78 @@
+{
+  "cwd": "~/pwm_led",
+  "version": "Icarus Verilog version 14.0 (devel) (s20260301-583-g5d7612759-dirty)",
+  "compile": {
+    "cmd": "iverilog -g2012 -Wall -o sim.vvp rtl/tb_pwm_led.v rtl/pwm_led.v",
+    "log": "real/iverilog.log",
+    "note": "Captured with -Wall (see real/sim/iverilog-capture.log); without -Wall Icarus prints nothing."
+  },
+  "run": {
+    "cmd": "vvp -n sim.vvp"
+  },
+  "iterations": [
+    {
+      "n": 1,
+      "log": "real/vvp-run1-FAIL.log",
+      "tb": "real/tb_pwm_led.run1.v"
+    },
+    {
+      "n": 2,
+      "log": "real/vvp.log",
+      "tb": "real/rtl/tb_pwm_led.v"
+    }
+  ],
+  "tests": [
+    {
+      "id": 1,
+      "name": "duty ramps up"
+    },
+    {
+      "id": 2,
+      "name": "LED0 on-time ≈ duty"
+    },
+    {
+      "id": 3,
+      "name": "direction flips at 255"
+    },
+    {
+      "id": 4,
+      "name": "reset clears led + duty"
+    }
+  ],
+  "artifacts": {
+    "vvp": {
+      "name": "sim.vvp",
+      "bytes": 11415,
+      "lines": 386
+    },
+    "vcd": {
+      "name": "pwm_led.vcd",
+      "bytes": 222521,
+      "timestamps": 8252,
+      "timescale": "1ps"
+    }
+  },
+  "simTimeUs": 165.02,
+  "explain": {
+    "compile": "iverilog elaborates RTL + testbench into <code>sim.vvp</code>. One harmless warning: <code>pwm_led</code> inherits the testbench timescale.",
+    "run": "vvp replays the circuit clock edge by clock edge. The testbench drives <code>clk</code>/<code>rst</code> and checks the hardware at four checkpoints.",
+    "window": "test2 counts the cycles LED0 is on over 256 clocks, while <code>duty</code> keeps ramping.",
+    "fail": "LED0 was on <b>51/256</b>, but the check used <code>duty</code> read <i>after</i> the window (<b>55</b>). The RTL is right; the check is wrong.",
+    "fix": "Snapshot <code>d0 = dut.duty</code> when the window opens; accept <code>d0-2 … duty+2</code>.",
+    "pass": "Same RTL, fixed testbench: <b>4/4 PASS</b>. <code>pwm_led.vcd</code> goes to GTKWave next."
+  },
+  "sync": {
+    "note": "terminal lines are released when circuit playback crosses the trace marker cycle (data/hw-trace.json markers)",
+    "cycles": {
+      "reset": 4,
+      "test1": 643,
+      "test2Window": [
+        643,
+        898
+      ],
+      "test2": 899,
+      "test3": 4123,
+      "test4": 4125
+    }
+  }
+}

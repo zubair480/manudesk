@@ -1,0 +1,1 @@
+yosys -p "read_verilog ../rtl/pwm_led.v; synth_ecp5 -top pwm_led -json pwm_led.json; tee -o stat.txt stat" -l yosys.log

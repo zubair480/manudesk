@@ -1,0 +1,8 @@
+# running in pwm_led_prove/src/
+read_verilog -formal pwm_led_fv.v
+prep -top pwm_led
+
+hierarchy -smtcheck
+rename -witness
+write_jny -no-connections ../model/design.json
+write_rtlil ../model/design.il

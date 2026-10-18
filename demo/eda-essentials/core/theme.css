@@ -1,0 +1,64 @@
+@import url('https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700&family=Geist+Mono:wght@400;500&display=swap');
+
+/* Minimal light theme. One ink color, one accent, generous whitespace, no glows or gradients. */
+:root {
+  --bg: #ffffff;
+  --surface: #fafafa;       /* subtle panel fill */
+  --surface-2: #f4f4f5;     /* code / terminal fill */
+  --line: #ececec;          /* hairline borders */
+  --line-2: #dedede;
+  --ink: #0a0a0a;           /* primary text */
+  --ink-2: #3f3f46;         /* body text */
+  --muted: #71717a;         /* secondary text */
+  --faint: #a1a1aa;         /* tertiary / line numbers */
+  --accent: #2563eb;        /* the single accent */
+  --accent-soft: #eff4ff;
+  --pass: #16a34a; --pass-soft: #f0fdf4;
+  --fail: #dc2626; --fail-soft: #fef2f2;
+  --warn: #b45309; --warn-soft: #fffbeb;
+  --wave: #0a0a0a;          /* waveforms: ink on white */
+  --radius: 10px;
+  --ease: cubic-bezier(.22,.61,.36,1);
+  --ease-out: cubic-bezier(.16,1,.3,1);
+  --sans: 'Geist', 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --mono: 'Geist Mono', 'JetBrains Mono', ui-monospace, Consolas, monospace;
+  --top: 60px;
+  --bottom: 52px;
+  /* legacy aliases so early scene code keeps working */
+  --fg: var(--ink); --panel: var(--surface); --panel-2: var(--surface-2); --cyan: var(--accent); --violet: var(--accent); --blue: var(--accent); --amber: var(--warn); --dim: var(--faint);
+}
+
+* { box-sizing: border-box; }
+html, body { margin: 0; height: 100%; background: var(--bg); color: var(--ink); font-family: var(--sans); font-size: 15px; overflow: hidden; -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility; font-feature-settings: 'ss01', 'cv11'; }
+
+/* ---------- reusable building blocks for scenes ---------- */
+.panel, .glass { background: var(--bg); border: 1px solid var(--line); border-radius: var(--radius); box-shadow: 0 1px 2px rgba(0,0,0,.03), 0 8px 24px -12px rgba(0,0,0,.08); }
+.window { display: flex; flex-direction: column; overflow: hidden; }
+.window > .titlebar { height: 30px; flex: 0 0 30px; display: flex; align-items: center; gap: 8px; padding: 0 10px; border-bottom: 1px solid var(--line); background: var(--surface); font-size: 12.5px; color: var(--muted); }
+.titlebar .dots { display: flex; gap: 6px; }
+.titlebar .dots i { width: 10px; height: 10px; border-radius: 50%; background: #e4e4e7; display: block; }
+.titlebar .title { flex: 1; text-align: center; font-weight: 500; }
+.titlebar .title b { color: var(--ink); font-weight: 600; }
+.mono { font-family: var(--mono); }
+.term { font-family: var(--mono); font-size: 11.5px; line-height: 1.5; padding: 8px 10px; overflow: auto; white-space: pre-wrap; color: var(--ink-2); background: var(--surface-2); }
+.term .prompt { color: var(--faint); } .term .cmd { color: var(--ink); font-weight: 500; } .term .ok { color: var(--pass); } .term .bad { color: var(--fail); } .term .warn { color: var(--warn); } .term .dim { color: var(--faint); }
+.caret::after { content: ''; display: inline-block; width: 7px; height: 1.05em; background: var(--ink); vertical-align: -2px; margin-left: 2px; animation: blink 1.1s steps(1) infinite; }
+@keyframes blink { 50% { opacity: 0; } }
+.badge { display: inline-flex; align-items: center; gap: 6px; padding: 2px 9px; border-radius: 999px; font-size: 12px; font-weight: 500; border: 1px solid var(--line-2); color: var(--ink-2); background: var(--bg); }
+.badge.pass { color: var(--pass); border-color: #bbf7d0; background: var(--pass-soft); }
+.badge.fail { color: var(--fail); border-color: #fecaca; background: var(--fail-soft); }
+.badge.info { color: var(--accent); border-color: #c7d7fe; background: var(--accent-soft); }
+.callout { padding: 14px 16px; border-radius: var(--radius); border: 1px solid var(--line); border-left: 2px solid var(--accent); background: var(--bg); font-size: 14px; line-height: 1.6; color: var(--ink-2); }
+.callout h4 { margin: 0 0 4px; font-size: 12px; font-weight: 600; color: var(--ink); letter-spacing: 0; }
+.eyebrow { font-size: 12px; font-weight: 500; color: var(--muted); letter-spacing: .2px; }
+.kpi { display: flex; flex-direction: column; gap: 2px; }
+.kpi .v { font-size: 32px; font-weight: 600; letter-spacing: -1px; font-variant-numeric: tabular-nums; color: var(--ink); }
+.kpi .l { font-size: 12.5px; color: var(--muted); }
+.fade-in { animation: fadeIn .6s var(--ease-out) both; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+::-webkit-scrollbar { width: 8px; height: 8px; } ::-webkit-scrollbar-thumb { background: #e4e4e7; border-radius: 8px; } ::-webkit-scrollbar-track { background: transparent; }
+
+/* Every app window in the demo (anything with a title bar) floats on a soft, layered shadow */
+.window, .glass, .panel, .vs, #stage .scene :has(> .titlebar) {
+  box-shadow: 0 1px 1px rgba(16,24,40,.04), 0 2px 4px rgba(16,24,40,.04), 0 12px 24px -6px rgba(16,24,40,.10), 0 32px 64px -24px rgba(16,24,40,.22) !important;
+}

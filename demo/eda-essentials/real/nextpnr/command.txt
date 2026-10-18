@@ -1,0 +1,2 @@
+nextpnr-ecp5 --85k --package CABGA381 --json ../yosys/pwm_led.json --lpf pwm_led.lpf --textcfg pwm_led.config --freq 25 --seed 1 --report report.json --write routed.json -l nextpnr.log
+ecppack --compress pwm_led.config pwm_led.bit

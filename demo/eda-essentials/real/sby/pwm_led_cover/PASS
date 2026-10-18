@@ -1,0 +1,12 @@
+Elapsed clock time [H:MM:SS (secs)]: 0:00:02 (2)
+Elapsed process time unvailable on Windows
+engine_0 (smtbmc yices) returned pass
+cover trace: engine_0\trace0.vcd
+cover trace: engine_0\trace0.yw
+  reached cover statement pwm_led.reset_mid_ramp at pwm_led_cover.vh:19.9-19.83 step 7
+cover trace: engine_0\trace1.vcd
+cover trace: engine_0\trace1.yw
+  reached cover statement pwm_led.duty_reaches_4 at pwm_led_cover.vh:12.9-12.44 step 18
+cover trace: engine_0\trace2.vcd
+cover trace: engine_0\trace2.yw
+  reached cover statement pwm_led.first_led_on at pwm_led_cover.vh:14.9-14.38 step 35

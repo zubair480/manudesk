@@ -1,0 +1,14 @@
+$ build_msvc.bat   (cl /std:c++17 /O2 /EHsc /MT: sim_main.cpp + obj_dir/*.cpp + verilated.cpp + verilated_threads.cpp -> obj_dir/Vpwm_led.exe)
+# make is not installed, so the Makefile step of --build is replaced by this MSVC 19.29 (VS 2019 BuildTools) compile
+sim_main.cpp
+Vpwm_led.cpp
+Vpwm_led___024root__0.cpp
+Vpwm_led___024root__Slow.cpp
+Vpwm_led___024root__0__Slow.cpp
+Vpwm_led__Syms__Slow.cpp
+verilated.cpp
+verilated_threads.cpp
+Generating Code...
+cl exit 0
+wall 17.70 s (measured with Stopwatch)
+Vpwm_led.exe 332800 bytes

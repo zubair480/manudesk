@@ -1,0 +1,8 @@
+
+(gtkwave.exe:31928): GLib-GIO-WARNING **: 07:26:38.997: win32 session dbus binary not found
+Exiting early because of --exit request.
+
+GTKWave Analyzer v4.0.0-prealpha (f6d60e0) (w)1999-2022 BSI
+
+[0] start time.
+[165020000] end time.

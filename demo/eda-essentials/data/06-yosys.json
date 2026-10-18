@@ -1,0 +1,806 @@
+{
+ "simulated": false,
+ "command": "yosys -p \"read_verilog ../rtl/pwm_led.v; synth_ecp5 -top pwm_led -json pwm_led.json; tee -o stat.txt stat\" -l yosys.log",
+ "log_lines": 1374,
+ "passes": [
+  {
+   "num": "2",
+   "name": "SYNTH_LATTICE",
+   "desc": "",
+   "line": 15,
+   "sample": []
+  },
+  {
+   "num": "2.3",
+   "name": "HIERARCHY",
+   "desc": "managing design hierarchy",
+   "line": 112,
+   "sample": []
+  },
+  {
+   "num": "2.4",
+   "name": "PROC",
+   "desc": "convert processes to netlists",
+   "line": 121,
+   "sample": []
+  },
+  {
+   "num": "2.5",
+   "name": "CHECK",
+   "desc": "checking for obvious problems",
+   "line": 182,
+   "sample": [
+    "Checking module pwm_led...",
+    "Found and reported 0 problems."
+   ]
+  },
+  {
+   "num": "2.6",
+   "name": "FLATTEN",
+   "desc": "flatten design",
+   "line": 186,
+   "sample": []
+  },
+  {
+   "num": "2.7",
+   "name": "TRIBUF",
+   "desc": "",
+   "line": 188,
+   "sample": []
+  },
+  {
+   "num": "2.8",
+   "name": "DEMINOUT",
+   "desc": "demote inout ports to input or output",
+   "line": 190,
+   "sample": []
+  },
+  {
+   "num": "2.9",
+   "name": "OPT_EXPR",
+   "desc": "perform const folding",
+   "line": 192,
+   "sample": [
+    "Optimizing module pwm_led."
+   ]
+  },
+  {
+   "num": "2.10",
+   "name": "CHECK",
+   "desc": "checking for obvious problems",
+   "line": 195,
+   "sample": [
+    "Checking module pwm_led...",
+    "Found and reported 0 problems."
+   ]
+  },
+  {
+   "num": "2.11",
+   "name": "OPT_CLEAN",
+   "desc": "remove unused cells and wires",
+   "line": 199,
+   "sample": [
+    "Finding unused cells or wires in module \\pwm_led..",
+    "Removed 0 unused cells and 30 unused wires.",
+    "<suppressed ~1 debug messages>"
+   ]
+  },
+  {
+   "num": "2.12",
+   "name": "OPT",
+   "desc": "performing simple optimizations",
+   "line": 204,
+   "sample": []
+  },
+  {
+   "num": "2.13",
+   "name": "FSM",
+   "desc": "extract and optimize FSM",
+   "line": 243,
+   "sample": []
+  },
+  {
+   "num": "2.14",
+   "name": "OPT",
+   "desc": "performing simple optimizations",
+   "line": 262,
+   "sample": []
+  },
+  {
+   "num": "2.15",
+   "name": "WREDUCE",
+   "desc": "reducing word size of cells",
+   "line": 372,
+   "sample": [
+    "Removed top 7 bits (of 8) from port B of cell pwm_led.$../rtl/pwm_led.v:22$add$2 ($add).",
+    "Removed top 7 bits (of 8) from port B of cell pwm_led.$../rtl/pwm_led.v:27$add$10 ($add).",
+    "Removed top 7 bits (of 8) from port B of cell pwm_led.$../rtl/pwm_led.v:27$sub$11 ($sub).",
+    "Removed top 2 bits (of 8) from port B of cell pwm_led.$../rtl/pwm_led.v:31$add$14 ($add)."
+   ]
+  },
+  {
+   "num": "2.16",
+   "name": "PEEPOPT",
+   "desc": "run peephole optimizers",
+   "line": 380,
+   "sample": []
+  },
+  {
+   "num": "2.17",
+   "name": "OPT_CLEAN",
+   "desc": "remove unused cells and wires",
+   "line": 382,
+   "sample": [
+    "Finding unused cells or wires in module \\pwm_led.."
+   ]
+  },
+  {
+   "num": "2.18",
+   "name": "SHARE",
+   "desc": "SAT-based resource sharing",
+   "line": 385,
+   "sample": []
+  },
+  {
+   "num": "2.19",
+   "name": "TECHMAP",
+   "desc": "map to technology primitives",
+   "line": 387,
+   "sample": []
+  },
+  {
+   "num": "2.20",
+   "name": "OPT_EXPR",
+   "desc": "perform const folding",
+   "line": 398,
+   "sample": [
+    "Optimizing module pwm_led."
+   ]
+  },
+  {
+   "num": "2.21",
+   "name": "OPT_CLEAN",
+   "desc": "remove unused cells and wires",
+   "line": 401,
+   "sample": [
+    "Finding unused cells or wires in module \\pwm_led.."
+   ]
+  },
+  {
+   "num": "2.22",
+   "name": "TECHMAP",
+   "desc": "map to technology primitives",
+   "line": 404,
+   "sample": []
+  },
+  {
+   "num": "2.23",
+   "name": "TECHMAP",
+   "desc": "map to technology primitives",
+   "line": 416,
+   "sample": []
+  },
+  {
+   "num": "2.24",
+   "name": "ALUMACC",
+   "desc": "create $alu and $macc cells",
+   "line": 427,
+   "sample": [
+    "Extracting $alu and $macc cells in module pwm_led:",
+    "creating $macc model for $../rtl/pwm_led.v:37$add$26 ($add).",
+    "creating $macc model for $../rtl/pwm_led.v:36$add$24 ($add).",
+    "creating $macc model for $../rtl/pwm_led.v:35$add$22 ($add)."
+   ]
+  },
+  {
+   "num": "2.25",
+   "name": "OPT",
+   "desc": "performing simple optimizations",
+   "line": 480,
+   "sample": []
+  },
+  {
+   "num": "2.26",
+   "name": "MEMORY",
+   "desc": "",
+   "line": 549,
+   "sample": []
+  },
+  {
+   "num": "2.27",
+   "name": "OPT_CLEAN",
+   "desc": "remove unused cells and wires",
+   "line": 576,
+   "sample": [
+    "Finding unused cells or wires in module \\pwm_led.."
+   ]
+  },
+  {
+   "num": "2.28",
+   "name": "MEMORY_LIBMAP",
+   "desc": "mapping memories to cells",
+   "line": 579,
+   "sample": []
+  },
+  {
+   "num": "2.29",
+   "name": "TECHMAP",
+   "desc": "map to technology primitives",
+   "line": 581,
+   "sample": []
+  },
+  {
+   "num": "2.30",
+   "name": "OPT",
+   "desc": "performing simple optimizations",
+   "line": 598,
+   "sample": []
+  },
+  {
+   "num": "2.31",
+   "name": "MEMORY_MAP",
+   "desc": "converting memories to logic and flip-flops",
+   "line": 619,
+   "sample": []
+  },
+  {
+   "num": "2.32",
+   "name": "OPT",
+   "desc": "performing simple optimizations",
+   "line": 621,
+   "sample": []
+  },
+  {
+   "num": "2.33",
+   "name": "TECHMAP",
+   "desc": "map to technology primitives",
+   "line": 660,
+   "sample": []
+  },
+  {
+   "num": "2.34",
+   "name": "OPT",
+   "desc": "performing simple optimizations",
+   "line": 730,
+   "sample": []
+  },
+  {
+   "num": "2.35",
+   "name": "OPT_CLEAN",
+   "desc": "remove unused cells and wires",
+   "line": 760,
+   "sample": [
+    "Finding unused cells or wires in module \\pwm_led.."
+   ]
+  },
+  {
+   "num": "2.36",
+   "name": "DFFLEGALIZE",
+   "desc": "convert FFs and LATCHes to types supported by the target",
+   "line": 763,
+   "sample": []
+  },
+  {
+   "num": "2.37",
+   "name": "OPT_MERGE",
+   "desc": "detect identical cells",
+   "line": 765,
+   "sample": [
+    "Finding identical cells in module `\\pwm_led'.",
+    "Computing hashes of 171 cells of `\\pwm_led'.",
+    "Finding duplicate cells in `\\pwm_led'.",
+    "Removed a total of 0 cells."
+   ]
+  },
+  {
+   "num": "2.38",
+   "name": "TECHMAP",
+   "desc": "map to technology primitives",
+   "line": 771,
+   "sample": []
+  },
+  {
+   "num": "2.39",
+   "name": "OPT_EXPR",
+   "desc": "perform const folding",
+   "line": 853,
+   "sample": [
+    "Optimizing module pwm_led."
+   ]
+  },
+  {
+   "num": "2.40",
+   "name": "SIMPLEMAP",
+   "desc": "map simple cells to gate primitives",
+   "line": 856,
+   "sample": []
+  },
+  {
+   "num": "2.41",
+   "name": "LATTICE_GSR",
+   "desc": "implement FF init values",
+   "line": 858,
+   "sample": [
+    "Handling GSR in pwm_led."
+   ]
+  },
+  {
+   "num": "2.42",
+   "name": "ATTRMVCP",
+   "desc": "move or copy attributes",
+   "line": 861,
+   "sample": []
+  },
+  {
+   "num": "2.43",
+   "name": "OPT_CLEAN",
+   "desc": "remove unused cells and wires",
+   "line": 863,
+   "sample": [
+    "Finding unused cells or wires in module \\pwm_led..",
+    "Removed 0 unused cells and 214 unused wires.",
+    "<suppressed ~1 debug messages>"
+   ]
+  },
+  {
+   "num": "2.44",
+   "name": "CHECK",
+   "desc": "checking for obvious problems",
+   "line": 868,
+   "sample": [
+    "Checking module pwm_led...",
+    "Found and reported 0 problems."
+   ]
+  },
+  {
+   "num": "2.45",
+   "name": "TECHMAP",
+   "desc": "map to technology primitives",
+   "line": 872,
+   "sample": []
+  },
+  {
+   "num": "2.46",
+   "name": "ABC9",
+   "desc": "",
+   "line": 884,
+   "sample": []
+  },
+  {
+   "num": "2.47",
+   "name": "TECHMAP",
+   "desc": "map to technology primitives",
+   "line": 1183,
+   "sample": []
+  },
+  {
+   "num": "2.48",
+   "name": "OPT_LUT_INS",
+   "desc": "discard unused LUT inputs",
+   "line": 1278,
+   "sample": [
+    "Optimizing LUTs in pwm_led.",
+    "Optimizing lut $abc$4833$lut$aiger4832$219.genblk1.genblk1.genblk1.genblk1.genblk1.genblk1.genblk1.lut1 (4 -> ",
+    "Optimizing lut $abc$4833$lut$aiger4832$219.genblk1.genblk1.genblk1.genblk1.genblk1.genblk1.genblk1.lut3 (4 -> ",
+    "Optimizing lut $abc$4833$lut$aiger4832$219.genblk1.genblk1.genblk1.genblk1.genblk1.genblk1.genblk1.lut4 (4 -> "
+   ]
+  },
+  {
+   "num": "2.49",
+   "name": "AUTONAME",
+   "desc": "",
+   "line": 1288,
+   "sample": [
+    "Renamed 353 objects in module pwm_led.",
+    "<suppressed ~353 debug messages>"
+   ]
+  },
+  {
+   "num": "2.50",
+   "name": "HIERARCHY",
+   "desc": "managing design hierarchy",
+   "line": 1292,
+   "sample": [
+    "Attribute `top' found on module `pwm_led'. Setting top module to pwm_led."
+   ]
+  },
+  {
+   "num": "2.52",
+   "name": "CHECK",
+   "desc": "checking for obvious problems",
+   "line": 1346,
+   "sample": [
+    "Checking module pwm_led...",
+    "Found and reported 0 problems."
+   ]
+  }
+ ],
+ "rtl_stat": {
+  "cells": 44,
+  "types": {
+   "$add": 10,
+   "$eq": 1,
+   "$logic_and": 2,
+   "$logic_not": 2,
+   "$lt": 8,
+   "$mux": 3,
+   "$not": 2,
+   "$reduce_and": 2,
+   "$reduce_bool": 1,
+   "$sdff": 10,
+   "$sdffe": 2,
+   "$sub": 1
+  },
+  "wires": 39,
+  "wire_bits": 167,
+  "raw": "7. Printing statistics.\n\n=== pwm_led ===\n\n        +----------Local Count, excluding submodules.\n        | \n       39 wires\n      167 wire bits\n        7 public wires\n       43 public wire bits\n        3 ports\n       10 port bits\n       44 cells\n       10   $add\n        1   $eq\n        2   $logic_and\n        2   $logic_not\n        8   $lt\n        3   $mux\n        2   $not\n        2   $reduce_and\n        1   $reduce_bool\n       10   $sdff\n        2   $sdffe\n        1   $sub"
+ },
+ "ecp5_stat": {
+  "cells": 150,
+  "types": {
+   "CCU2C": 52,
+   "L6MUX21": 3,
+   "LUT4": 48,
+   "PFUMX": 6,
+   "TRELLIS_FF": 41
+  },
+  "wires": 210,
+  "wire_bits": 269,
+  "raw": "3. Printing statistics.\n\n=== pwm_led ===\n\n        +----------Local Count, excluding submodules.\n        | \n      210 wires\n      269 wire bits\n      210 public wires\n      269 public wire bits\n        3 ports\n       10 port bits\n      150 cells\n       52   CCU2C\n        3   L6MUX21\n       48   LUT4\n        6   PFUMX\n       41   TRELLIS_FF"
+ },
+ "blocks": [
+  {
+   "id": "pwm",
+   "label": "PWM carrier",
+   "rtl": "pwm_cnt <= pwm_cnt + 1",
+   "lines": [
+    22
+   ],
+   "rtl_cells": [
+    {
+     "t": "$add",
+     "w": 8,
+     "line": 22
+    },
+    {
+     "t": "$sdff",
+     "w": 8,
+     "line": 14
+    }
+   ],
+   "ecp5": {
+    "TRELLIS_FF": 8,
+    "LUT4": 1,
+    "CCU2C": 4
+   }
+  },
+  {
+   "id": "pre",
+   "label": "Prescaler",
+   "rtl": "pre <= pre + 1",
+   "lines": [
+    23
+   ],
+   "rtl_cells": [
+    {
+     "t": "$add",
+     "w": 16,
+     "line": 23
+    },
+    {
+     "t": "$sdff",
+     "w": 16,
+     "line": 14
+    }
+   ],
+   "ecp5": {
+    "TRELLIS_FF": 16,
+    "CCU2C": 8,
+    "LUT4": 1
+   }
+  },
+  {
+   "id": "fsm",
+   "label": "Breath control",
+   "rtl": "duty \u00b1 1, dir flips at 0/255",
+   "lines": [
+    25,
+    26,
+    27
+   ],
+   "rtl_cells": [
+    {
+     "t": "$eq",
+     "w": 8,
+     "line": 25
+    },
+    {
+     "t": "$logic_and",
+     "w": 1,
+     "line": 25
+    },
+    {
+     "t": "$logic_not",
+     "w": 8,
+     "line": 26
+    },
+    {
+     "t": "$logic_and",
+     "w": 1,
+     "line": 26
+    },
+    {
+     "t": "$logic_not",
+     "w": 1,
+     "line": 26
+    },
+    {
+     "t": "$add",
+     "w": 8,
+     "line": 27
+    },
+    {
+     "t": "$sub",
+     "w": 8,
+     "line": 27
+    },
+    {
+     "t": "$mux",
+     "w": 8,
+     "line": 27
+    },
+    {
+     "t": "$sdffe",
+     "w": 1,
+     "line": 14
+    },
+    {
+     "t": "$sdffe",
+     "w": 8,
+     "line": 14
+    },
+    {
+     "t": "$reduce_bool",
+     "w": 2,
+     "line": null
+    },
+    {
+     "t": "$reduce_and",
+     "w": 18,
+     "line": null
+    },
+    {
+     "t": "$reduce_and",
+     "w": 17,
+     "line": null
+    },
+    {
+     "t": "$not",
+     "w": 1,
+     "line": null
+    },
+    {
+     "t": "$not",
+     "w": 1,
+     "line": null
+    },
+    {
+     "t": "$mux",
+     "w": 1,
+     "line": 26
+    },
+    {
+     "t": "$mux",
+     "w": 1,
+     "line": 25
+    }
+   ],
+   "ecp5": {
+    "LUT4": 27,
+    "PFUMX": 6,
+    "L6MUX21": 3,
+    "TRELLIS_FF": 9,
+    "CCU2C": 8
+   }
+  },
+  {
+   "id": "led",
+   "label": "8\u00d7 phase compare",
+   "rtl": "led[i] <= (pwm_cnt + 32\u00b7i) < duty",
+   "lines": [
+    30,
+    31,
+    32,
+    33,
+    34,
+    35,
+    36,
+    37
+   ],
+   "rtl_cells": [
+    {
+     "t": "$lt",
+     "w": 8,
+     "line": 30
+    },
+    {
+     "t": "$add",
+     "w": 8,
+     "line": 31
+    },
+    {
+     "t": "$lt",
+     "w": 8,
+     "line": 31
+    },
+    {
+     "t": "$add",
+     "w": 8,
+     "line": 32
+    },
+    {
+     "t": "$lt",
+     "w": 8,
+     "line": 32
+    },
+    {
+     "t": "$add",
+     "w": 8,
+     "line": 33
+    },
+    {
+     "t": "$lt",
+     "w": 8,
+     "line": 33
+    },
+    {
+     "t": "$add",
+     "w": 8,
+     "line": 34
+    },
+    {
+     "t": "$lt",
+     "w": 8,
+     "line": 34
+    },
+    {
+     "t": "$add",
+     "w": 8,
+     "line": 35
+    },
+    {
+     "t": "$lt",
+     "w": 8,
+     "line": 35
+    },
+    {
+     "t": "$add",
+     "w": 8,
+     "line": 36
+    },
+    {
+     "t": "$lt",
+     "w": 8,
+     "line": 36
+    },
+    {
+     "t": "$add",
+     "w": 8,
+     "line": 37
+    },
+    {
+     "t": "$lt",
+     "w": 8,
+     "line": 37
+    },
+    {
+     "t": "$sdff",
+     "w": 1,
+     "line": 14
+    },
+    {
+     "t": "$sdff",
+     "w": 1,
+     "line": 14
+    },
+    {
+     "t": "$sdff",
+     "w": 1,
+     "line": 14
+    },
+    {
+     "t": "$sdff",
+     "w": 1,
+     "line": 14
+    },
+    {
+     "t": "$sdff",
+     "w": 1,
+     "line": 14
+    },
+    {
+     "t": "$sdff",
+     "w": 1,
+     "line": 14
+    },
+    {
+     "t": "$sdff",
+     "w": 1,
+     "line": 14
+    },
+    {
+     "t": "$sdff",
+     "w": 1,
+     "line": 14
+    }
+   ],
+   "ecp5": {
+    "TRELLIS_FF": 8,
+    "LUT4": 19,
+    "CCU2C": 32
+   }
+  }
+ ],
+ "edges": [
+  {
+   "from": "pre",
+   "to": "fsm",
+   "bits": 16
+  },
+  {
+   "from": "fsm",
+   "to": "led",
+   "bits": 8
+  },
+  {
+   "from": "pwm",
+   "to": "led",
+   "bits": 8
+  },
+  {
+   "from": "led",
+   "to": "out:led",
+   "bits": 8
+  },
+  {
+   "from": "in:clk",
+   "to": "pre",
+   "bits": 1
+  },
+  {
+   "from": "in:clk",
+   "to": "led",
+   "bits": 1
+  },
+  {
+   "from": "in:clk",
+   "to": "fsm",
+   "bits": 1
+  },
+  {
+   "from": "in:clk",
+   "to": "pwm",
+   "bits": 1
+  },
+  {
+   "from": "in:rst",
+   "to": "pre",
+   "bits": 1
+  },
+  {
+   "from": "in:rst",
+   "to": "led",
+   "bits": 1
+  },
+  {
+   "from": "in:rst",
+   "to": "fsm",
+   "bits": 1
+  },
+  {
+   "from": "in:rst",
+   "to": "pwm",
+   "bits": 1
+  }
+ ]
+}

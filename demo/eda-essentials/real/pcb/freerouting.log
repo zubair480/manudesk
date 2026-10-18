@@ -1,0 +1,26 @@
+2026-10-18 07:27:00.246 INFO   Freerouting v2.4.1 (build-date: 2026-09-03)
+2026-10-18 07:27:01.944 INFO   [8ADFED\B4CB1D] Loading board file 'board.dsn'...
+2026-10-18 07:27:02.061 INFO   [8ADFED\B4CB1D] Job '8ADFED\B4CB1D' started at 2026-10-18T14:27:02.061075300Z.
+2026-10-18 07:27:02.196 INFO   [8ADFED\B4CB1D] Fanout stage started on board '5c3ebffa19a726c83ec979042e2d06d9' with 76 of 117 SMD pins needing fanout (0 already connected, 41 netless).
+2026-10-18 07:27:02.355 INFO   New version available: v2.5.0
+2026-10-18 07:27:05.257 INFO   [8ADFED\B4CB1D] Fanout pass #1 on board 'de2945df20fb4893a04e64919cc092f2' completed in 3.00 seconds with 71 SMD pins fanouted, 0 not routed, 0 insert errors, +31 extra vias (0 SMD pins still to check in pass, ripup costs=100).
+2026-10-18 07:27:06.208 INFO   [8ADFED\B4CB1D] Fanout pass #2 on board 'dd5b4d21d384ffc4eb0515ce4ace822f' completed in 0.91 seconds with 13 SMD pins fanouted, 0 not routed, 0 insert errors, +2 extra vias (0 SMD pins still to check in pass, ripup costs=200).
+2026-10-18 07:27:06.603 INFO   [8ADFED\B4CB1D] Fanout pass #3 on board '6fc5b6740aa84da26d8f68031eab5d2e' completed in 0.37 seconds with 4 SMD pins fanouted, 0 not routed, 0 insert errors, +4 extra vias (0 SMD pins still to check in pass, ripup costs=300).
+2026-10-18 07:27:06.749 INFO   [8ADFED\B4CB1D] Fanout pass #4 on board '6fc5b6740aa84da26d8f68031eab5d2e' completed in 0.13 seconds with 0 SMD pins fanouted, 0 not routed, 0 insert errors, +0 extra vias (0 SMD pins still to check in pass, ripup costs=400).
+2026-10-18 07:27:06.840 INFO   [8ADFED\B4CB1D] Fanout stage completed: started with 76 total SMD pins, completed in 4.63 seconds, escaped pins: 76/76 (100.0%), using 3.55 total CPU seconds, 4.55 GB total allocated, and 246.0 MB peak heap usage.
+2026-10-18 07:27:06.855 INFO   [8ADFED\B4CB1D] Auto-routing stage started on board '6fc5b6740aa84da26d8f68031eab5d2e' for 24 unrouted items.
+2026-10-18 07:27:09.861 INFO   [8ADFED\B4CB1D] Auto-routing pass #1 on board '6fc5b6740aa84da26d8f68031eab5d2e' was completed in 2.85 seconds with score 965.51 (2 unrouted and 0 violations), using 5.66 CPU seconds and the job allocated 9.58 GB of memory so far.
+2026-10-18 07:27:10.815 INFO   [8ADFED\B4CB1D] Auto-routing pass #2 on board '658a4d305d4117ea94dc0dede5e232bb' was completed in 0.85 seconds with score 965.51 (2 unrouted and 0 violations), using 6.66 CPU seconds and the job allocated 13.13 GB of memory so far.
+2026-10-18 07:27:11.137 INFO   [8ADFED\B4CB1D] Auto-routing pass #3 on board 'c5a53083d332933feec11bdbf5563a50' was completed in 0.23 seconds with score 999.99 (0 unrouted and 0 violations), using 7.58 CPU seconds and the job allocated 15.81 GB of memory so far.
+2026-10-18 07:27:11.311 INFO   [8ADFED\B4CB1D] Auto-routing pass #4 on board '4f8b5b0fe4ddea41a998732fff353fad' was completed in 0.04 seconds with score 999.99 (0 unrouted and 0 violations), using 7.58 CPU seconds and the job allocated 15.81 GB of memory so far.
+2026-10-18 07:27:11.414 INFO   [8ADFED\B4CB1D] Auto-routing stage completed: started with 58 unrouted nets, completed in 9.25 seconds, final score: 999.99 (0 unrouted and 0 violations), using 7.58 total CPU seconds, 15.81 GB total allocated, and 395.3 MB peak heap usage.
+2026-10-18 07:27:11.447 INFO   [8ADFED\B4CB1D] Optimization stage started on board 'fd3df52970bfa51c13d78dfaf5d625b0' with score 999.99 (0 unrouted and 0 violations).
+2026-10-18 07:27:11.475 INFO   [8ADFED\B4CB1D] Stopping optimizer because the current board score (999.99) is already close to the maximum score (1000). Remaining potential improvement is less than the threshold (1.00%).
+2026-10-18 07:27:11.500 INFO   [8ADFED\B4CB1D] Optimization stage completed: started with score 999.99 (0 unrouted and 0 violations), completed in 0.03 seconds, final score: 999.99 (0 unrouted and 0 violations), using 0.03 total CPU seconds, 0.18 GB total allocated, and 211.0 MB peak heap usage.
+2026-10-18 07:27:11.507 INFO   [8ADFED\B4CB1D] Job '8ADFED\B4CB1D' finished with state: COMPLETED (elapsed: 9.44 seconds, finished at UTC: 2026-10-18T14:27:11.505923600Z).
+2026-10-18 07:27:11.740 INFO   Saving output file 'C:\Users\zubai\yc 2.0 hackathon\demo\eda-walkthrough\real\pcb\board.ses' (SES)...
+2026-10-18 07:27:11.744 INFO   Successfully saved output file 'C:\Users\zubai\yc 2.0 hackathon\demo\eda-walkthrough\real\pcb\board.ses' (20126 bytes).
+
+real	0m13.131s
+user	0m0.030s
+sys	0m0.000s

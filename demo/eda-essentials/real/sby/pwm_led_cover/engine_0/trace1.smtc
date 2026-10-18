@@ -1,0 +1,94 @@
+initial
+assume (= [$auto$async2sync.cc:107:execute$185] false)
+assume (= [$auto$async2sync.cc:107:execute$191] false)
+assume (= [$auto$async2sync.cc:116:execute$183] true)
+assume (= [$auto$async2sync.cc:116:execute$189] true)
+assume (= [$auto$async2sync.cc:116:execute$195] true)
+assume (= [_witness_.anyinit_procdff_167] false)
+assume (= [_witness_.anyinit_procdff_168] false)
+assume (= [_witness_.anyinit_procdff_169] false)
+assume (= [_witness_.anyinit_procdff_170] false)
+assume (= [_witness_.anyinit_procdff_171] #b00000000)
+assume (= [_witness_.anyinit_procdff_172] false)
+assume (= [dir] false)
+assume (= [duty] #b00000000)
+assume (= [led] #b00000000)
+assume (= [past_valid] false)
+assume (= [pre] #b00)
+assume (= [pwm_cnt] #b00000000)
+
+state 0
+assume (= [clk] false)
+assume (= [rst] true)
+
+state 1
+assume (= [clk] false)
+assume (= [rst] false)
+
+state 2
+assume (= [clk] false)
+assume (= [rst] false)
+
+state 3
+assume (= [clk] false)
+assume (= [rst] false)
+
+state 4
+assume (= [clk] false)
+assume (= [rst] false)
+
+state 5
+assume (= [clk] false)
+assume (= [rst] false)
+
+state 6
+assume (= [clk] false)
+assume (= [rst] false)
+
+state 7
+assume (= [clk] false)
+assume (= [rst] false)
+
+state 8
+assume (= [clk] false)
+assume (= [rst] false)
+
+state 9
+assume (= [clk] false)
+assume (= [rst] false)
+
+state 10
+assume (= [clk] false)
+assume (= [rst] false)
+
+state 11
+assume (= [clk] false)
+assume (= [rst] false)
+
+state 12
+assume (= [clk] false)
+assume (= [rst] false)
+
+state 13
+assume (= [clk] false)
+assume (= [rst] false)
+
+state 14
+assume (= [clk] false)
+assume (= [rst] false)
+
+state 15
+assume (= [clk] false)
+assume (= [rst] false)
+
+state 16
+assume (= [clk] false)
+assume (= [rst] false)
+
+state 17
+assume (= [clk] false)
+assume (= [rst] false)
+
+state 18
+assume (= [clk] false)
+assume (= [rst] false)

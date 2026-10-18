@@ -1,0 +1,59 @@
+/* Session G (UX) owns this file: story strip, chapter card, next-up teaser (see core/story.js). */
+
+/* ---- footer: step chip + story-so-far rail ---- */
+.st-chip { flex: 0 0 auto; display: inline-flex; align-items: baseline; gap: 6px; padding: 4px 10px 4px 4px; border-radius: 7px; background: color-mix(in srgb, var(--c) 9%, #fff); border: 1px solid color-mix(in srgb, var(--c) 22%, #fff); font-size: 12px; font-weight: 500; color: var(--c); white-space: nowrap; }
+.st-chip b { font-family: var(--mono); font-weight: 600; font-size: 11.5px; color: #fff; background: var(--c); border-radius: 5px; padding: 1px 6px; }
+.st-chip i { font-style: normal; font-family: var(--mono); font-size: 11px; color: color-mix(in srgb, var(--c) 60%, #fff); margin-left: -4px; }
+.st-chip[hidden] { display: none; }
+
+.st-rail { flex: 0 1 auto; min-width: 0; display: flex; align-items: center; gap: 6px; overflow: hidden; }
+.st-done { display: inline-flex; align-items: center; gap: 6px; padding: 3px 9px; border-radius: 999px; border: 1px solid var(--line-2); background: var(--bg); font-size: 11.5px; font-weight: 500; color: var(--ink-2); white-space: nowrap; font-variant-numeric: tabular-nums; }
+.st-done i { width: 6px; height: 6px; border-radius: 50%; background: var(--c); flex: 0 0 auto; }
+.st-done em { font-style: normal; color: var(--muted); font-weight: 400; }
+.st-done.fresh { animation: st-pop .9s var(--ease-out) both; }
+@keyframes st-pop {
+  0% { opacity: 0; transform: translateY(8px); border-color: var(--c); background: color-mix(in srgb, var(--c) 14%, #fff); }
+  45% { opacity: 1; transform: none; border-color: var(--c); background: color-mix(in srgb, var(--c) 14%, #fff); }
+  100% { border-color: var(--line-2); background: var(--bg); }
+}
+.st-more { font-family: var(--mono); font-size: 11px; color: var(--faint); }
+@media (max-width: 1280px) { .st-done em { display: none; } }
+@media (max-width: 1100px) { .st-rail .st-done:nth-last-child(n+3) { display: none; } }
+@media (max-width: 900px) { .st-rail { display: none; } }
+
+/* ---- chapter card (scene start) ---- */
+/* A floating banner, not a veil: the hardware view starts drawing underneath and stays visible (no dead start). */
+.st-card { position: fixed; top: calc(var(--top) + 14px); left: 50%; z-index: 15; transform: translateX(-50%); pointer-events: none; opacity: 0; visibility: hidden; transition: opacity .45s var(--ease-out), visibility .45s; }
+.st-card.on { opacity: 1; visibility: visible; transition-duration: .2s; }
+.st-card.out { opacity: 0; visibility: hidden; }
+.st-card-in { text-align: center; padding: 14px 28px 12px; min-width: 420px; max-width: 680px; background: rgba(255,255,255,.97); border: 1px solid var(--line); border-top: 3px solid var(--c); border-radius: 12px; box-shadow: 0 1px 2px rgba(16,24,40,.06), 0 18px 40px -16px rgba(16,24,40,.32); }
+.st-card.on .st-card-in { animation: st-rise .55s var(--ease-out) both; }
+.st-card.out .st-card-in { transform: translateY(-8px) scale(.985); transition: transform .45s var(--ease-out); }
+@keyframes st-rise { from { opacity: 0; transform: translateY(12px) scale(.985); } to { opacity: 1; transform: none; } }
+.st-eyebrow { font-family: var(--mono); font-size: 12px; font-weight: 500; letter-spacing: .02em; color: var(--c); text-transform: uppercase; }
+.st-tool { margin-top: 3px; font-size: 28px; font-weight: 600; letter-spacing: -.9px; line-height: 1.05; color: var(--ink); }
+.st-q { margin-top: 5px; font-size: 17px; font-weight: 500; letter-spacing: -.4px; line-height: 1.35; color: var(--ink-2); }
+.st-card.on .st-q { animation: st-rise .6s .12s var(--ease-out) both; }
+.st-prev { display: inline-flex; align-items: center; gap: 7px; margin-top: 9px; padding: 5px 12px; border-radius: 999px; background: var(--pass-soft, #f0fdf4); color: var(--pass, #16a34a); font-size: 13px; font-weight: 500; font-variant-numeric: tabular-nums; }
+.st-card.on .st-prev { animation: st-rise .6s .22s var(--ease-out) both; }
+.st-prev span { font-weight: 600; }
+.st-dots { display: flex; justify-content: center; gap: 5px; margin-top: 10px; }
+.st-dots i { width: 22px; height: 4px; border-radius: 3px; background: var(--line-2); }
+.st-dots i.d { background: var(--c); opacity: .55; }
+.st-dots i.a { background: var(--c); opacity: 1; width: 34px; }
+
+/* ---- next-up teaser (scene end, during the shell's auto-advance pause) ---- */
+.st-teaser { position: fixed; right: 18px; bottom: calc(var(--bottom) + 14px); z-index: 16; display: flex; flex-direction: column; align-items: flex-end; gap: 8px; pointer-events: none; opacity: 0; transform: translateY(10px); transition: opacity .35s var(--ease-out), transform .45s var(--ease-out); }
+.st-teaser.on { opacity: 1; transform: none; }
+.st-got { display: inline-flex; align-items: center; gap: 7px; padding: 6px 12px; border-radius: 999px; background: #fff; border: 1px solid color-mix(in srgb, var(--c) 35%, #fff); color: var(--c); font-size: 13px; font-weight: 600; font-variant-numeric: tabular-nums; box-shadow: 0 8px 24px -12px rgba(16,24,40,.25); }
+.st-next { width: 340px; padding: 12px 14px 12px; background: #fff; border: 1px solid var(--line); border-left: 3px solid var(--c); border-radius: 10px; box-shadow: 0 1px 2px rgba(16,24,40,.06), 0 14px 32px -14px rgba(16,24,40,.3); }
+.st-next .st-eyebrow { font-size: 11px; }
+.st-next .st-q { margin-top: 4px; font-size: 15px; font-weight: 500; letter-spacing: -.2px; color: var(--ink); }
+.st-bar { margin-top: 10px; height: 3px; border-radius: 3px; background: var(--line); overflow: hidden; }
+.st-bar i { display: block; height: 100%; width: 100%; background: var(--c); transform-origin: 0 50%; transform: scaleX(0); }
+.st-teaser.on .st-bar i { animation: st-count var(--dur, 1700ms) linear forwards; }
+@keyframes st-count { to { transform: scaleX(1); } }
+
+@media (prefers-reduced-motion: reduce) {
+  .st-card, .st-card-in, .st-teaser, .st-done.fresh, .st-q, .st-prev { animation: none !important; transition: none !important; }
+}
