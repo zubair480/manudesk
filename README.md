@@ -10,37 +10,35 @@ AI agents are the customer, not humans. Every tool output is compact and cheap i
 
 ## Tools
 
+Exactly four MCP tools:
+
 | Tool | Returns |
 |---|---|
-| `list_designs()` | Each design with its target and baseline MHz, latency budget and resource budget |
-| `get_design(name)` | The starting Verilog and the rules `check` enforces |
-| `check(name, verilog)` | `pass`, `stage`, `fix[]`, `mhz`, `x` (speedup), `lat`, `path` (slowest path), `use` (LUT/FF/DSP) |
+| `list_designs()` | Each design: name, description, top module, `baseline_mhz`, `latency_budget`, `resource_budget` |
+| `get_design(name)` | The naive starting Verilog, budgets, `goal`, `rules[]` and `device` |
+| `dsp_helper()` | Verilog source of `mul18x18_reg`, a fully registered 18x18 multiply that maps to one MULT18X18D |
+| `check(name, verilog)` | `{accepted, stage_reached, reasons[{what, fix}], fmax_mhz, baseline_mhz, vs_baseline, latency, critical_path, resources, budgets, seconds}` |
 
-A real `check` reply (about 270 characters):
-
-```json
-{"pass":true,"stage":"ok","fix":["correct; 74.4 MHz is below target 138: shorten the slowest path"],
- "mhz":74.4,"target":138,"base":74.4,"x":1.0,"lat":2,
- "path":"a_r->acc_r 13.43ns (48 logic hops, logic 7.35 route 5.56) carryx48 @L11,L19",
- "use":{"LUT":265,"FF":128,"DSP":4}}
-```
-
-`path` names the start and end registers, the delay split, the dominant cell type, and the source lines
-(`L11`) on the path, so the agent knows exactly what to pipeline next.
+`critical_path` is one readable line built from nextpnr's report.json and the routed netlist's cell types and
+`src` attributes, for example `critical path dut.s4[3] -> dut.s5[0]: 5.27 ns over 19 segments / 8 logic hops
+(logic 1.88 ns, routing 2.86 ns, clk-to-q 0.53, setup 0.00); cells on path: CCU2C(carry) x8; Verilog sources:
+design.v:11.15-11.17`.
 
 ## What `check` does
 
-Cheapest gate first; the first failure returns with a `fix` list.
+Stages run in order; the first failure returns, and every reason says what failed and how to fix it.
 
-1. **static**: top module present, `localparam LATENCY` within budget, no `initial`, `` `include `` or system tasks (keeps the sandbox closed).
-2. **lint**: Verilator.
-3. **sim**: a 2,000-cycle self-checking testbench the agent never sees. If the outputs are right but shifted, it tells the agent the real latency.
-4. **mutation**: re-run with `LATENCY+1`; it must fail, so a constant or undriven output can't pass.
-5. **synth + ports**: Yosys `synth_ecp5`; the port list must match the original.
-6. **pnr**: nextpnr-ecp5 on an LFE5U-85F-6BG381C, with every port registered by a harness, so logic before the first register can't escape timing.
-7. **budget**: LUT, FF and DSP use within the design's budget.
+1. **lint**: sandbox rules (no `initial`, `` `include `` or system tasks), then Verilator `--lint-only`.
+2. **interface**: the top module's ports (yosys parse, no synthesis) must match the original; `localparam LATENCY` present and within budget.
+3. **testbench**: a 2,000-cycle hidden testbench (random vectors plus edge cases) against a golden model delayed by LATENCY. If the outputs are right but shifted, it tells the agent the real latency.
+4. **latency_check**: rerun with `LATENCY+1`; if it still passes, LATENCY is overstated and the design is rejected.
+5. **synth**: Yosys `synth_ecp5`.
+6. **pnr**: nextpnr-ecp5 `--85k --speed 6 --freq 300 --timing-allow-fail` on a harness that registers every port, so logic before the first register can't escape timing.
+7. **resources**: TRELLIS_FF, TRELLIS_COMB and MULT18X18D within the design's budget (the harness's port registers are not counted).
 
-Results are cached by exact source, so resubmitting the same file is free.
+Each check runs in its own temporary directory (`MANUDESK_WORK`, no spaces) under a 120 s deadline. Results
+are cached by exact source, so resubmitting the same file is free. `POST /api/check` keeps the short legacy
+view (`pass`, `stage`, `fix`, `mhz`, `x`, `lat`, `path`, `use`) for the edge functions and the md_checks log.
 
 ## Designs
 
@@ -57,7 +55,13 @@ Baselines are the starting files measured by this checker (`scripts/measure_base
 
 ## Connect an agent
 
-Claude Code:
+Local, over stdio (needs the OSS CAD Suite on this machine):
+
+```bash
+claude mcp add manudesk -- uv run --directory /path/to/ManuDesk manudesk
+```
+
+Remote, over HTTP (Claude Code):
 
 ```bash
 claude mcp add --transport http manudesk http://160.211.47.50:8765/mcp --header "Authorization: Bearer $MANUDESK_TOKEN"
@@ -70,7 +74,7 @@ Cursor and troubleshooting: [docs/CONNECT.md](docs/CONNECT.md). `scripts/connect
 ```bash
 uv sync
 cp .env.example .env        # set MANUDESK_TOKEN (and CRUSOE_API_KEY for the built-in agent)
-uv run python -m manudesk.server --host 0.0.0.0 --port 8765
+uv run python -m manudesk.server --transport http --host 0.0.0.0 --port 8765
 uv run python scripts/mcp_smoke.py      # list, get, check over real MCP
 uv run pytest -q
 ```

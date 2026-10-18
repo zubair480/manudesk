@@ -129,7 +129,7 @@ def compact(d: dict) -> str:
 
 
 def build_prompt(design, code: str, last: dict | None, playbook: str, first: bool) -> str:
-    parts = [f"RULES: {RULES}",
+    parts = [f"RULES: {' '.join(RULES)}",
              f"DESIGN {design.name} (top `{design.top}`): {design.summary}",
              f"LIMITS: {compact(design.limits())}"]
     if playbook:

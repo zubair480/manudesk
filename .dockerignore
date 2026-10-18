@@ -1,0 +1,7 @@
+# Build context allowlist: never send .env (keys), .insforge (API key) or local work dirs.
+*
+!pyproject.toml
+!uv.lock
+!manudesk
+!designs
+**/__pycache__

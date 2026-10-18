@@ -11,7 +11,7 @@ EnvironmentFile=/home/ubuntu/manudesk/.env
 Environment=MANUDESK_TOOLS=/opt/fpga/oss-cad-suite/bin
 Environment=MANUDESK_WORK=/var/tmp/manudesk
 Environment=PATH=/home/ubuntu/.local/bin:/opt/fpga/oss-cad-suite/bin:/usr/local/bin:/usr/bin:/bin
-ExecStart=/home/ubuntu/.local/bin/uv run python -m manudesk.server --host 0.0.0.0 --port 8765
+ExecStart=/home/ubuntu/.local/bin/uv run python -m manudesk.server --transport http --host 0.0.0.0 --port 8765
 Restart=always
 RestartSec=3
 

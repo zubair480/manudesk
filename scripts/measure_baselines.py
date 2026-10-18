@@ -15,7 +15,7 @@ with ThreadPoolExecutor(3) as ex:
     for d, r in ex.map(one, all_designs().values()):
         p = d.dir / "spec.json"
         spec = json.loads(p.read_text())
-        if r.get("pass"):
-            spec["baseline_mhz"] = r["mhz"]
+        if r["accepted"]:
+            spec["baseline_mhz"] = r["fmax_mhz"]
             p.write_text(json.dumps(spec, indent=2) + "\n")
-        print(d.name, r.get("pass"), r.get("mhz"), r.get("use"), r.get("fix"))
+        print(d.name, r["accepted"], r["fmax_mhz"], r["resources"], r["reasons"], r["critical_path"])

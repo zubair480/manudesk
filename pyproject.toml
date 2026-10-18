@@ -17,7 +17,7 @@ dependencies = [
 dev = ["pytest>=8"]
 
 [project.scripts]
-manudesk = "manudesk.cli:main"
+manudesk = "manudesk.server:main"
 
 [build-system]
 requires = ["hatchling"]

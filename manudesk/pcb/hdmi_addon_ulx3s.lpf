@@ -1,0 +1,26 @@
+# HDMI add-on on ULX3S J1. TMDS on the true differential pairs gp/gn[8..11] (bank 7),
+# DDC/HPD/CEC, LEDs and buttons on the single-ended gp/gn[0..4] (bank 0).
+# Index convention follows ulx3s_v20.lpf gpdi_*: [0]=blue/D0, [1]=green/D1, [2]=red/D2, [3]=clock.
+LOCATE COMP "hdmi_dp[0]" SITE "A4";  # gp[8]
+LOCATE COMP "hdmi_dn[0]" SITE "A5";  # gn[8]
+LOCATE COMP "hdmi_dp[1]" SITE "A2";  # gp[9]
+LOCATE COMP "hdmi_dn[1]" SITE "B1";  # gn[9]
+LOCATE COMP "hdmi_dp[2]" SITE "C4";  # gp[10]
+LOCATE COMP "hdmi_dn[2]" SITE "B4";  # gn[10]
+LOCATE COMP "hdmi_dp[3]" SITE "F4";  # gp[11]
+LOCATE COMP "hdmi_dn[3]" SITE "E3";  # gn[11]
+IOBUF PORT "hdmi_dp[0]" IO_TYPE=LVCMOS33D DRIVE=4;
+IOBUF PORT "hdmi_dp[1]" IO_TYPE=LVCMOS33D DRIVE=4;
+IOBUF PORT "hdmi_dp[2]" IO_TYPE=LVCMOS33D DRIVE=4;
+IOBUF PORT "hdmi_dp[3]" IO_TYPE=LVCMOS33D DRIVE=4;
+LOCATE COMP "hdmi_scl" SITE "B11";   # gp[0]
+LOCATE COMP "hdmi_sda" SITE "C11";   # gn[0]
+LOCATE COMP "hdmi_hpd" SITE "A10";   # gp[1]
+LOCATE COMP "hdmi_cec" SITE "A11";   # gn[1]
+LOCATE COMP "led[0]"   SITE "A9";    # gp[2]
+LOCATE COMP "led[1]"   SITE "B10";   # gn[2]
+LOCATE COMP "led[2]"   SITE "B9";    # gp[3]
+LOCATE COMP "led[3]"   SITE "C10";   # gn[3]
+LOCATE COMP "btn[0]"   SITE "A7";    # gp[4]
+LOCATE COMP "btn[1]"   SITE "A8";    # gn[4]
+LOCATE COMP "clk_25mhz" SITE "G2";   # onboard oscillator, not on J1 (ignored by the board)

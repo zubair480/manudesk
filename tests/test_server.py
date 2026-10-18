@@ -41,12 +41,39 @@ def test_short_token_refused():
         server.build_app("short")
 
 
-def test_tools_are_compact():
+@pytest.mark.anyio
+async def test_exactly_four_tools():
+    assert sorted(t.name for t in await server.mcp.list_tools()) == ["check", "dsp_helper", "get_design",
+                                                                     "list_designs"]
+
+
+def test_instructions():
+    assert server.INSTRUCTIONS.startswith("Hardware feedback for Verilog. Loop: get_design(name)")
+
+
+def test_list_and_get_follow_the_spec():
     designs = json.loads(server.list_designs())
-    assert len(designs) >= 6 and all({"name", "target_mhz", "lat_budget"} <= set(d) for d in designs)
-    d = json.loads(server.get_design("mac"))
-    assert "module mac" in d["verilog"] and "tb" not in d and "LATENCY" in d["rules"]
+    assert {"popcount", "fir8", "crc32", "mac"} <= {d["name"] for d in designs}
+    for d in designs:
+        assert set(d) == {"name", "description", "top", "baseline_mhz", "latency_budget", "resource_budget"}
+        assert {"TRELLIS_FF", "TRELLIS_COMB"} <= set(d["resource_budget"])
+    d = json.loads(server.get_design("popcount"))
+    assert set(d) == {"name", "description", "top", "baseline_mhz", "latency_budget", "resource_budget", "goal",
+                      "verilog", "rules", "device"}
+    assert "module popcount" in d["verilog"] and "x baseline" in d["goal"] and "ECP5-85F" in d["device"]
+    assert d["latency_budget"] == 6 and d["resource_budget"] == {"TRELLIS_FF": 2000, "TRELLIS_COMB": 3000}
+    assert any("LATENCY+1" in r for r in d["rules"]) and any("mul18x18_reg" in r for r in d["rules"])
     assert "error" in json.loads(server.get_design("nope"))
+
+
+def test_testbench_never_leaks():
+    out = server.list_designs() + server.get_design("popcount") + server.dsp_helper()
+    assert "module tb" not in out and "MISMATCH" not in out and "$random" not in out
+
+
+def test_dsp_helper_is_the_library():
+    src = server.dsp_helper()
+    assert "module mul18x18_reg" in src and "MULT18X18D" in src
 
 
 @pytest.fixture

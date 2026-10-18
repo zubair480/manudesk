@@ -1,14 +1,15 @@
 """Where the chip tools live and how to run them.
 
 Set MANUDESK_TOOLS to the OSS CAD Suite `bin` directory (on the VM: /opt/fpga/oss-cad-suite/bin).
-Scratch builds go under MANUDESK_WORK (default ./work); EDA tools dislike spaces in paths, so pick one
-without them.
+Scratch builds go under MANUDESK_WORK (default <system temp>/manudesk), one fresh directory per check; EDA
+tools break on spaces in paths, so a root with a space is refused.
 """
 from __future__ import annotations
 
 import os
 import shutil
 import subprocess
+import tempfile
 import uuid
 from pathlib import Path
 
@@ -48,7 +49,9 @@ def tool(name: str) -> str:
 
 
 def work_root() -> Path:
-    root = Path(os.environ.get("MANUDESK_WORK", str(REPO / "work")))
+    root = Path(os.environ.get("MANUDESK_WORK") or Path(tempfile.gettempdir()) / "manudesk")
+    if " " in str(root):
+        raise RuntimeError(f"work dir {root} contains a space; set MANUDESK_WORK to a path without spaces")
     root.mkdir(parents=True, exist_ok=True)
     return root
 

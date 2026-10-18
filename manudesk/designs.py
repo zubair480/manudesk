@@ -11,15 +11,20 @@ from manudesk.toolchain import REPO
 DESIGNS = REPO / "designs"
 LIB = DESIGNS / "lib" / "ecp5_dsp.v"
 
+DEVICE = "Lattice ECP5-85F (LFE5U-85F-6BG381C), speed grade 6; yosys synth_ecp5 + nextpnr-ecp5"
+# Spec budget names <- spec.json short names (spec.json, md_designs and the edge functions use the short ones).
+BUDGET_KEYS = {"FF": "TRELLIS_FF", "LUT": "TRELLIS_COMB", "DSP": "MULT18X18D"}
+
 RULES = (
-    "Keep the module header (name, ports, widths, signedness) exactly. "
-    "Keep `localparam LATENCY = <n>;` in the top module: n = registers from any input to the outputs; "
-    "every input-to-output path must have that same depth; n <= latency_budget. "
-    "Synchronous active-high reset; clear every register you add. Plain Verilog-2005 (no SystemVerilog, "
-    "no initial, no $system tasks, no `include). The only extra module is "
-    "mul18x18_reg #(SIGNED=0|1)(clk, ce, rst, a[17:0], b[17:0], p[35:0]): ECP5 DSP, latency 2; do not "
-    "redefine it. Fmax is measured with every port registered, so logic before the first register still counts. "
-    "Part: Lattice ECP5-85F speed 6 (yosys synth_ecp5 + nextpnr-ecp5)."
+    "Keep the top module name and its ports (names, directions, widths) exactly the same.",
+    "Declare `localparam LATENCY = <n>;` in the top module, giving the true number of cycles from input to "
+    "output. A design whose output still passes with LATENCY+1 is rejected.",
+    "Stay within latency_budget and resource_budget.",
+    "For a registered DSP multiply, instantiate the provided `mul18x18_reg` (see dsp_helper); don't redefine it. "
+    "mul18x18_reg #(.SIGNED(0|1)) (clk, ce, rst, a[17:0], b[17:0], p[35:0]) has latency 2.",
+    "Fmax is measured inside a harness that registers every port, so logic before the first register still counts.",
+    "Plain synthesizable Verilog-2005: no initial blocks, no $system tasks, no `include. Synchronous active-high "
+    "reset; clear every register you add.",
 )
 
 
@@ -46,6 +51,15 @@ class Design:
     def limits(self) -> dict:
         return {"target_mhz": self.target_mhz, "baseline_mhz": self.baseline_mhz,
                 "latency_budget": self.latency_budget, "resources": self.resource_budget}
+
+    @property
+    def budgets(self) -> dict:
+        """resource_budget under the nextpnr cell names, e.g. {"TRELLIS_FF": 2000, "TRELLIS_COMB": 3000}."""
+        return {BUDGET_KEYS.get(k, k): v for k, v in self.resource_budget.items()}
+
+    @property
+    def goal(self) -> str:
+        return f"about {self.target_mhz / self.baseline_mhz:.1f}x baseline ({self.target_mhz:g} MHz or more)"
 
 
 @lru_cache(maxsize=1)

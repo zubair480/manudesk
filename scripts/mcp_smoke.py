@@ -30,7 +30,7 @@ async def main(url: str) -> int:
                 print("get_design keys:", sorted(d))
                 r = (await s.call_tool("check", {"name": "popcount", "verilog": d["verilog"]})).content[0].text
                 print("check:", r, f"({len(r)} chars)")
-                return 0 if json.loads(r).get("pass") else 1
+                return 0 if json.loads(r).get("accepted") else 1
 
 
 if __name__ == "__main__":
