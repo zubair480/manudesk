@@ -1,0 +1,90 @@
+/* 07-nextpnr-3d: slim log panel (≤22%), 3D chip fills the rest. */
+.n3d { display: grid; grid-template-columns: minmax(260px, 21%) 1fr; gap: 12px; height: 100%; min-height: 0; }
+
+.n3d-side { display: flex; flex-direction: column; gap: 12px; min-height: 0; }
+.n3d-log { flex: 1; min-height: 0; border-top: 2px solid var(--tool); }
+.n3d-log .term { flex: 1; font-size: 11px; line-height: 1.45; padding: 8px 10px; white-space: pre; overflow: hidden auto; scrollbar-width: none; }
+.n3d-log .term::-webkit-scrollbar { display: none; }
+.n3d-log .term .cmd { white-space: pre-wrap; word-break: break-all; }
+.n3d-log .term .prompt { color: var(--tool); }
+.n3d-log .term .hl { color: var(--tool); font-weight: 600; }
+.n3d-log .term .ok { color: #1a7f37; font-weight: 600; }
+.n3d-log .term .warn { color: #9a6700; }
+
+.n3d-stats { padding: 12px 14px 12px; display: flex; flex-direction: column; gap: 12px; }
+.n3d-fmax .l { font-size: 11.5px; font-weight: 500; color: var(--muted); }
+.n3d-fmax .v { font-size: 30px; font-weight: 600; letter-spacing: -1px; font-variant-numeric: tabular-nums; color: var(--tool); line-height: 1.15; }
+.n3d-fmax .v small { font-size: 13px; font-weight: 500; letter-spacing: 0; margin-left: 4px; color: var(--muted); }
+.n3d-fmax .sub { font-size: 11.5px; color: var(--muted); }
+.n3d-fmax .sub b { color: #1a7f37; font-weight: 600; }
+.n3d-bars { display: flex; flex-direction: column; gap: 8px; }
+.n3d-bars .bar { display: grid; grid-template-columns: 1fr auto; gap: 3px 10px; align-items: center; opacity: .35; transition: opacity .5s var(--ease-out); }
+.n3d-bars .bar.on { opacity: 1; }
+.n3d-bars .row { display: flex; justify-content: space-between; font-size: 11.5px; color: var(--ink-2); grid-column: 1 / -1; }
+.n3d-bars .row b { font-weight: 600; font-variant-numeric: tabular-nums; color: var(--ink); }
+.n3d-bars .row em { font-style: normal; font-weight: 400; color: var(--faint); margin-left: 3px; }
+.n3d-bars .track { height: 5px; border-radius: 3px; background: var(--surface-2); overflow: hidden; }
+.n3d-bars .track i { display: block; height: 100%; width: 0; background: var(--tool); border-radius: 3px; transition: width 1.2s var(--ease-out); }
+.n3d-bars .pct { font-size: 10.5px; font-family: var(--mono); color: var(--muted); }
+
+.n3d-view { position: relative; overflow: hidden; background: #fff; min-height: 0; padding: 0; }
+.n3d-view canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+.n3d-leaders { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; overflow: visible; }
+.n3d-leaders path { fill: none; stroke: #52525b; stroke-width: 1; transition: opacity .4s; }
+.n3d-leaders circle { fill: #fff; stroke: #52525b; stroke-width: 1.5; transition: opacity .4s; }
+.n3d-leaders .accent { stroke: var(--tool); }
+.n3d-labels { position: absolute; inset: 0; pointer-events: none; }
+.n3d-label { position: absolute; left: 0; top: 0; white-space: nowrap; font-size: 12px; color: var(--muted); background: rgba(255,255,255,.94);
+  border: 1px solid var(--line-2); border-radius: 7px; padding: 4px 9px; box-shadow: 0 1px 2px rgba(0,0,0,.04), 0 6px 16px -10px rgba(0,0,0,.18);
+  visibility: hidden; }
+.n3d-label.on { visibility: visible; animation: n3dIn .45s var(--ease-out); }
+.n3d-label b { color: var(--ink); font-weight: 600; margin-right: 5px; }
+.n3d-label.accent { border-color: color-mix(in srgb, var(--tool) 45%, white); }
+.n3d-label.accent b { color: var(--tool); }
+.n3d-leaders path, .n3d-leaders circle { opacity: 0; }
+@keyframes n3dIn { from { opacity: 0; filter: blur(2px); } to { opacity: 1; filter: none; } }
+
+.n3d-tag { position: absolute; top: 12px; left: 14px; display: flex; align-items: baseline; gap: 8px; font-size: 12px; color: var(--muted); }
+.n3d-tag b { color: var(--ink); font-weight: 600; font-size: 13px; }
+.n3d-legend { position: absolute; top: 12px; right: 14px; display: flex; gap: 12px; font-size: 11.5px; color: var(--ink-2); }
+.n3d-legend span { display: inline-flex; align-items: center; gap: 5px; }
+.n3d-legend i { width: 9px; height: 9px; border-radius: 2.5px; display: block; }
+.n3d-legend i.w { width: 14px; height: 3px; border-radius: 2px; background: var(--tool); }
+
+.n3d-scale { position: absolute; left: 14px; bottom: 12px; font-size: 13px; color: var(--ink-2); opacity: 0; transform: translateY(6px);
+  transition: opacity .6s var(--ease-out), transform .6s var(--ease-out); }
+.n3d-scale.on { opacity: 1; transform: none; }
+.n3d-scale b { color: var(--ink); font-weight: 600; font-variant-numeric: tabular-nums; }
+.n3d-scale em { font-style: normal; margin-left: 10px; padding: 2px 8px; border-radius: 999px; font-size: 11.5px; font-weight: 500;
+  color: var(--tool); background: color-mix(in srgb, var(--tool) 8%, white); border: 1px solid color-mix(in srgb, var(--tool) 25%, white); }
+
+.n3d-bit { position: absolute; right: 14px; bottom: 12px; display: flex; align-items: center; gap: 8px; padding: 7px 12px; border-radius: 999px;
+  background: #fff; border: 1px solid var(--line-2); font-size: 12.5px; color: var(--muted);
+  box-shadow: 0 1px 2px rgba(0,0,0,.04), 0 8px 20px -12px rgba(0,0,0,.2); opacity: 0; transform: translateY(8px);
+  transition: opacity .6s var(--ease-out), transform .6s var(--ease-out); }
+.n3d-bit.on { opacity: 1; transform: none; }
+.n3d-bit .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--pass); }
+.n3d-bit b { color: var(--ink); font-weight: 600; font-family: var(--mono); font-size: 12px; }
+.n3d-bit em { font-style: normal; color: var(--tool); font-weight: 600; font-variant-numeric: tabular-nums; }
+.n3d-err { position: absolute; inset: 0; display: grid; place-items: center; color: var(--muted); font-size: 14px; }
+
+/* Live readouts (left edge of the 3D view) and the Fmax payoff card (right). */
+.n3d-read { position: absolute; left: 14px; top: 44px; display: flex; flex-direction: column; gap: 8px; opacity: 0; transform: translateY(6px);
+  transition: opacity .6s var(--ease-out), transform .6s var(--ease-out); }
+.n3d-read.on { opacity: 1; transform: none; }
+.n3d-read > div { background: rgba(255,255,255,.92); border: 1px solid var(--line); border-radius: 8px; padding: 6px 10px; min-width: 150px;
+  box-shadow: 0 1px 2px rgba(0,0,0,.03), 0 6px 16px -12px rgba(0,0,0,.15); }
+.n3d-read span { display: block; font-size: 11px; font-weight: 500; color: var(--muted); }
+.n3d-read b { font-size: 17px; font-weight: 600; letter-spacing: -.3px; font-variant-numeric: tabular-nums; color: var(--ink); }
+.n3d-read b em { font-style: normal; font-size: 11.5px; font-weight: 400; color: var(--faint); margin-left: 5px; letter-spacing: 0; }
+.n3d-hero { position: absolute; right: 14px; top: 44px; width: 270px; padding: 14px 16px; background: #fff; border: 1px solid var(--line-2);
+  border-top: 2px solid var(--tool); border-radius: 10px; box-shadow: 0 1px 2px rgba(0,0,0,.04), 0 12px 28px -16px rgba(0,0,0,.25);
+  opacity: 0; transform: translateY(8px); transition: opacity .5s var(--ease-out), transform .5s var(--ease-out); pointer-events: none; }
+.n3d-hero.on { opacity: 1; transform: none; }
+.n3d-hero .x { font-size: 44px; font-weight: 600; letter-spacing: -1.5px; line-height: 1; color: var(--tool); font-variant-numeric: tabular-nums; }
+.n3d-hero .cap { font-size: 12px; color: var(--muted); margin: 2px 0 10px; }
+.n3d-hero .bar { display: grid; grid-template-columns: 62px 1fr auto; align-items: center; gap: 8px; font-size: 11.5px; color: var(--ink-2); margin-top: 6px; }
+.n3d-hero .bar b { font-weight: 600; font-variant-numeric: tabular-nums; color: var(--ink); }
+.n3d-hero .bar i { display: block; height: 8px; width: 0; border-radius: 4px; transition: width 1.4s var(--ease-out); }
+.n3d-hero .b-need i { background: #a1a1aa; }
+.n3d-hero .b-got i { background: var(--tool); }

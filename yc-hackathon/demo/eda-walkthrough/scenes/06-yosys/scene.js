@@ -533,7 +533,11 @@ export default {
   },
   // camera push (core makes focus a no-op on 2D scenes unless essential) + a spotlight that dims the other blocks
   focusBlock(ctx, id, max = 1.8) { this.focusRect(ctx, this.sceneRect(this.sch, this.blocks[id].g), max); this.spot(id); },
-  spot(id) { for (const k in this.blocks) this.blocks[k].gb.classList.toggle('dim', !!id && k !== id); },
+  spot(id) {
+    for (const k in this.blocks) this.blocks[k].gb.classList.toggle('dim', !!id && k !== id);
+    // perf: the infinite wire dash-flow forces full SVG repaints; pause it while a block is spotlit
+    this.svg.classList.toggle('spotting', !!id);
+  },
 
   async play(ctx) {
     const d = this.d;

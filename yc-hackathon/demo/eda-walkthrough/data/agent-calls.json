@@ -22,7 +22,7 @@
    "25 MHz clock, Fmax ≥ 25 MHz",
    "self-checking testbench",
    "lint clean, -Wall",
-   "2-layer board, DRC 0"
+   "2-layer board, 0 rule violations"
   ],
   "reason": "Reading the spec. Plan: RTL + testbench, then simulate, lint, synthesize, place and route, board."
  },
@@ -34,7 +34,7 @@
   "fix",
   "ship"
  ],
- "summaryReason": "Spec met: 4/4 tests, lint clean, 214.96 MHz against 25 MHz, board routed with DRC 0. Returning pwm_led.bit and the board files.",
+ "summaryReason": "Spec met: 4/4 tests, lint clean, 214.96 MHz against 25 MHz, board routed, 0 rule violations. Returning pwm_led.bit and the board files.",
  "scenes": {
   "01-code": {
    "calls": [
@@ -311,7 +311,7 @@
      "status": "ok",
      "at": 200,
      "reason_before": "KiCad: schematic to PCB, footprints placed around the BGA",
-     "reason": "Board placed. Routing it, then checking DRC."
+     "reason": "Board placed. Routing it, then checking clearances."
     },
     {
      "tool": "board_drc",

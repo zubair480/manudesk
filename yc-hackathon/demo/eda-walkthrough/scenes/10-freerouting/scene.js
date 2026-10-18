@@ -139,7 +139,7 @@ export default {
     st.g = st.el.cv.getContext('2d');
     st.rd = {};
     for (const c of root.querySelectorAll('.rd')) st.rd[c.dataset.r] = { card: c, v: c.querySelector('b'), sub: c.querySelector('small') };
-    st.rdMemo = {}; st.trk = { F: 0, B: 0 }; st.netsDone = 0; st.time = { v: 0 };
+    st.rdMemo = {}; st.trk = { F: 0, B: 0 }; st.netsDone = 0; st.time = { v: 0 }; st.dim = 0;
     st.tool = (getComputedStyle(root).getPropertyValue('--tool') || '').trim();
     if (!/^(#|rgb)/.test(st.tool)) st.tool = '#dc2626';
     this.buildModel(d);
@@ -243,22 +243,27 @@ export default {
       g.strokeRect(p.x - p.w / 2 - .25, p.y - p.h / 2 - .25, p.w + .5, p.h + .5);
       if (p.kind === 'bga') { g.beginPath(); g.moveTo(p.x - p.w / 2 - .25, p.y - p.h / 2 + 1.2); g.lineTo(p.x - p.w / 2 + 1.2, p.y - p.h / 2 - .25); g.stroke(); }
     }
+    // in-place emphasis: dim everything except the held-back pair
+    const da = 1 - .6 * (st.dim || 0);
     // pads
+    g.globalAlpha = da;
     for (const p of d.parts) for (const pd of p.pads) {
       g.fillStyle = pd.net || p.kind === 'hole' ? COL.pad : COL.padDim;
       if (pd.s === 'r') g.fillRect(pd.x - pd.w / 2, pd.y - pd.h / 2, pd.w, pd.h);
       else { g.beginPath(); g.arc(pd.x, pd.y, pd.d / 2, 0, 7); g.fill(); }
       if (pd.th && pd.drill) { g.fillStyle = COL.drill; g.beginPath(); g.arc(pd.x, pd.y, pd.drill / 2, 0, 7); g.fill(); }
     }
+    g.globalAlpha = 1;
 
     // traces: B.Cu under F.Cu
     g.lineCap = 'round'; g.lineJoin = 'round';
     st.tip = st.tip || null;
     let tip = null;
     for (const layer of ['B.Cu', 'F.Cu']) {
-      g.globalAlpha = layer === 'B.Cu' ? .85 : .93;
+      const la = layer === 'B.Cu' ? .85 : .93;
       for (const w of st.wires) {
         if (w.layer !== layer || w.p <= 0) continue;
+        g.globalAlpha = HELD.includes(w.net) ? la : la * da;
         g.strokeStyle = w.color; g.lineWidth = Math.max(w.w, 1.4 / s);
         const end = this.path(g, w, w.p);
         g.stroke();
@@ -280,20 +285,23 @@ export default {
       g.beginPath(); g.moveTo(x, -.6); g.lineTo(x, b.h + .6); g.stroke(); g.globalAlpha = 1;
     }
     // vias
+    g.globalAlpha = da;
     for (const vi of st.vias) {
       if (vi.s <= 0) continue;
       const r = (vi.d / 2) * vi.s;
       g.fillStyle = COL.via; g.beginPath(); g.arc(vi.x, vi.y, r, 0, 7); g.fill();
       g.fillStyle = COL.drill; g.beginPath(); g.arc(vi.x, vi.y, r * .5, 0, 7); g.fill();
     }
+    g.globalAlpha = 1;
     // airwires
     g.lineWidth = 1 / s;
+    const pulse = .7 + .3 * Math.sin(t / 650);
     for (const a of st.air) {
       const al = a.alpha * st.ratA;
       if (al <= .01) continue;
-      g.globalAlpha = al;
+      g.globalAlpha = a.warn ? al * (st.dim ? pulse : 1) : al * da;
       g.strokeStyle = a.warn ? COL.warn : COL.rat;
-      if (a.warn) { g.lineWidth = 1.5 / s; g.setLineDash([3 / s, 2.5 / s]); }
+      if (a.warn) { g.lineWidth = (st.dim ? 3 : 1.5) / s; g.setLineDash([3 / s, 2.5 / s]); }
       g.beginPath(); g.moveTo(a.a[0], a.a[1]); g.lineTo(a.b[0], a.b[1]); g.stroke();
       if (a.warn) { g.lineWidth = 1 / s; g.setLineDash([]); }
       g.globalAlpha = 1;
@@ -472,7 +480,6 @@ export default {
     // --- 3. fanout
     this.log(3);
     ctx.narrate('First, short escape traces pull pins out from under the FPGA.');
-    ctx.focus?.(this.boardRect(U1.x0 - 2, U1.y0 - 2, U1.x1 + 2, U1.y1 + 2), { scale: 2.2, ms: 900 });
     const F = st.fan, tot = P.fanout.reduce((a, p) => a + p.pins, 0) || 1;
     let off = 0;
     for (const [i, p] of P.fanout.entries()) {
@@ -487,8 +494,7 @@ export default {
       this.chip('f' + p.n, 'done');
     }
     this.log(8);
-    ctx.unfocus?.({ ms: 800 });
-    await ctx.sleep(700);
+    await ctx.sleep(500);
 
     // --- 4. autorouter passes
     this.log(9);
@@ -502,7 +508,7 @@ export default {
     for (const a of st.air) if (!a.gone) a.warn = 1;
     this.status(`${st.unrouted} unrouted · score ${fmt2(r1.score)}`, 'Auto-router pass #1');
     ctx.narrate(`Pass 1: ${d.stats.connections - r1.unrouted} of ${d.stats.connections} done. 2 connections are boxed in.`);
-    ctx.focus?.(this.heldRect(), { scale: 2, ms: 900 });
+    this.tween(st, 'dim', 1, 700, easeOut);
     await ctx.sleep(1800);
 
     // pass 2: rip-up and retry, still 2 unrouted
@@ -522,12 +528,12 @@ export default {
     await this.routeList(ctx, st.held, 1500);
     await ctx.sleep(1200);
     E.warnC.textContent = '0';
+    this.tween(st, 'dim', 0, 700, easeOut);
     this.log(12); this.chip('r3', 'done');
     this.score(r3.score, 1200);
     this.status(`${r3.unrouted} unrouted · score ${fmt2(r3.score)}`, 'Auto-router pass #3');
     await ctx.sleep(900);
-    ctx.unfocus?.({ ms: 800 });
-    await ctx.sleep(400);
+    await ctx.sleep(300);
     this.chip('r4', 'run'); this.status('Auto-router is running…', 'Auto-router pass #4'); this.phase('Auto-router pass #4 · verify');
     await ctx.sleep(900);
     for (const v of st.vias) if (!v.shown) this.popVia(v);
@@ -564,7 +570,7 @@ export default {
     await ctx.sleep(2500);
     banner.classList.remove('on');
     const un = st.rd.un?.card;
-    if (un) { ctx.focus?.(un, { scale: 1.8, ms: 800 }); await ctx.sleep(1500); ctx.unfocus?.({ ms: 700 }); await ctx.sleep(750); }
+    if (un) { un.classList.add('live'); await ctx.sleep(1200); un.classList.remove('live'); }
 
     // --- 6. save + import
     E.cursor.classList.add('on');

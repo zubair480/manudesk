@@ -50,7 +50,7 @@ const STORY = {
   },
   '09-kicad': {
     stage: 'Board', q: 'A chip needs a body. Can we build the board?',
-    win: () => `Board laid out, ${n(m('pcb_drc_errors')) ?? 0} DRC errors`,
+    win: () => `Board laid out, ${n(m('pcb_drc_errors')) ?? 0} rule violations`, // Freerouting's check; KiCad DRC never ran
   },
   '10-freerouting': {
     stage: 'Route', q: '58 connections to wire. By hand, or by machine?',
@@ -160,6 +160,8 @@ function onScene(ev) {
   cur = { id: entry.id, index };
   hideTeaser();
   renderChip(entry); renderRail();
+  // the finale's dashboard recaps everything; give its closing caption the full footer width
+  rail.hidden = entry.id === '11-results';
   showCard(entry, prevId && index > 0 ? prevId : null);
   teaserShownFor = null;
 }

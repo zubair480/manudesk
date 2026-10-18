@@ -74,27 +74,20 @@
     {
       "rules": [
         "WIDTHTRUNC",
-        "WIDTHEXPAND"
-      ],
-      "hl": {
-        "pwm_cnt": "8-bit",
-        "duty": "8-bit",
-        "cmps": "8b + 8'd32·i → 8b"
-      },
-      "say": "Widths: 8-bit + 8-bit into 8-bit. Nothing gets cut off."
-    },
-    {
-      "rules": [
+        "WIDTHEXPAND",
         "UNUSEDSIGNAL",
         "UNUSEDPARAM",
         "UNDRIVEN"
       ],
       "hl": {
+        "pwm_cnt": "8-bit",
+        "duty": "8-bit",
+        "cmps": "8b + 8'd32·i → 8b",
         "pre": "DIV used",
         "dir": "read",
         "leds": "driven"
       },
-      "say": "Nothing unused, nothing undriven."
+      "say": "Widths match, nothing unused or undriven."
     },
     {
       "rules": [
@@ -115,24 +108,17 @@
       "rules": [
         "LATCH",
         "COMBDLY",
-        "CASEINCOMPLETE"
-      ],
-      "hl": {
-        "tick": "comb",
-        "cmps": "no latch"
-      },
-      "say": "Pure logic between flops. No hidden latch."
-    },
-    {
-      "rules": [
+        "CASEINCOMPLETE",
         "SYNCASYNCNET",
         "IMPLICIT"
       ],
       "hl": {
+        "tick": "comb",
+        "cmps": "no latch",
         "rst": "sync only",
         "clk": "1 clock"
       },
-      "say": "Reset only on the clock edge."
+      "say": "No hidden latch, reset only on the clock edge."
     },
     {
       "rules": [
@@ -191,7 +177,7 @@
     "cyclesPerSec": 3971347,
     "led0On": 24739808,
     "led0Duty": 49.48,
-    "hwSeconds": 2.0,
+    "hwSeconds": 2,
     "repeat": {
       "log": "real/verilator/06-run-50M-b.log",
       "seconds": 12.408,

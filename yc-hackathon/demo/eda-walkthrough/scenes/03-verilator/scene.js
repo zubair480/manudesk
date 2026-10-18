@@ -112,7 +112,7 @@ export default {
 
     // 3. rule classes tick, each highlighting (and zooming to) what it inspects
     const pinGroup = $('.hw .hw-rstpin')?.parentNode;
-    const targets = [$('.hw g.hw-cmp'), $('.hw g.hw-ff'), $('.hw g.hw-ff'), $('.hw .hw-gate'), pinGroup, pinGroup];
+    const targets = [$('.hw g.hw-cmp'), $('.hw g.hw-ff'), $('.hw .hw-gate'), pinGroup];
     let n = 0;
     for (const [bi, b] of d.beats.entries()) {
       let hl = b.hl;

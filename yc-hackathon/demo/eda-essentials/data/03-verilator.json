@@ -1,0 +1,226 @@
+{
+  "cwd": "~/pwm_led/rtl",
+  "cmd": "verilator_bin --lint-only -Wall pwm_led.v",
+  "log": "real/verilator.log",
+  "capture": "real/sim/verilator-capture.log",
+  "version": "Verilator 5.053 devel rev v5.052-448-g1272f7355",
+  "rules": [
+    {
+      "id": "WIDTHTRUNC",
+      "desc": "value truncated to a narrower signal"
+    },
+    {
+      "id": "WIDTHEXPAND",
+      "desc": "operand silently zero-extended"
+    },
+    {
+      "id": "UNUSEDSIGNAL",
+      "desc": "signal assigned but never read"
+    },
+    {
+      "id": "UNUSEDPARAM",
+      "desc": "parameter declared but unused"
+    },
+    {
+      "id": "UNDRIVEN",
+      "desc": "signal read but never driven"
+    },
+    {
+      "id": "MULTIDRIVEN",
+      "desc": "signal driven from two blocks"
+    },
+    {
+      "id": "LATCH",
+      "desc": "combinational logic infers a latch"
+    },
+    {
+      "id": "CASEINCOMPLETE",
+      "desc": "case without full coverage"
+    },
+    {
+      "id": "BLKSEQ",
+      "desc": "blocking = inside clocked always"
+    },
+    {
+      "id": "COMBDLY",
+      "desc": "non-blocking <= in combinational logic"
+    },
+    {
+      "id": "SYNCASYNCNET",
+      "desc": "net used as both sync and async reset"
+    },
+    {
+      "id": "IMPLICIT",
+      "desc": "implicitly declared wire"
+    },
+    {
+      "id": "PINMISSING",
+      "desc": "instance port left unconnected"
+    },
+    {
+      "id": "DECLFILENAME",
+      "desc": "module name differs from file name"
+    },
+    {
+      "id": "EOFNEWLINE",
+      "desc": "file does not end in a newline"
+    },
+    {
+      "id": "PINCONNECTEMPTY",
+      "desc": "port connected to nothing: .x()"
+    }
+  ],
+  "beats": [
+    {
+      "rules": [
+        "WIDTHTRUNC",
+        "WIDTHEXPAND"
+      ],
+      "hl": {
+        "pwm_cnt": "8-bit",
+        "duty": "8-bit",
+        "cmps": "8b + 8'd32·i → 8b"
+      },
+      "say": "Widths: 8-bit + 8-bit into 8-bit. Nothing gets cut off."
+    },
+    {
+      "rules": [
+        "UNUSEDSIGNAL",
+        "UNUSEDPARAM",
+        "UNDRIVEN"
+      ],
+      "hl": {
+        "pre": "DIV used",
+        "dir": "read",
+        "leds": "driven"
+      },
+      "say": "Nothing unused, nothing undriven."
+    },
+    {
+      "rules": [
+        "MULTIDRIVEN",
+        "BLKSEQ"
+      ],
+      "hl": {
+        "pre": "1 driver",
+        "pwm_cnt": "1 driver",
+        "duty": "1 driver",
+        "dir": "<= only",
+        "ff0": "<=",
+        "ff7": "<="
+      },
+      "say": "All flops updated in one clocked block."
+    },
+    {
+      "rules": [
+        "LATCH",
+        "COMBDLY",
+        "CASEINCOMPLETE"
+      ],
+      "hl": {
+        "tick": "comb",
+        "cmps": "no latch"
+      },
+      "say": "Pure logic between flops. No hidden latch."
+    },
+    {
+      "rules": [
+        "SYNCASYNCNET",
+        "IMPLICIT"
+      ],
+      "hl": {
+        "rst": "sync only",
+        "clk": "1 clock"
+      },
+      "say": "Reset only on the clock edge."
+    },
+    {
+      "rules": [
+        "PINMISSING",
+        "PINCONNECTEMPTY",
+        "DECLFILENAME",
+        "EOFNEWLINE"
+      ],
+      "hl": {
+        "clk": "port",
+        "rst": "port",
+        "leds": "led[7:0] port"
+      },
+      "say": "Ports and file name all line up."
+    }
+  ],
+  "widths": {
+    "pre": "[DIV-1:0] · 16-bit (tb: 4)",
+    "pwm_cnt": "[7:0] · 8-bit",
+    "duty": "[7:0] · 8-bit",
+    "dir": "1-bit",
+    "cmp": "8b + 8'd32·i → 8b (wraps)",
+    "led": "led[7:0] · 8 × 1-bit"
+  },
+  "model": {
+    "built": true,
+    "simulated": false,
+    "steps": [
+      {
+        "cmd": "verilator_bin --cc --exe --build -j 0 -Wall pwm_led.v sim_main.cpp",
+        "log": "real/verilator/01-build-attempt.log",
+        "result": "failed: 'make' is not installed on this Windows machine"
+      },
+      {
+        "cmd": "verilator_bin --cc --exe -Wall -O3 --x-assign fast --x-initial fast pwm_led.v sim_main.cpp",
+        "log": "real/verilator/02-cc.log",
+        "result": "exit 0, 5 C++ files (0.037 MB), Walltime 0.061 s"
+      },
+      {
+        "cmd": "build_msvc.bat",
+        "log": "real/verilator/03-build-msvc.log",
+        "result": "MSVC 19.29 cl /O2, exit 0, 17.70 s, Vpwm_led.exe 332,800 bytes"
+      },
+      {
+        "cmd": "./obj_dir/Vpwm_led 50000000",
+        "log": "real/verilator/04-run.log",
+        "result": "50,000,000 cycles in 12.590 s = 3,971,347 cycles/s"
+      }
+    ],
+    "ccFiles": 5,
+    "ccLines": 987,
+    "compileSeconds": 17.7,
+    "exeBytes": 332800,
+    "cycles": 50000000,
+    "seconds": 12.59,
+    "cyclesPerSec": 3971347,
+    "led0On": 24739808,
+    "led0Duty": 49.48,
+    "hwSeconds": 2.0,
+    "repeat": {
+      "log": "real/verilator/06-run-50M-b.log",
+      "seconds": 12.408,
+      "cyclesPerSec": 4029542,
+      "led0On": 24739808
+    },
+    "note": "Real run on this machine. make is missing, so the Makefile step of --build was replaced by a direct MSVC (VS 2019 BuildTools) compile of the same Verilator output (real/verilator/build_msvc.bat). The second 50M run gives the identical led0 count (deterministic, cycle-accurate). A 20M run reached 8.43 M cycles/s (05-run-repeat.log); other sessions share the CPU."
+  },
+  "pipeline": [
+    {
+      "id": "code",
+      "label": "RTL",
+      "sub": "pwm_led.v"
+    },
+    {
+      "id": "icarus",
+      "label": "Icarus",
+      "sub": "simulate: does it behave?"
+    },
+    {
+      "id": "verilator",
+      "label": "Verilator",
+      "sub": "verify: is it well-formed?"
+    },
+    {
+      "id": "yosys",
+      "label": "Yosys",
+      "sub": "synthesize"
+    }
+  ],
+  "explain": "A passing testbench only proves the cases it tried. Verilator reads every line statically: widths, drivers, latches, reset nets. It runs in milliseconds and gates the design before synthesis spends minutes on it. <b>0 warnings under -Wall</b> means the RTL is clean."
+}

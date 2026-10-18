@@ -22,13 +22,13 @@ const verb = document.getElementById('rot-verb'), tool = document.getElementById
 let ri = 0;
 const swap = (el, text, color) => {
   el.classList.add('out');
-  setTimeout(() => { el.textContent = text; if (color) el.style.color = color; el.classList.remove('out'); el.classList.add('in'); setTimeout(() => el.classList.remove('in'), 500); }, 260);
+  setTimeout(() => { el.textContent = text; if (color) el.style.color = color; el.classList.remove('out'); el.classList.add('in'); setTimeout(() => el.classList.remove('in'), 450); }, 160);
 };
 tool.style.color = ROT[0][2];
 const rotTimer = setInterval(() => {
   if (intro.classList.contains('gone')) return;
   ri = (ri + 1) % ROT.length;
-  swap(verb, ROT[ri][0]); setTimeout(() => swap(tool, ROT[ri][1], ROT[ri][2]), 70);
+  swap(verb, ROT[ri][0]); swap(tool, ROT[ri][1], ROT[ri][2]);
   setActive(ri + 1);
 }, 2200);
 

@@ -183,7 +183,9 @@ async function runSim(ctx, run) {
           ctx.narrate(`Caught: on ${S.t2.on0} of 256 ticks. The check expected ${S.t2.late - 2} to ${S.t2.late + 2}.`);
           note(S.d.explain.fail, 'fail');
           ctx.focus?.(S.$('.judge'), { scale: 2.2 });
+          S.root.querySelector('.sa-ivl')?.classList.add('spot');   // spotlight: LED0 + duty rings and the judge meter
           await ctx.sleep(2400);
+          S.root.querySelector('.sa-ivl')?.classList.remove('spot');
           ctx.unfocus?.();
         } else {
           ctx.narrate(`Run 2: ${S.t2.on0} sits inside the real ${S.t2.d0}–${S.t2.d1} window. 4/4 pass.`);

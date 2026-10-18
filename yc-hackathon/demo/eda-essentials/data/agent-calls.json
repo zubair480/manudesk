@@ -1,0 +1,248 @@
+{
+ "_owner": "Session H (thesis). Per-scene MCP tool calls for core/agent.js. ms = wall-clock measured on this machine (warm run, OSS CAD Suite) unless est:true. Tool names are the PROPOSED eda-tools MCP surface (see THESIS.md); The real MCP today is ManuDesk (C:/Users/zubai/manudesk/manudesk/server.py: list_designs, get_design, check); finer-grained tools here are the PROPOSED surface built on the same eda.py functions. Real backing code: C:/Users/zubai/crusoe hackathon/tc/ (tools/sim.py, synth.py, pnr.py, verifier.py, toolstream_x11.py, pcb/pipeline.py). tag 'roadmap' = shown in the demo but not in the real pipeline (cocotb, SymbiYosys).",
+ "_timing_sources": {
+  "simulate": "iverilog 359 ms + vvp 221 ms, timed 2026-10-18 in scratchpad (warm)",
+  "lint": "verilator_bin --lint-only -Wall: 268 ms",
+  "verilator_model": "real/verilator/04-run.log: 50M cycles in 12.59 s",
+  "cocotb": "real/cocotb/run.log: 0.35 s",
+  "synthesize": "yosys synth_ecp5: 4238 ms",
+  "place_route": "nextpnr-ecp5: 8178 ms; ecppack 7777 ms",
+  "formal": "real/sby/sby.log: real 0m2.610s",
+  "autoroute": "real/pcb/freerouting.log: real 0m13.131s (job 9.44 s)"
+ },
+ "server": "eda-tools",
+ "host": "local · OSS CAD Suite",
+ "toolCount": 10,
+ "specMs": 3800,
+ "spec": {
+  "title": "8-LED breathing PWM driver for the ULX3S",
+  "text": "Write Verilog for a Lattice ECP5-85F at 25 MHz: eight LEDs that breathe, each phase-shifted from the last. Prove it works in simulation, close timing, and hand back a bitstream and a routed board.",
+  "constraints": [
+   "8 LEDs, 32-count phase shift",
+   "25 MHz clock, Fmax ≥ 25 MHz",
+   "self-checking testbench",
+   "lint clean, -Wall",
+   "2-layer board, DRC 0"
+  ],
+  "reason": "Reading the spec. Plan: RTL + testbench, lint, simulate, look at the waves, synthesize, place and route."
+ },
+ "loop": [
+  "spec",
+  "write HDL",
+  "call MCP tools",
+  "see results",
+  "fix",
+  "ship"
+ ],
+ "summaryReason": "Spec met: lint clean, 4/4 tests, 214.96 MHz against 25 MHz, board DRC 0. Returning pwm_led.bit and the board files.",
+ "scenes": {
+  "01-code": {
+   "calls": [
+    {
+     "tool": "write_rtl",
+     "args": {
+      "path": "rtl/pwm_led.v",
+      "top": "pwm_led"
+     },
+     "ms": 38,
+     "est": true,
+     "result": "40 lines · module pwm_led",
+     "status": "ok",
+     "at": 200,
+     "reason_before": "Writing the RTL: prescaler, 8-bit PWM counter, a duty ramp, and 8 comparators offset by 32",
+     "reason": "RTL written. A design is only as good as its testbench, so writing that next."
+    },
+    {
+     "tool": "write_rtl",
+     "args": {
+      "path": "rtl/tb_pwm_led.v",
+      "kind": "testbench"
+     },
+     "ms": 31,
+     "est": true,
+     "result": "41 lines · 4 self-checks",
+     "status": "ok",
+     "startOn": "testbench",
+     "reason": "Four checks: duty ramps, LED0 on-time matches duty, dir flips at 255, reset clears. Next, simulate."
+    }
+   ]
+  },
+  "02-iverilog": {
+   "calls": [
+    {
+     "tool": "lint",
+     "args": {
+      "files": [
+       "rtl/pwm_led.v"
+      ],
+      "flags": "-Wall"
+     },
+     "ms": 268,
+     "result": "0 warnings · exit 0",
+     "status": "ok",
+     "at": 150,
+     "reason": "Lint clean in 268 ms. Now simulating.",
+     "note": "ManuDesk check() lint uses -Wno-fatal -Wno-DECLFILENAME -Wno-UNUSEDSIGNAL -Wno-UNUSEDPARAM -Wno-WIDTH; the demo capture used -Wall",
+     "waitFor": "Run 1|vvp simulates"
+    },
+    {
+     "tool": "simulate",
+     "args": {
+      "top": "tb_pwm_led",
+      "files": [
+       "rtl/pwm_led.v",
+       "rtl/tb_pwm_led.v"
+      ]
+     },
+     "ms": 580,
+     "result": "3/4 · test2 FAIL on0=51 duty=55",
+     "status": "fail",
+     "at": 150,
+     "waitFor": "LED0 was on|check is wrong|FAIL",
+     "reason_before": "Lint passed. Running the testbench on Icarus (iverilog + vvp)",
+     "reason": "test2 failed: duty keeps ramping during the 256-cycle window, so comparing to the final duty is wrong. Patching the testbench."
+    },
+    {
+     "tool": "patch_file",
+     "args": {
+      "path": "rtl/tb_pwm_led.v",
+      "change": "snapshot d0 = duty; accept d0-2..duty+2"
+     },
+     "ms": 24,
+     "est": true,
+     "result": "+4 −4 lines",
+     "status": "ok",
+     "startOn": "check is wrong|snapshot|fix",
+     "reason": "The RTL is fine, the check was wrong. Re-running the same simulation."
+    },
+    {
+     "tool": "simulate",
+     "args": {
+      "top": "tb_pwm_led",
+      "files": [
+       "rtl/pwm_led.v",
+       "rtl/tb_pwm_led.v"
+      ],
+      "vcd": true
+     },
+     "ms": 580,
+     "result": "4/4 PASS · 165.02 µs · pwm_led.vcd",
+     "status": "ok",
+     "startOn": "Run 2|second run|corrected",
+     "waitFor": "4/4|passes|PASS",
+     "reason": "Fail → fix → pass in 1.18 s of tool time. Looking at the waveforms."
+    }
+   ]
+  },
+  "04-gtkwave": {
+   "calls": [
+    {
+     "tool": "waveform",
+     "args": {
+      "vcd": "pwm_led.vcd",
+      "signals": [
+       "clk",
+       "duty",
+       "dir",
+       "led[7:0]"
+      ],
+      "window": "1 PWM period",
+      "stream": "toolstream"
+     },
+     "ms": 900,
+     "est": true,
+     "result": "13 signals · 12,899 edges · PNG + live window",
+     "status": "ok",
+     "at": 200,
+     "reason_before": "Opening the dump in GTKWave on the VM, streamed to the browser",
+     "reason": "Each LED is a PWM train; the 8 carriers are 32 counts apart. Matches the spec. Synthesizing."
+    }
+   ]
+  },
+  "06-yosys": {
+   "calls": [
+    {
+     "tool": "synthesize",
+     "args": {
+      "top": "pwm_led",
+      "family": "ecp5"
+     },
+     "ms": 4238,
+     "result": "150 cells · 48 LUT4 · 41 FF · 52 CCU2C",
+     "status": "ok",
+     "at": 200,
+     "reason_before": "Yosys synth_ecp5: mapping counters to carry chains and logic to LUT4s",
+     "reason": "150 primitives, tiny for an 85K-LUT part. Placing and routing."
+    }
+   ]
+  },
+  "07-nextpnr-3d": {
+   "calls": [
+    {
+     "tool": "place_route",
+     "args": {
+      "device": "LFE5U-85F",
+      "package": "CABGA381",
+      "lpf": "pwm_led.lpf",
+      "freq_mhz": 25
+     },
+     "ms": 8178,
+     "result": "530 arcs · Fmax 214.96 MHz (25 needed)",
+     "status": "ok",
+     "at": 200,
+     "reason_before": "nextpnr-ecp5 on the real ECP5 fabric, ULX3S pin constraints",
+     "reason": "Routed, and timing closes with 8.6× headroom (same nextpnr report). Packing the bitstream."
+    },
+    {
+     "tool": "pack_bitstream",
+     "args": {
+      "config": "pwm_led.config",
+      "compress": true
+     },
+     "ms": 7777,
+     "result": "pwm_led.bit · 282,479 B",
+     "status": "ok",
+     "startOn": "ecppack|bitstream",
+     "reason": "Bitstream ready to flash. Now the board it goes on."
+    }
+   ]
+  },
+  "11-results": {
+   "summary": true
+  },
+  "09-kicad": {
+   "calls": [
+    {
+     "tool": "board_build",
+     "args": {
+      "fpga": "LFE5U-25F-6BG256C",
+      "leds": 8,
+      "osc_mhz": 25,
+      "layers": 2
+     },
+     "ms": 1400,
+     "est": true,
+     "result": "29 parts · 27 nets · 58 connections",
+     "status": "ok",
+     "at": 200,
+     "reason_before": "KiCad: schematic to PCB, footprints placed around the BGA",
+     "reason": "Board placed. Routing it, then checking DRC."
+    },
+    {
+     "tool": "board_drc",
+     "args": {
+      "board": "pwm_led.kicad_pcb"
+     },
+     "ms": 800,
+     "est": true,
+     "result": "0 errors · 0 unconnected",
+     "status": "ok",
+     "startOn": "Design rules|DRC",
+     "reason": "Clean. Spec met, from Verilog to a routed board.",
+     "tag": "roadmap",
+     "note": "DRC numbers come from Freerouting's clearance/connectivity result; kicad-cli DRC exists only in Crusoe-Forge (non-MCP)"
+    }
+   ]
+  }
+ }
+}

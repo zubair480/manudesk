@@ -58,13 +58,13 @@ export default {
     const root = this.root, res = root.querySelector('.res');
     ctx.narrate('One spec, nine tools, zero hand-holding. Here is everything the agent proved.');
     res.classList.add('go');
-    await ctx.sleep(900);
+    await ctx.sleep(2200);
     const caps = [
       'Designed: 40 lines of Verilog for an 8-LED breathing driver.',
       'Simulation caught a real testbench bug. One fix later, 4/4 passed.',
       'Formal tools proved 5 properties for every reachable state.',
       'On the FPGA: 214.96 MHz, 8.6× faster than the board needs.',
-      'On the PCB: 58 connections autorouted to zero, and zero DRC errors.',
+      'On the PCB: 58 connections autorouted to zero, with zero rule violations.',
     ];
     const chaps = [...root.querySelectorAll('.chap')];
     for (let i = 0; i < chaps.length; i++) {
@@ -76,6 +76,7 @@ export default {
       await ctx.sleep(2100);
       c.classList.add('done');
     }
+    await ctx.sleep(800);
     ctx.unfocus?.({ ms: 800 });
     this.leds(root.querySelector('#res-leds'));
     root.querySelector('.res').classList.add('final');

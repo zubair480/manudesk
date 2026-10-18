@@ -286,6 +286,7 @@ export default {
           this.cellOf(p, 'b', k)?.classList.replace('chk', 'ok');
         }
       } else {
+        if (k === 19) ctx.narrate('20 cycles deep, still no counterexample.');
         if (k === 4) { hwA.highlight(UNION_HL); ctx.focus?.(root.querySelector('.sy-foot'), { scale: 1.45, ms: 900, pad: 24 }); }
         this.cells('b', k).forEach(e => e.classList.add('ok'));
         await ctx.sleep(k < 10 ? 160 : 105);

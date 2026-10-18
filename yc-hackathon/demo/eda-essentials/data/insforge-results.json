@@ -1,0 +1,139 @@
+{
+ "_source": "InsForge project yc-hackathon (https://nden3esm.us-west.insforge.app), tables md_designs / md_runs / md_checks / md_iterations. Read-only SELECT snapshot taken 2026-10-18 ~15:46 UTC (totals refreshed). Nothing was written to InsForge.",
+ "totals": {
+  "runs": 12,
+  "reached": 10,
+  "running": 0,
+  "queued": 2,
+  "checks": 59,
+  "checks_failed": 11,
+  "agent_steps": 43,
+  "model": "claude-sonnet-5.5"
+ },
+ "designs": [
+  {
+   "name": "popcount",
+   "summary": "256-bit population count",
+   "baseline": 70.0,
+   "target": 105,
+   "best": 242.7,
+   "x": 3.47,
+   "via": "mcp",
+   "lut": 872,
+   "ff": 309,
+   "story": "sim FAIL (7.2 s) → 170.7 → 242.7 MHz over 9 MCP check calls"
+  },
+  {
+   "name": "fir8",
+   "summary": "8-tap FIR, 16-bit",
+   "baseline": 66.4,
+   "target": 107,
+   "best": 215.0,
+   "x": 3.24,
+   "via": "agent",
+   "lut": 210,
+   "ff": 301,
+   "story": "lint FAIL (26 ms) → fixed → 215 MHz PASS (7.2 s); run took 61 s"
+  },
+  {
+   "name": "mac",
+   "summary": "32×32 multiply-accumulate",
+   "baseline": 74.4,
+   "target": 138,
+   "best": 234.1,
+   "x": 3.15,
+   "via": "agent",
+   "lut": 208,
+   "ff": 355,
+   "story": "sim FAIL (0.7 s) → 234.1 MHz PASS (5.6 s) on iteration 4"
+  },
+  {
+   "name": "add64cmp",
+   "summary": "64-bit add + compare",
+   "baseline": 85.7,
+   "target": 149,
+   "best": null,
+   "x": 1,
+   "via": "baseline",
+   "story": "baseline only"
+  },
+  {
+   "name": "mandel_step",
+   "summary": "Mandelbrot step, Q3.14",
+   "baseline": 79.1,
+   "target": 130,
+   "best": null,
+   "x": 1,
+   "via": "baseline",
+   "story": "baseline only"
+  },
+  {
+   "name": "crc32",
+   "summary": "CRC-32, 64 bits/cycle",
+   "baseline": 61.1,
+   "target": 104,
+   "best": null,
+   "x": 1,
+   "via": "baseline",
+   "story": "2 runs queued"
+  }
+ ],
+ "loop": [
+  {
+   "design": "fir8",
+   "stage": "lint",
+   "pass": false,
+   "mhz": null,
+   "ms": 26,
+   "at": "14:43:52"
+  },
+  {
+   "design": "fir8",
+   "stage": "ok",
+   "pass": true,
+   "mhz": 215.0,
+   "ms": 7198,
+   "at": "14:44:16"
+  },
+  {
+   "design": "mac",
+   "stage": "sim",
+   "pass": false,
+   "mhz": null,
+   "ms": 526,
+   "at": "14:51:42"
+  },
+  {
+   "design": "mac",
+   "stage": "ok",
+   "pass": true,
+   "mhz": 217.4,
+   "ms": 4745,
+   "at": "14:52:19"
+  },
+  {
+   "design": "popcount",
+   "stage": "sim",
+   "pass": false,
+   "mhz": null,
+   "ms": 7208,
+   "at": "15:03:18"
+  },
+  {
+   "design": "popcount",
+   "stage": "ok",
+   "pass": true,
+   "mhz": 170.7,
+   "ms": 7870,
+   "at": "15:03:33"
+  },
+  {
+   "design": "popcount",
+   "stage": "ok",
+   "pass": true,
+   "mhz": 242.7,
+   "ms": 8737,
+   "at": "15:03:44"
+  }
+ ]
+}

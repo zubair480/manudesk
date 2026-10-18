@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Live Hardware View</title>
+<link rel="stylesheet" href="../../core/theme.css">
+<link rel="stylesheet" href="./hwsim.css">
+<style>
+  html, body { overflow: auto; background: #fff; }
+  body { --tool: #ea580c; }
+  main { max-width: 1360px; margin: 0 auto; padding: 32px 28px 60px; }
+  header h1 { margin: 6px 0 4px; font-size: 26px; font-weight: 600; letter-spacing: -1px; }
+  header p { margin: 0 0 22px; color: var(--muted); font-size: 14px; max-width: 760px; line-height: 1.55; }
+  .bar { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; margin-bottom: 14px; }
+  .bar button { font-family: inherit; font-size: 13px; color: var(--ink-2); background: #fff; border: 1px solid var(--line-2); border-radius: 8px; height: 32px; padding: 0 12px; cursor: pointer; transition: all .2s var(--ease); }
+  .bar button:hover { border-color: var(--ink); color: var(--ink); }
+  .bar button.on { background: var(--tool); border-color: var(--tool); color: #fff; }
+  .bar .sp { margin-left: auto; display: flex; align-items: center; gap: 8px; font-size: 12.5px; color: var(--muted); }
+  .bar input[type=range] { accent-color: var(--tool); width: 140px; }
+  .grid { display: grid; grid-template-columns: minmax(0, 1fr) 380px; gap: 20px; align-items: start; }
+  .card { padding: 18px 20px 16px; }
+  .card .eyebrow { margin-bottom: 10px; display: flex; justify-content: space-between; }
+  .side { display: flex; flex-direction: column; gap: 20px; }
+  #log { font-family: var(--mono); font-size: 12px; line-height: 1.7; color: var(--ink-2); max-height: 230px; overflow: auto; }
+  #log div { animation: fadeIn .4s var(--ease-out) both; }
+  #log .pass { color: #1a7f37; font-weight: 600; }
+  #log .event { color: #9a6700; }
+  #log .c { color: var(--faint); }
+  .stage-wrap { margin-top: 28px; }
+  .stage-wrap .bar button.on { background: var(--ink); border-color: var(--ink); color: #fff; }
+  #stage { width: 1400px; height: 700px; max-width: 100%; border: 1px dashed var(--line-2); border-radius: 10px; }
+  @media (max-width: 1000px) { .grid { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+<main>
+  <header>
+    <div class="eyebrow">components/hwsim · Session E</div>
+    <h1>Live hardware view</h1>
+    <p>The real <span class="mono">pwm_led.v</span> datapath, replayed cycle by cycle from Icarus Verilog's VCD (<span class="mono">real/pwm_led.vcd</span>, 4,126 clock edges). Registers tick, buses pulse on change, comparators light when <span class="mono">(pwm_cnt + 32·i) &lt; duty</span>, and the LEDs glow with their real duty cycle. Drag the timeline to scrub.</p>
+  </header>
+  <div class="bar" id="bar">
+    <button data-w="reset">Reset release</button>
+    <button data-w="ramp">Duty ramp</button>
+    <button data-w="test2">test2 window (256 cyc)</button>
+    <button data-w="pwm3">3 PWM periods</button>
+    <button data-w="flip">dir flip @ 255</button>
+    <button data-w="all">Whole run</button>
+    <button id="pause">Pause</button>
+    <button id="hl">Highlight tb reads</button>
+    <span class="sp">speed <input id="speed" type="range" min="1" max="3" step="0.05" value="1.7"><span id="spv" class="mono"></span></span>
+  </div>
+  <div class="grid">
+    <section class="panel card"><div class="eyebrow"><span>mode: 'full'</span><span class="mono" id="state"></span></div><div id="full"></div></section>
+    <div class="side">
+      <section class="panel card"><div class="eyebrow"><span>mode: 'compact'</span><span>side-panel embed</span></div><div id="compact"></div></section>
+      <section class="panel card"><div class="eyebrow"><span>events: marker</span></div><div id="log"></div></section>
+    </div>
+  </div>
+  <section class="stage-wrap">
+    <div class="eyebrow" style="margin-bottom:10px">fill mode: a scene gives the view a sized box (dashed) and it fills it edge to edge</div>
+    <div class="bar" id="sizes">
+      <button data-s="800x700">800 × 700 (tall)</button><button data-s="900x400">900 × 400</button><button data-s="1400x400">1400 × 400</button>
+      <button data-s="900x700">900 × 700</button><button data-s="1400x700" class="on">1400 × 700</button>
+    </div>
+    <div id="stage"></div>
+  </section>
+</main>
+<script type="module">
+  import { mountHwSim, loadTrace } from './hwsim.js';
+  const trace = await loadTrace('../../data/hw-trace.json');
+  const color = '#ea580c';
+  const full = mountHwSim(document.getElementById('full'), { trace, color, mode: 'full' });
+  const mini = mountHwSim(document.getElementById('compact'), { trace, color, mode: 'compact' });
+  const stage = mountHwSim(document.getElementById('stage'), { trace, color, mode: 'full' });
+  full.on('cycle', st => stage.seek(st.cycle));
+  document.querySelectorAll('#sizes button').forEach(b => b.addEventListener('click', () => {
+    const [w, h] = b.dataset.s.split('x');
+    Object.assign(document.getElementById('stage').style, { width: w + 'px', height: h + 'px' });
+    document.querySelectorAll('#sizes button').forEach(x => x.classList.toggle('on', x === b));
+  }));
+  window.hw = { full, mini, stage, trace };
+
+  const $ = s => document.querySelector(s);
+  const speedOf = () => Math.round(10 ** +$('#speed').value);
+  const showSpeed = () => { $('#spv').textContent = speedOf() + ' cyc/s'; };
+  showSpeed();
+  $('#speed').addEventListener('input', () => { showSpeed(); full.setSpeed(speedOf()); mini.setSpeed(speedOf()); });
+
+  // keep the compact view locked to the full one
+  full.on('cycle', s => { mini.seek(s.cycle); $('#state').textContent = `duty ${s.duty} · dir ${s.dir} · led ${s.led.toString(2).padStart(8, '0')}`; });
+  full.on('marker', m => {
+    const d = document.createElement('div');
+    d.className = m.kind;
+    d.innerHTML = `<span class="c">#${m.cycle.toLocaleString()}</span> ${m.label}`;
+    $('#log').prepend(d);
+  });
+
+  async function playWindow(name) {
+    document.querySelectorAll('#bar [data-w]').forEach(b => b.classList.toggle('on', b.dataset.w === name));
+    const [a, b] = name === 'all' ? [0, trace.n - 1] : trace.windows[name];
+    await full.play(a, b, name === 'all' || name === 'ramp' ? speedOf() * 4 : speedOf());
+  }
+  document.querySelectorAll('#bar [data-w]').forEach(b => b.addEventListener('click', () => playWindow(b.dataset.w)));
+  $('#pause').addEventListener('click', () => full.playing ? full.pause() : full.play(undefined, undefined, speedOf()));
+  let hl = false;
+  $('#hl').addEventListener('click', () => {
+    hl = !hl;
+    const spec = hl ? { duty: 'tb reads', dir: 'tb reads', led0: 'tb reads', rst: 'tb writes' } : {};
+    full.highlight(spec); mini.highlight(hl ? { duty: 'reads', led0: 'reads', rst: 'writes' } : {});
+  });
+
+  playWindow('reset').then(() => playWindow('test2'));
+</script>
+</body>
+</html>

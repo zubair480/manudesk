@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Silicon Walkthrough</title>
+<link rel="stylesheet" href="core/theme.css?v=3">
+<link rel="stylesheet" href="core/shell.css?v=2">
+<link rel="stylesheet" href="core/hero.css?v=3">
+<link rel="stylesheet" href="core/story.css?v=2">
+<link rel="stylesheet" href="core/agent.css?v=2">
+<link rel="stylesheet" href="components/hwsim/hwsim.css?v=3" data-hwsim-css>
+<script type="importmap">{ "imports": { "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js", "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/" } }</script>
+</head>
+<body>
+  <header id="top">
+    <div class="brand"><span class="logo"></span><span>Silicon&nbsp;Walkthrough</span><em>agent → MCP → ECP5</em></div>
+    <nav id="stepper" aria-label="Pipeline steps"></nav>
+    <div class="controls">
+      <button id="prev" title="Previous (←)">‹</button>
+      <button id="play" title="Play / pause (space)">▶</button>
+      <button id="next" title="Next (→)">›</button>
+      <button id="speed" title="Playback speed">1.25×</button>
+    </div>
+  </header>
+  <main id="stage"></main>
+  <footer id="caption"><span class="dot"></span><span id="caption-text">Press ▶ to start the walkthrough</span><div id="progress"><i></i></div></footer>
+
+  <div id="intro">
+    <div class="hero">
+      <div class="hero-copy">
+        <div class="pill"><i class="live"></i>Real tool output, captured on this machine</div>
+        <h1 id="hero-h1">An AI agent takes Verilog to a real FPGA</h1>
+        <div class="rotator">Our design was <span class="rot-slot"><span id="rot-verb">simulated</span></span> by <span class="rot-slot"><span id="rot-tool">Icarus Verilog</span></span></div>
+        <p>One hardware design, <code>pwm_led.v</code>, written by an agent and driven through the real open-source tools over MCP: lint, simulation, waveforms, synthesis, and place and route.</p>
+        <div class="cta"><button id="start">Start walkthrough <span>→</span></button></div>
+        <div class="stats">
+          <div><b data-count="1">0</b><small>bug caught on the way</small></div>
+          <div><b data-count="0">0</b><small>lint warnings</small></div>
+          <div><b data-count="214.96" data-dec="2">0</b><em>MHz</em><small>Fmax, 8.6× the 25 MHz needed</small></div>
+          <div><b data-count="2">0</b><small>sim runs to pass</small></div>
+        </div>
+      </div>
+      <div class="hero-visual">
+        <div id="hero-3d"></div>
+        <div class="tag t1"><i style="background:#4f46e5"></i>Lattice ECP5-85F FPGA</div>
+        <div class="tag t2"><i style="background:#2a8bff"></i>8 phase-shifted PWM LEDs</div>
+        <div class="tag t3"><i style="background:#f59e0b"></i>25 MHz clock</div>
+      </div>
+    </div>
+    <div class="pipeline" id="intro-tools"></div>
+  </div>
+  <script type="module" src="core/core.js"></script>
+  <script type="module" src="core/intro.js"></script>
+  <script type="module" src="core/story.js"></script>
+  <script type="module" src="core/agent.js"></script>
+</body>
+</html>

@@ -57,3 +57,4 @@
 @media (prefers-reduced-motion: reduce) {
   .st-card, .st-card-in, .st-teaser, .st-done.fresh, .st-q, .st-prev { animation: none !important; transition: none !important; }
 }
+.st-rail[hidden] { display: none; }

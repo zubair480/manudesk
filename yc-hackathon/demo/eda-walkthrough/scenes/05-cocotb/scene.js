@@ -183,7 +183,7 @@ export default {
       const [{ mountHwSim }, trace] = await Promise.all([import('../../components/hwsim/hwsim.js'), ctx.data('hw-trace')]);
       if (!S || S.root !== root) return;
       const color = getComputedStyle(root).getPropertyValue('--tool').trim() || '#0891b2';
-      const hw = mountHwSim(q('hw'), { trace, mode: 'full', color, startCycle: 4105 });
+      const hw = mountHwSim(q('hw'), { trace, mode: 'full', color, startCycle: 4105, driver: 'driven by cocotb (Python)', glow: 'big' });
       S.hw = hw;
       await hw.ready;
       if (!S || S.hw !== hw) return;
@@ -277,34 +277,22 @@ export default {
       else await sleep(((to - from) / cps) * 1000);
     };
 
-    // ---- camera: zoom onto parts of the live circuit (scene px rects from the SVG)
-    const camRect = (els) => {
-      const base = root.getBoundingClientRect(); let x0 = 1e9, y0 = 1e9, x1 = -1e9, y1 = -1e9;
-      for (const el of els) { const b = el.getBoundingClientRect(); if (!b.width) continue; x0 = Math.min(x0, b.left); y0 = Math.min(y0, b.top); x1 = Math.max(x1, b.right); y1 = Math.max(y1, b.bottom); }
-      return x1 > x0 ? { x: x0 - base.left, y: y0 - base.top, w: x1 - x0, h: y1 - y0 } : null;
-    };
-    const camTarget = (kind) => {
-      const hw = q('hw'); if (!hw) return null;
-      if (kind === 'leds') return camRect(hw.querySelectorAll('.hw-led'));
-      if (kind === 'stair') return camRect([...hw.querySelectorAll('.hw-cmp'), ...hw.querySelectorAll('.hw-led')]);
-      if (kind === 'dir') { const g = [...hw.querySelectorAll('.hw-reg')].find((n) => /up\/down/.test(n.textContent)); return g ? camRect([g]) : null; }
-      return null;
-    };
+    // ---- key moments: hold the highlighted part briefly (no camera zoom on 2D scenes, per the user)
     const camera = async (kind) => {
-      const r = camTarget(kind); if (!r || !ctx.focus) return;
-      ctx.focus(r, { scale: 1.8, ms: 800, pad: 24 }); await sleep(800 + 1500);
-      ctx.unfocus({ ms: 700 }); await sleep(700);
+      // no camera zoom on 2D scenes (user rule); hold the highlighted moment briefly instead
+      void kind; await sleep(1100);
     };
 
     // ================= intro: the real command (skimmed)
-    ctx.narrate('Can plain Python test real hardware? cocotb says yes.');
+    ctx.narrate('Can plain Python test real hardware? cocotb says yes.'); const tIntro = performance.now();
     const p1 = tline(`<span class="prompt">$</span> <span class="cmd"></span>`, 'cmdl'); await ctx.typeInto(p1.querySelector('.cmd'), d.env, 55);
     const p2 = tline(`<span class="prompt">$</span> <span class="cmd"></span>`, 'cmdl'); await ctx.typeInto(p2.querySelector('.cmd'), d.command, 40);
     q('state').textContent = 'running'; q('state').classList.add('on');
-    await streamUntil((L) => L.msg === 'Running tests', 35);
+    await streamUntil((L) => L.msg === 'Running tests', 10);
 
     // ================= tests (normal speed: the circuit carries this part)
     ctx.visual();
+    await sleep(Math.max(0, 1900 - (performance.now() - tIntro))); // let the question land
     ctx.narrate('Same 4 checks as the Verilog testbench, now written in Python.');
     await sleep(2200);
     const plan = buildPlan(S.T);
@@ -374,15 +362,13 @@ export default {
     }
     if (S.hw) S.hw.play(2052, 2820, 110 * ctx.speed, { signal: ctx.signal }).catch(() => {});
     await sleep(500);
-    if (fin && ctx.focus) ctx.focus(fin, { scale: 1.5, ms: 900, pad: 60 });
     ctx.emit('metric', { key: 'cocotb_passed', label: 'cocotb tests passed', value: T.pass, unit: `/ ${T.tests}` });
     ctx.emit('metric', { key: 'cocotb_sim_time', label: 'cocotb simulated time', value: +(T.simTimeNs / 1000).toFixed(2), unit: 'µs' });
     ctx.emit('metric', { key: 'cocotb_wall_time', label: 'cocotb wall time', value: T.realTimeS, unit: 's' });
     await sleep(2400);
     ctx.narrate('4/4 PASS. The logic works. Now can it become real chip cells?');
     await sleep(2200);
-    ctx.unfocus?.({ ms: 700 });
-    await sleep(600);
+    await sleep(300);
   },
 
   unmount() {

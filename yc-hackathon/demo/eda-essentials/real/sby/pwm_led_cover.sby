@@ -1,0 +1,16 @@
+[options]
+mode cover
+depth 48
+
+[engines]
+smtbmc yices
+
+[script]
+read_verilog -formal pwm_led_cover_fv.v
+# DIV reduced from 16 to 2 so interesting states are reachable within 48 cycles
+chparam -set DIV 2 pwm_led
+prep -top pwm_led
+
+[files]
+pwm_led_cover_fv.v
+pwm_led_cover.vh

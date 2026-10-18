@@ -194,9 +194,7 @@ export default {
     const sch = q('.sch-svg');
     sch.classList.add('show-sym'); await countTo('parts', data.parts.length, 1300);
     sch.classList.add('show-wire');
-    ctx.focus?.(sch.querySelector('.sym'), { scale: 1.6, ms: 900 });   // U1, the ECP5
     await countTo('nets', data.nets.length, 1500);
-    ctx.unfocus?.({ ms: 700 });
     sch.classList.add('show-lbl'); await ctx.sleep(900);
 
     // ---------- 2. ERC ----------
@@ -241,7 +239,6 @@ export default {
     });
     status(`Placement done · ${data.ratsnest.length} unrouted connections`, '56.0 × 38.0 mm · 2 layers');
     say(`Parts are placed. The thin lines are the ratsnest: ${data.ratsnest.length} point-to-point connections from the netlist, still without copper.`);
-    ctx.narrate(`${data.ratsnest.length} wires to route by hand, or 9 seconds by machine?`);
     const rw = S.root.querySelector('[data-r="rats"]')?.closest('dd'); rw?.classList.add('flash');
     await anim(ctx, 900, (t) => { pcbState.ratsA = 0.9 + 0.1 * Math.sin(t * Math.PI * 4); draw(); });
     rw?.classList.remove('flash');
@@ -277,8 +274,7 @@ export default {
       await ctx.sleep(900);
     } else {
       say('3D viewer could not load (offline?). The routed 2D board above is the same data.');
-      ctx.narrate(`${data.ratsnest.length} wires to route by hand, or 9 seconds by machine?`);
-    const rw = S.root.querySelector('[data-r="rats"]')?.closest('dd'); rw?.classList.add('flash');
+      const rw = S.root.querySelector('[data-r="rats"]')?.closest('dd'); rw?.classList.add('flash');
     await anim(ctx, 900, (t) => { pcbState.ratsA = 0.9 + 0.1 * Math.sin(t * Math.PI * 4); draw(); });
     rw?.classList.remove('flash');
     }
@@ -326,9 +322,8 @@ export default {
     ctx.emit('metric', { key: 'pcb_components', label: 'Components', value: data.parts.length });
     ctx.emit('metric', { key: 'pcb_layers', label: 'Copper layers', value: data.board.layers.length });
     ctx.emit('metric', { key: 'pcb_drc_errors', label: 'Rule violations (Freerouting check)', value: errors });
-    ctx.focus?.(q('.kc9-drc'), { scale: 1.5, ms: 800 });
+    ctx.narrate(`0 rule violations. So how did a robot route ${data.ratsnest.length} wires in 9 s?`);
     await ctx.sleep(1400);
-    ctx.unfocus?.({ ms: 700 });
     await ctx.sleep(2000);
   },
 

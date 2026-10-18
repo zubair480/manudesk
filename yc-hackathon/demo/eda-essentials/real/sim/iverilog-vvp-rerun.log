@@ -1,0 +1,13 @@
+$ iverilog -g2012 -o sim.vvp rtl/tb_pwm_led.v rtl/pwm_led.v
+iverilog exit 0
+$ vvp -n sim.vvp
+VCD info: dumpfile pwm_led.vcd opened for output.
+[140000] reset released
+PASS test1 duty ramping up: duty=39
+PASS test2 led0 on-time 51/256 within duty window 39..55
+PASS test3 direction reversed at duty=255
+PASS test4 reset clears led and duty
+ALL TESTS PASSED (4/4)
+rtl/tb_pwm_led.v:39: $finish called at 165020000 (1ps)
+vvp exit 0
+wall_ms 140

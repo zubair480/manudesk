@@ -137,3 +137,6 @@
 .sa-ivl .diff .dl .code { overflow: visible; text-overflow: clip; word-break: break-word; }
 .sa-ivl .diff mark { background: #fde68a; color: inherit; border-radius: 3px; padding: 0 2px; font-weight: 600; }
 .sa-ivl .cp-row span { white-space: normal; line-height: 1.3; }
+/* FAIL spotlight (2D scenes may not zoom): fade everything except the LED0/duty rings and the judge meter */
+.sa-ivl .strip, .sa-ivl .rail > .cp, .sa-ivl .hwsim svg > *:not(.hw-hl-layer) { transition: opacity .6s var(--ease-out); }
+.sa-ivl.spot .strip, .sa-ivl.spot .rail > .cp, .sa-ivl.spot .hwsim svg > *:not(.hw-hl-layer) { opacity: .3; }

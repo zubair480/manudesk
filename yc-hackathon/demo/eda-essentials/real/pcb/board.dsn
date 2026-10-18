@@ -1,0 +1,463 @@
+(pcb "board.dsn"
+  (parser
+    (string_quote ")
+    (space_in_quoted_tokens on)
+    (host_cad "KiCad's Pcbnew")
+    (host_version "9.0")
+  )
+  (resolution um 10)
+  (unit um)
+  (structure
+    (layer F.Cu (type signal) (property (index 0)))
+    (layer B.Cu (type signal) (property (index 1)))
+    (boundary (path pcb 0  0 0  56000 0  56000 -38000  0 -38000  0 0))
+    (via "Via[0-1]_600:300_um")
+    (rule (width 200) (clearance 150) (clearance 150 (type default_smd)) (clearance 50 (type smd_smd)))
+  )
+  (placement
+    (component "Package_BGA:ECP5_CABGA256::U1"
+      (place U1 28000 -15000 front 0 (PN "LFE5U-25F-6BG256C"))
+    )
+    (component "Oscillator:Oscillator_SMD_3225-4Pin::Y1"
+      (place Y1 15000 -10000 front 0 (PN "25MHz"))
+    )
+    (component "Capacitor_SMD:C_0402::C1"
+      (place C1 20500 -9500 front 0 (PN "100nF"))
+    )
+    (component "Capacitor_SMD:C_0402::C2"
+      (place C2 35500 -9500 front 0 (PN "100nF"))
+    )
+    (component "Capacitor_SMD:C_0402::C3"
+      (place C3 20500 -21000 front 0 (PN "100nF"))
+    )
+    (component "Capacitor_SMD:C_0402::C4"
+      (place C4 35500 -21000 front 0 (PN "100nF"))
+    )
+    (component "Resistor_SMD:R_0402::R1"
+      (place R1 14000 -25500 front 0 (PN "330R"))
+    )
+    (component "LED_SMD:LED_0603::D1"
+      (place D1 14000 -30500 front 0 (PN "LED_Green"))
+    )
+    (component "Resistor_SMD:R_0402::R2"
+      (place R2 18000 -25500 front 0 (PN "330R"))
+    )
+    (component "LED_SMD:LED_0603::D2"
+      (place D2 18000 -30500 front 0 (PN "LED_Green"))
+    )
+    (component "Resistor_SMD:R_0402::R3"
+      (place R3 22000 -25500 front 0 (PN "330R"))
+    )
+    (component "LED_SMD:LED_0603::D3"
+      (place D3 22000 -30500 front 0 (PN "LED_Green"))
+    )
+    (component "Resistor_SMD:R_0402::R4"
+      (place R4 26000 -25500 front 0 (PN "330R"))
+    )
+    (component "LED_SMD:LED_0603::D4"
+      (place D4 26000 -30500 front 0 (PN "LED_Green"))
+    )
+    (component "Resistor_SMD:R_0402::R5"
+      (place R5 30000 -25500 front 0 (PN "330R"))
+    )
+    (component "LED_SMD:LED_0603::D5"
+      (place D5 30000 -30500 front 0 (PN "LED_Green"))
+    )
+    (component "Resistor_SMD:R_0402::R6"
+      (place R6 34000 -25500 front 0 (PN "330R"))
+    )
+    (component "LED_SMD:LED_0603::D6"
+      (place D6 34000 -30500 front 0 (PN "LED_Green"))
+    )
+    (component "Resistor_SMD:R_0402::R7"
+      (place R7 38000 -25500 front 0 (PN "330R"))
+    )
+    (component "LED_SMD:LED_0603::D7"
+      (place D7 38000 -30500 front 0 (PN "LED_Green"))
+    )
+    (component "Resistor_SMD:R_0402::R8"
+      (place R8 42000 -25500 front 0 (PN "330R"))
+    )
+    (component "LED_SMD:LED_0603::D8"
+      (place D8 42000 -30500 front 0 (PN "LED_Green"))
+    )
+    (component "Connector_PinHeader_2.54mm:PinHeader_2x05::J1"
+      (place J1 48770 -15080 front 0 (PN "JTAG"))
+    )
+    (component "Connector_USB:USB_Micro-B::J2"
+      (place J2 3400 -19000 front 0 (PN "USB_Micro-B"))
+    )
+    (component "Package_TO_SOT_SMD:SOT-223::U2"
+      (place U2 9000 -28000 front 0 (PN "AMS1117-3.3"))
+    )
+    (component "MountingHole:MountingHole_3.2mm_M3_Pad::H1"
+      (place H1 3500 -3500 front 0 (PN "MountingHole_3.2mm"))
+    )
+    (component "MountingHole:MountingHole_3.2mm_M3_Pad::H2"
+      (place H2 52500 -3500 front 0 (PN "MountingHole_3.2mm"))
+    )
+    (component "MountingHole:MountingHole_3.2mm_M3_Pad::H3"
+      (place H3 3500 -34500 front 0 (PN "MountingHole_3.2mm"))
+    )
+    (component "MountingHole:MountingHole_3.2mm_M3_Pad::H4"
+      (place H4 52500 -34500 front 0 (PN "MountingHole_3.2mm"))
+    )
+  )
+  (library
+    (image "Package_BGA:ECP5_CABGA256::U1"
+      (outline (path signal 50  -5000 5000  5000 5000  5000 -5000  -5000 -5000  -5000 5000))
+      (pin BGA_450 "A1" -3500 3500)
+      (pin BGA_450 "A2" -2500 3500)
+      (pin BGA_450 "A3" -1500 3500)
+      (pin BGA_450 "A4" -500 3500)
+      (pin BGA_450 "A5" 500 3500)
+      (pin BGA_450 "A6" 1500 3500)
+      (pin BGA_450 "A7" 2500 3500)
+      (pin BGA_450 "A8" 3500 3500)
+      (pin BGA_450 "B1" -3500 2500)
+      (pin BGA_450 "B2" -2500 2500)
+      (pin BGA_450 "B3" -1500 2500)
+      (pin BGA_450 "B4" -500 2500)
+      (pin BGA_450 "B5" 500 2500)
+      (pin BGA_450 "B6" 1500 2500)
+      (pin BGA_450 "B7" 2500 2500)
+      (pin BGA_450 "B8" 3500 2500)
+      (pin BGA_450 "C1" -3500 1500)
+      (pin BGA_450 "C2" -2500 1500)
+      (pin BGA_450 "C3" -1500 1500)
+      (pin BGA_450 "C4" -500 1500)
+      (pin BGA_450 "C5" 500 1500)
+      (pin BGA_450 "C6" 1500 1500)
+      (pin BGA_450 "C7" 2500 1500)
+      (pin BGA_450 "C8" 3500 1500)
+      (pin BGA_450 "D1" -3500 500)
+      (pin BGA_450 "D2" -2500 500)
+      (pin BGA_450 "D3" -1500 500)
+      (pin BGA_450 "D4" -500 500)
+      (pin BGA_450 "D5" 500 500)
+      (pin BGA_450 "D6" 1500 500)
+      (pin BGA_450 "D7" 2500 500)
+      (pin BGA_450 "D8" 3500 500)
+      (pin BGA_450 "E1" -3500 -500)
+      (pin BGA_450 "E2" -2500 -500)
+      (pin BGA_450 "E3" -1500 -500)
+      (pin BGA_450 "E4" -500 -500)
+      (pin BGA_450 "E5" 500 -500)
+      (pin BGA_450 "E6" 1500 -500)
+      (pin BGA_450 "E7" 2500 -500)
+      (pin BGA_450 "E8" 3500 -500)
+      (pin BGA_450 "F1" -3500 -1500)
+      (pin BGA_450 "F2" -2500 -1500)
+      (pin BGA_450 "F3" -1500 -1500)
+      (pin BGA_450 "F4" -500 -1500)
+      (pin BGA_450 "F5" 500 -1500)
+      (pin BGA_450 "F6" 1500 -1500)
+      (pin BGA_450 "F7" 2500 -1500)
+      (pin BGA_450 "F8" 3500 -1500)
+      (pin BGA_450 "G1" -3500 -2500)
+      (pin BGA_450 "G2" -2500 -2500)
+      (pin BGA_450 "G3" -1500 -2500)
+      (pin BGA_450 "G4" -500 -2500)
+      (pin BGA_450 "G5" 500 -2500)
+      (pin BGA_450 "G6" 1500 -2500)
+      (pin BGA_450 "G7" 2500 -2500)
+      (pin BGA_450 "G8" 3500 -2500)
+      (pin BGA_450 "H1" -3500 -3500)
+      (pin BGA_450 "H2" -2500 -3500)
+      (pin BGA_450 "H3" -1500 -3500)
+      (pin BGA_450 "H4" -500 -3500)
+      (pin BGA_450 "H5" 500 -3500)
+      (pin BGA_450 "H6" 1500 -3500)
+      (pin BGA_450 "H7" 2500 -3500)
+      (pin BGA_450 "H8" 3500 -3500)
+    )
+    (image "Oscillator:Oscillator_SMD_3225-4Pin::Y1"
+      (outline (path signal 50  -1600 1250  1600 1250  1600 -1250  -1600 -1250  -1600 1250))
+      (pin OSC "1" -1100 -850)
+      (pin OSC "2" 1100 -850)
+      (pin OSC "3" 1100 850)
+      (pin OSC "4" -1100 850)
+    )
+    (image "Capacitor_SMD:C_0402::C1"
+      (outline (path signal 50  -500 250  500 250  500 -250  -500 -250  -500 250))
+      (pin R0402 "1" -500 0)
+      (pin R0402 "2" 500 0)
+    )
+    (image "Capacitor_SMD:C_0402::C2"
+      (outline (path signal 50  -500 250  500 250  500 -250  -500 -250  -500 250))
+      (pin R0402 "1" -500 0)
+      (pin R0402 "2" 500 0)
+    )
+    (image "Capacitor_SMD:C_0402::C3"
+      (outline (path signal 50  -500 250  500 250  500 -250  -500 -250  -500 250))
+      (pin R0402 "1" -500 0)
+      (pin R0402 "2" 500 0)
+    )
+    (image "Capacitor_SMD:C_0402::C4"
+      (outline (path signal 50  -500 250  500 250  500 -250  -500 -250  -500 250))
+      (pin R0402 "1" -500 0)
+      (pin R0402 "2" 500 0)
+    )
+    (image "Resistor_SMD:R_0402::R1"
+      (outline (path signal 50  -250 500  250 500  250 -500  -250 -500  -250 500))
+      (pin R0402 "1" 0 500)
+      (pin R0402 "2" 0 -500)
+    )
+    (image "LED_SMD:LED_0603::D1"
+      (outline (path signal 50  -400 800  400 800  400 -800  -400 -800  -400 800))
+      (pin R0603 "1" 0 -800)
+      (pin R0603 "2" 0 800)
+    )
+    (image "Resistor_SMD:R_0402::R2"
+      (outline (path signal 50  -250 500  250 500  250 -500  -250 -500  -250 500))
+      (pin R0402 "1" 0 500)
+      (pin R0402 "2" 0 -500)
+    )
+    (image "LED_SMD:LED_0603::D2"
+      (outline (path signal 50  -400 800  400 800  400 -800  -400 -800  -400 800))
+      (pin R0603 "1" 0 -800)
+      (pin R0603 "2" 0 800)
+    )
+    (image "Resistor_SMD:R_0402::R3"
+      (outline (path signal 50  -250 500  250 500  250 -500  -250 -500  -250 500))
+      (pin R0402 "1" 0 500)
+      (pin R0402 "2" 0 -500)
+    )
+    (image "LED_SMD:LED_0603::D3"
+      (outline (path signal 50  -400 800  400 800  400 -800  -400 -800  -400 800))
+      (pin R0603 "1" 0 -800)
+      (pin R0603 "2" 0 800)
+    )
+    (image "Resistor_SMD:R_0402::R4"
+      (outline (path signal 50  -250 500  250 500  250 -500  -250 -500  -250 500))
+      (pin R0402 "1" 0 500)
+      (pin R0402 "2" 0 -500)
+    )
+    (image "LED_SMD:LED_0603::D4"
+      (outline (path signal 50  -400 800  400 800  400 -800  -400 -800  -400 800))
+      (pin R0603 "1" 0 -800)
+      (pin R0603 "2" 0 800)
+    )
+    (image "Resistor_SMD:R_0402::R5"
+      (outline (path signal 50  -250 500  250 500  250 -500  -250 -500  -250 500))
+      (pin R0402 "1" 0 500)
+      (pin R0402 "2" 0 -500)
+    )
+    (image "LED_SMD:LED_0603::D5"
+      (outline (path signal 50  -400 800  400 800  400 -800  -400 -800  -400 800))
+      (pin R0603 "1" 0 -800)
+      (pin R0603 "2" 0 800)
+    )
+    (image "Resistor_SMD:R_0402::R6"
+      (outline (path signal 50  -250 500  250 500  250 -500  -250 -500  -250 500))
+      (pin R0402 "1" 0 500)
+      (pin R0402 "2" 0 -500)
+    )
+    (image "LED_SMD:LED_0603::D6"
+      (outline (path signal 50  -400 800  400 800  400 -800  -400 -800  -400 800))
+      (pin R0603 "1" 0 -800)
+      (pin R0603 "2" 0 800)
+    )
+    (image "Resistor_SMD:R_0402::R7"
+      (outline (path signal 50  -250 500  250 500  250 -500  -250 -500  -250 500))
+      (pin R0402 "1" 0 500)
+      (pin R0402 "2" 0 -500)
+    )
+    (image "LED_SMD:LED_0603::D7"
+      (outline (path signal 50  -400 800  400 800  400 -800  -400 -800  -400 800))
+      (pin R0603 "1" 0 -800)
+      (pin R0603 "2" 0 800)
+    )
+    (image "Resistor_SMD:R_0402::R8"
+      (outline (path signal 50  -250 500  250 500  250 -500  -250 -500  -250 500))
+      (pin R0402 "1" 0 500)
+      (pin R0402 "2" 0 -500)
+    )
+    (image "LED_SMD:LED_0603::D8"
+      (outline (path signal 50  -400 800  400 800  400 -800  -400 -800  -400 800))
+      (pin R0603 "1" 0 -800)
+      (pin R0603 "2" 0 800)
+    )
+    (image "Connector_PinHeader_2.54mm:PinHeader_2x05::J1"
+      (outline (path signal 50  -2540 6350  2540 6350  2540 -6350  -2540 -6350  -2540 6350))
+      (pin TH_SQ "1" -1270 5080)
+      (pin TH_1700 "2" 1270 5080)
+      (pin TH_1700 "3" -1270 2540)
+      (pin TH_1700 "4" 1270 2540)
+      (pin TH_1700 "5" -1270 0)
+      (pin TH_1700 "6" 1270 0)
+      (pin TH_1700 "7" -1270 -2540)
+      (pin TH_1700 "8" 1270 -2540)
+      (pin TH_1700 "9" -1270 -5080)
+      (pin TH_1700 "10" 1270 -5080)
+    )
+    (image "Connector_USB:USB_Micro-B::J2"
+      (outline (path signal 50  -2500 3750  2500 3750  2500 -3750  -2500 -3750  -2500 3750))
+      (pin USB "1" 0 1300)
+      (pin USB "2" 0 650)
+      (pin USB "3" 0 0)
+      (pin USB "4" 0 -650)
+      (pin USB "5" 0 -1300)
+    )
+    (image "Package_TO_SOT_SMD:SOT-223::U2"
+      (outline (path signal 50  -3250 1750  3250 1750  3250 -1750  -3250 -1750  -3250 1750))
+      (pin SOT_PIN "1" -2300 -3100)
+      (pin SOT_PIN "2" 0 -3100)
+      (pin SOT_PIN "3" 2300 -3100)
+      (pin SOT_TAB "4" 0 3100)
+    )
+    (image "MountingHole:MountingHole_3.2mm_M3_Pad::H1"
+      (outline (path signal 50  -2800 2800  2800 2800  2800 -2800  -2800 -2800  -2800 2800))
+      (pin MH_3200 "1" 0 0)
+    )
+    (image "MountingHole:MountingHole_3.2mm_M3_Pad::H2"
+      (outline (path signal 50  -2800 2800  2800 2800  2800 -2800  -2800 -2800  -2800 2800))
+      (pin MH_3200 "1" 0 0)
+    )
+    (image "MountingHole:MountingHole_3.2mm_M3_Pad::H3"
+      (outline (path signal 50  -2800 2800  2800 2800  2800 -2800  -2800 -2800  -2800 2800))
+      (pin MH_3200 "1" 0 0)
+    )
+    (image "MountingHole:MountingHole_3.2mm_M3_Pad::H4"
+      (outline (path signal 50  -2800 2800  2800 2800  2800 -2800  -2800 -2800  -2800 2800))
+      (pin MH_3200 "1" 0 0)
+    )
+    (padstack BGA_450
+      (shape (circle F.Cu 450))
+      (attach off)
+    )
+    (padstack R0402
+      (shape (rect F.Cu -300 -300 300 300))
+      (attach off)
+    )
+    (padstack R0603
+      (shape (rect F.Cu -450 -475 450 475))
+      (attach off)
+    )
+    (padstack OSC
+      (shape (rect F.Cu -550 -450 550 450))
+      (attach off)
+    )
+    (padstack USB
+      (shape (rect F.Cu -675 -200 675 200))
+      (attach off)
+    )
+    (padstack SOT_PIN
+      (shape (rect F.Cu -500 -800 500 800))
+      (attach off)
+    )
+    (padstack SOT_TAB
+      (shape (rect F.Cu -1650 -800 1650 800))
+      (attach off)
+    )
+    (padstack TH_1700
+      (shape (circle F.Cu 1700))
+      (shape (circle B.Cu 1700))
+      (attach off)
+    )
+    (padstack TH_SQ
+      (shape (rect F.Cu -850 -850 850 850))
+      (shape (rect B.Cu -850 -850 850 850))
+      (attach off)
+    )
+    (padstack MH_3200
+      (shape (circle F.Cu 5600))
+      (shape (circle B.Cu 5600))
+      (attach off)
+    )
+    (padstack "Via[0-1]_600:300_um"
+      (shape (circle F.Cu 600))
+      (shape (circle B.Cu 600))
+      (attach off)
+    )
+  )
+  (network
+    (net "LED0"
+      (pins U1-H1 R1-1)
+    )
+    (net "/led_a0"
+      (pins R1-2 D1-2)
+    )
+    (net "LED1"
+      (pins U1-H2 R2-1)
+    )
+    (net "/led_a1"
+      (pins R2-2 D2-2)
+    )
+    (net "LED2"
+      (pins U1-H3 R3-1)
+    )
+    (net "/led_a2"
+      (pins R3-2 D3-2)
+    )
+    (net "LED3"
+      (pins U1-H4 R4-1)
+    )
+    (net "/led_a3"
+      (pins R4-2 D4-2)
+    )
+    (net "LED4"
+      (pins U1-H5 R5-1)
+    )
+    (net "/led_a4"
+      (pins R5-2 D5-2)
+    )
+    (net "LED5"
+      (pins U1-H6 R6-1)
+    )
+    (net "/led_a5"
+      (pins R6-2 D6-2)
+    )
+    (net "LED6"
+      (pins U1-H7 R7-1)
+    )
+    (net "/led_a6"
+      (pins R7-2 D7-2)
+    )
+    (net "LED7"
+      (pins U1-H8 R8-1)
+    )
+    (net "/led_a7"
+      (pins R8-2 D8-2)
+    )
+    (net "CLK25"
+      (pins U1-B1 Y1-3)
+    )
+    (net "TCK"
+      (pins U1-B8 J1-3)
+    )
+    (net "TDI"
+      (pins U1-C8 J1-4)
+    )
+    (net "TMS"
+      (pins U1-D8 J1-5)
+    )
+    (net "TDO"
+      (pins U1-E8 J1-6)
+    )
+    (net "RST"
+      (pins U1-F8 J1-7)
+    )
+    (net "USB_DN"
+      (pins U1-E1 J2-2)
+    )
+    (net "USB_DP"
+      (pins U1-F1 J2-3)
+    )
+    (net "VBUS"
+      (pins J2-1 U2-3)
+    )
+    (net "+3V3"
+      (pins U1-C3 U1-C6 U1-F3 U1-F6 Y1-4 Y1-1 U2-2 U2-4 J1-1 C1-1 C2-1 C3-1 C4-1)
+    )
+    (net "GND"
+      (pins U1-D4 U1-D5 U1-E4 U1-E5 Y1-2 J2-5 U2-1 J1-2 J1-8 J1-10 C1-2 C2-2 C3-2 C4-2 D1-1 D2-1 D3-1 D4-1 D5-1 D6-1 D7-1 D8-1)
+    )
+    (class kicad_default "" "LED0" "/led_a0" "LED1" "/led_a1" "LED2" "/led_a2" "LED3" "/led_a3" "LED4" "/led_a4" "LED5" "/led_a5" "LED6" "/led_a6" "LED7" "/led_a7" "CLK25" "TCK" "TDI" "TMS" "TDO" "RST" "USB_DN" "USB_DP" "VBUS" "+3V3" "GND"
+      (circuit (use_via "Via[0-1]_600:300_um"))
+      (rule (width 200) (clearance 150))
+    )
+  )
+  (wiring
+  )
+)

@@ -14,7 +14,7 @@
 @keyframes rise { to { transform: none; } }
 .rotator { font-size: 19px; color: var(--muted); font-weight: 400; margin-bottom: 18px; animation: fadeIn .8s var(--ease-out) .7s both; }
 .rot-slot { display: inline-block; overflow: hidden; vertical-align: bottom; }
-.rot-slot > span { display: inline-block; font-weight: 600; color: var(--ink); transition: transform .26s var(--ease), opacity .26s; }
+.rot-slot > span { display: inline-block; font-weight: 600; color: var(--ink); transition: transform .16s var(--ease), opacity .16s; }
 .rot-slot > span.out { transform: translateY(-80%); opacity: 0; }
 .rot-slot > span.in { animation: rotIn .45s var(--ease-out) both; }
 @keyframes rotIn { from { transform: translateY(80%); opacity: 0; } to { transform: none; opacity: 1; } }
@@ -52,3 +52,5 @@ kbd { font-family: var(--mono); font-size: 11px; padding: 1px 6px; border: 1px s
 .pipeline .node.on b, .pipeline .node.past b { color: var(--ink); }
 .pipeline small { font-size: 10.5px; color: var(--faint); font-family: var(--mono); }
 @media (max-width: 1000px) { .hero { grid-template-columns: 1fr; } .hero-visual { min-height: 300px; } .stats { grid-template-columns: repeat(2, auto); } .pipeline { grid-template-columns: repeat(6, 1fr); } .pipeline .rail { display: none; } }
+
+@media (max-height: 760px) { .stats { margin-top: 22px; padding-top: 14px; } .stats b { font-size: 24px; } #hero-h1 { font-size: clamp(34px, 4.6vw, 60px); margin: 14px 0 12px; } .pipeline { padding: 10px 0 14px; } }

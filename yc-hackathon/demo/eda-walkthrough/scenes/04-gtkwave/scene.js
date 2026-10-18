@@ -336,7 +336,7 @@ function syncReadout() {
   q('r-ledn').textContent = bits.some(b => b == null) ? '' : `${bits.filter(Boolean).length} on`;
   const cyc = Math.max(0, Math.floor((t - 20) / S.d.clkPeriodNs)); // trace = one sample per rising edge at 20 + 40k ns
   q('rc').textContent = `cycle ${cyc.toLocaleString('en-US')}`;
-  if (S.hw && S.hwCycle !== cyc) { S.hwCycle = cyc; S.hw.seek(Math.min(cyc, (S.hw.trace?.n || 1e9) - 1)); }
+  if (S.hw && !S.hwHold && S.hwCycle !== cyc) { S.hwCycle = cyc; S.hw.seek(Math.min(cyc, (S.hw.trace?.n || 1e9) - 1)); }
 }
 
 /* --------------------------------------------------------------- scene */
@@ -392,7 +392,11 @@ export default {
     };
     S.sel = ['duty[7:0]']; S.hw?.highlight({ duty: 'duty[7:0]' });
     callout('Across the whole run <b>duty</b> climbs to <b>0xFF</b>. At the far right <b>dir</b> drops to 0 and the LEDs start dimming.');
-    const reveal = tween(5600, (k) => { S.reveal = k * d.endNs; S.cursor = S.reveal; }, sig, (t) => t);
+    let midCap = false;
+    const reveal = tween(7200, (k) => {
+      S.reveal = k * d.endNs; S.cursor = S.reveal;
+      if (!midCap && k > 0.72) { midCap = true; ctx.narrate('Each row is one wire: clock, brightness, 8 LEDs'); }
+    }, sig, (t) => t);
     for (const name of ORDER) {
       const base = name.replace(/\[.*/, '');
       const li = list.querySelector(`[data-name="${base}"]`); li.classList.add('pick');
@@ -430,22 +434,16 @@ export default {
       }, sig, easeIO);
       S.view.t0 = a; S.view.t1 = b;
     };
-    const rowsRect = (a, b) => {
-      const base = S.root.getBoundingClientRect(), cv = S.cv.getBoundingClientRect(), sp = S.root.querySelector('.gw-signals').getBoundingClientRect();
-      return { x: sp.left - base.left, y: cv.top - base.top + S.RULER + a * S.rowH, w: cv.right - sp.left, h: (b - a + 1) * S.rowH };
-    };
     ctx.narrate("Zoom in: LED0's pulse grows 68, 85, 102… clocks wide");
     callout('The number on each <b>led[0]</b> pulse is its on-time in clocks. It widens every period: the breathing ramp that test2 checked.');
     S.marker = startP - 3 * P;
     await zoomTo(startP - 4 * P, startP + 4 * P, 2600);
     select(['led[0]']); S.hw?.highlight({ led0: 'on-time grows', duty: 'ramping' }); S.ann = { kind: 'widths', alpha: 0 }; await tween(500, (k) => { S.ann.alpha = k; }, sig);
-    const camW = rowsRect(4, 6);
-    ctx.focus?.(camW, { scale: 1.8, ms: 800 });
     // P0: no dead spell, the cursor keeps sweeping so the LEDs and readout tick
     await tween(2600, (k) => { S.cursor = startP - 4 * P + k * 8 * P; }, sig, (t) => t);
     ctx.narrate("Wider pulse, brighter LED. That's the breathing.");
     await tween(1400, (k) => { S.cursor = startP + 4 * P - k * 2 * P; }, sig, easeIO);
-    ctx.unfocus?.({ ms: 700 }); S.cursor = null;
+    S.cursor = null;
     await tween(400, (k) => { S.ann.alpha = 1 - k; }, sig);
 
     ctx.narrate('One cycle is 256 clocks. Each LED starts 32 clocks after the last.');
@@ -455,9 +453,7 @@ export default {
     select(['led[0]', 'led[1]', 'led[2]', 'led[3]', 'led[4]', 'led[5]', 'led[6]', 'led[7]']); S.hw?.highlight({ leds: 'phase +32 clk each' }); S.ann = { kind: 'phase', alpha: 0 }; await tween(600, (k) => { S.ann.alpha = k; }, sig);
 
     // 5. cursor sweep across the period with live value readout
-    ctx.focus?.(rowsRect(5, 12), { scale: 1.35, ms: 800 });
     await tween(4200, (k) => { S.cursor = startP + k * P; }, sig, easeIO);
-    ctx.unfocus?.({ ms: 700 });
     await sleep(600);
     S.cursor = startP + P * 0.62; S.dirty = true;
 
@@ -466,16 +462,13 @@ export default {
     ctx.emit('metric', { key: 'wave_transitions', label: 'Signal transitions inspected', value: edges, unit: '' });
     ctx.emit('metric', { key: 'wave_pwm_period', label: 'PWM period', value: +(P / 1000).toFixed(2), unit: 'µs' });
     ctx.emit('metric', { key: 'wave_led_phase', label: 'LED phase shift', value: 32, unit: 'clk' });
+    S.hwHold = true; // the circuit now plays on its own; stop cursor-sync seeks
     S.hw?.highlight({ duty: 'hits 255', dir: 'flips to dimming' });
     callout('At <b>duty = 255</b> the up/down register <b>dir</b> flips to 0 and the brightness ramps back down: the LEDs breathe out.');
     ctx.narrate('Duty hits 255, dir flips, the LEDs dim. Can a script prove it?');
-    const hwEl = S.root.querySelector('.gw-hw');
-    if (hwEl) ctx.focus?.(hwEl, { scale: 1.5, ms: 900 });
     if (S.hw) { try { await S.hw.play(4078, 4120, 20 * ctx.speed, { signal: sig }); } catch (e) { if (e?.name === 'AbortError') throw e; } }
     else await sleep(2100);
-    await sleep(900);
-    ctx.unfocus?.({ ms: 700 });
-    await sleep(500);
+    await sleep(1200);
   },
 
   unmount() {

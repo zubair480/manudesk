@@ -1,0 +1,139 @@
+/* Scene 02-iverilog (Session A). White base; terminal strip <=25%, live circuit >=75%. Scoped under .sa-ivl */
+.sa-ivl { --tool: #ea580c; --ok: #1a7f37; --bad: #cf222e; --wn: #9a6700;
+  position: absolute; inset: 0; padding: 12px 14px; display: grid; grid-template-columns: minmax(260px, 25%) minmax(0, 1fr); gap: 12px; }
+.sa-ivl, .sa-ivl * { font-variant-ligatures: none; font-feature-settings: "liga" 0, "calt" 0; }
+.sa-ivl .tk-kw { color: #cf222e; } .sa-ivl .tk-ty { color: #8250df; } .sa-ivl .tk-num { color: #0550ae; }
+.sa-ivl .tk-com { color: #6e7781; font-style: italic; } .sa-ivl .tk-str { color: #0a3069; }
+.sa-ivl .tk-sys { color: #8250df; } .sa-ivl .tk-dir { color: #953800; } .sa-ivl .tk-op { color: #24292f; }
+
+/* ---- terminal strip */
+.sa-ivl .strip { display: flex; flex-direction: column; gap: 12px; min-height: 0; min-width: 0; }
+.sa-ivl .term-win { flex: 1 1 auto; min-height: 0; border-top: 2px solid var(--tool); }
+.sa-ivl .term-win .titlebar .title { text-align: left; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-size: 12px; }
+.sa-ivl .iter-chip { font: 500 10.5px var(--mono); padding: 1px 7px; border-radius: 999px; border: 1px solid #fed7aa; color: var(--tool); background: #fff7ed; white-space: nowrap; transition: all .4s var(--ease-out); }
+.sa-ivl .iter-chip.ok { color: var(--ok); border-color: #bbf7d0; background: #f0fdf4; font-weight: 600; }
+.sa-ivl .iter-chip.bad { color: var(--bad); border-color: #fecaca; background: #fef2f2; font-weight: 600; }
+.sa-ivl .term-body { flex: 1; min-height: 0; position: relative; background: #f4f4f5; }
+.sa-ivl .out { position: absolute; inset: 0; overflow: auto; font: 11.5px/1.45 var(--mono); padding: 9px 10px 24px; color: var(--ink-2); scrollbar-width: thin; }
+.sa-ivl .tl { white-space: pre-wrap; word-break: break-word; }
+.sa-ivl .tl + .tl { margin-top: 1px; }
+.sa-ivl .fade-line { animation: ivlIn .4s var(--ease-out) both; }
+@keyframes ivlIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: none; } }
+.sa-ivl .prompt { color: var(--tool); font-weight: 500; }
+.sa-ivl .cmd { color: var(--ink); } .sa-ivl .bin { color: var(--ink); font-weight: 600; } .sa-ivl .flag { color: var(--muted); }
+.sa-ivl .cur { display: inline-block; width: 6px; height: 12px; margin: 0 0 -2px 2px; background: var(--tool); }
+.sa-ivl .tl.warn, .sa-ivl .tl.warn2 { color: var(--wn); }
+.sa-ivl .tl.warn2 { opacity: .85; }
+.sa-ivl .loc { color: var(--ink-2); }
+.sa-ivl .tl.ok { color: var(--ok); font-weight: 600; }
+.sa-ivl .tl.bad { color: var(--bad); font-weight: 600; background: #fef2f2; margin: 0 -10px; padding: 0 10px; box-shadow: inset 2px 0 0 var(--bad); }
+.sa-ivl .ivl-tag { display: inline-block; padding: 0 5px; margin-right: 3px; border-radius: 4px; font-size: 10.5px; line-height: 15px; font-weight: 600; position: static; }
+.sa-ivl .ivl-tag.PASS { color: #fff; background: var(--ok); }
+.sa-ivl .ivl-tag.FAIL { color: #fff; background: var(--bad); }
+.sa-ivl .tl .num { color: var(--tool); font-weight: 600; }
+.sa-ivl .tl.dim, .sa-ivl .dim { color: var(--faint); font-weight: 400; }
+.sa-ivl .tl.info { color: var(--muted); }
+.sa-ivl .exit { color: var(--ok); }
+.sa-ivl .vcd-line { display: inline-block; margin-top: 4px; color: var(--ink); padding: 3px 8px; border: 1px solid #fed7aa; border-radius: 6px; background: #fff; }
+.sa-ivl .vcd-line b { font-weight: 600; color: var(--tool); }
+
+.sa-ivl .note { flex: 0 0 auto; padding: 9px 12px; }
+.sa-ivl .note h4 { margin: 0 0 3px; font-size: 11px; }
+.sa-ivl .note p { margin: 0; font-size: 12px; line-height: 1.45; }
+.sa-ivl .note code { font-family: var(--mono); font-size: 11px; color: var(--ink); background: #f4f4f5; padding: 0 3px; border-radius: 3px; }
+.sa-ivl .note b { color: var(--ink); font-weight: 600; }
+.sa-ivl .note.pulse { animation: fadeIn .5s var(--ease-out) both; }
+.sa-ivl .note.tone-amber { border-left-color: var(--wn); }
+.sa-ivl .note.tone-tool { border-left-color: var(--tool); }
+.sa-ivl .note.tone-fail { border-left-color: var(--bad); }
+.sa-ivl .note.tone-pass { border-left-color: var(--ok); }
+
+/* ---- circuit stage: live circuit + a narrow rail (checkpoints, test2 judge) */
+.sa-ivl .stage { min-width: 0; min-height: 0; display: grid; grid-template-columns: minmax(0, 1fr) 232px; gap: 12px; }
+.sa-ivl .hw-wrap { position: relative; min-width: 0; min-height: 0; overflow: hidden; border: 1px solid var(--line); border-top: 2px solid var(--tool); border-radius: 10px; background: #fff; }
+.sa-ivl .hw { position: absolute; inset: 0; }
+
+.sa-ivl .ivl-pin { position: absolute; transform: translate(-50%, -175%); font: 600 10px/16px var(--mono); padding: 0 7px; border-radius: 8px; color: #fff; white-space: nowrap; pointer-events: none; animation: ivlPop .45s var(--ease-out) both; }
+.sa-ivl .ivl-pin.ok { background: var(--ok); } .sa-ivl .ivl-pin.bad { background: var(--bad); }
+.sa-ivl .ivl-pin.a1 { transform: translate(-100%, -175%); } .sa-ivl .ivl-pin.a2 { transform: translate(0, -175%); }
+.sa-ivl .ivl-pin.a3 { transform: translate(calc(-200% - 6px), -175%); } .sa-ivl .ivl-pin.a4 { transform: translate(-100%, -175%); }
+@keyframes ivlPop { from { opacity: 0; margin-top: 4px; } to { opacity: 1; margin-top: 0; } }
+
+.sa-ivl .rail { display: flex; flex-direction: column; gap: 12px; min-height: 0; overflow: hidden; }
+.sa-ivl .r-head { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; padding: 8px 12px 6px; font-size: 11.5px; font-weight: 500; color: var(--muted); }
+.sa-ivl .r-head b { font: 600 12px var(--mono); color: var(--tool); }
+.sa-ivl .cp { padding-bottom: 6px; border-top: 2px solid var(--tool); }
+.sa-ivl .cp-sum { font-size: 15px !important; color: var(--ink) !important; }
+.sa-ivl .cp-row { display: grid; grid-template-columns: 8px 40px 1fr auto; gap: 7px; align-items: center; padding: 4px 12px; font-size: 11px; color: var(--ink-2); transition: background .4s var(--ease-out); }
+.sa-ivl .cp-row span { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.sa-ivl .cp-row b { font: 600 11px var(--mono); color: var(--ink); }
+.sa-ivl .cp-row em { font: 500 10px var(--mono); font-style: normal; color: var(--faint); }
+.sa-ivl .cp-row i { width: 8px; height: 8px; border-radius: 50%; background: #e4e4e7; transition: background .3s; }
+.sa-ivl .cp-row.ok i { background: var(--ok); } .sa-ivl .cp-row.ok em { color: var(--ok); font-weight: 600; }
+.sa-ivl .cp-row.bad { background: #fef2f2; } .sa-ivl .cp-row.bad i { background: var(--bad); } .sa-ivl .cp-row.bad em { color: var(--bad); font-weight: 600; }
+
+.sa-ivl .judge { flex: 0 1 auto; padding-bottom: 10px; border-top: 2px solid var(--line-2); transition: opacity .5s var(--ease-out), border-color .4s, background .4s; }
+.sa-ivl .judge.idle { opacity: .55; }
+.sa-ivl .judge.live { border-top-color: var(--tool); }
+.sa-ivl .judge.bad { border-top-color: var(--bad); background: #fffafa; }
+.sa-ivl .judge.ok { border-top-color: var(--ok); background: #fafffb; }
+.sa-ivl .judge .r-head span { color: var(--ink); font-weight: 600; }
+.sa-ivl .j-nums { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; padding: 0 12px; }
+.sa-ivl .j-nums label { display: block; font-size: 10px; color: var(--muted); }
+.sa-ivl .j-big { font: 600 26px/1.15 var(--mono); letter-spacing: -1px; font-variant-numeric: tabular-nums; }
+.sa-ivl .j-big small { font-size: 12px; font-weight: 500; color: var(--faint); letter-spacing: 0; margin-left: 2px; }
+.sa-ivl .j-on { color: #059669; } .sa-ivl .j-duty { color: #2563eb; }
+.sa-ivl .judge.bad .j-on { color: var(--bad); }
+.sa-ivl .j-scale { position: relative; margin: 22px 14px 4px; }
+.sa-ivl .j-bandl { position: absolute; top: -17px; transform: translateX(-50%); font: 600 10px var(--mono); white-space: nowrap; }
+.sa-ivl .judge.bad .j-bandl { color: var(--bad); } .sa-ivl .judge.ok .j-bandl { color: var(--ok); }
+.sa-ivl .j-track { position: relative; height: 16px; background: #f4f4f5; border-radius: 3px; border-bottom: 1px solid #d4d4d8; }
+.sa-ivl .j-bar { position: absolute; left: 0; top: 2px; bottom: 2px; width: 0; background: #10b981; border-radius: 2px; }
+.sa-ivl .judge.bad .j-bar { background: var(--bad); }
+.sa-ivl .j-sweep { position: absolute; bottom: -4px; height: 3px; background: #93b4f8; border-radius: 2px; }
+.sa-ivl .j-dm { position: absolute; top: -6px; bottom: -6px; width: 2px; margin-left: -1px; background: #2563eb; }
+.sa-ivl .j-band { position: absolute; top: -5px; bottom: -5px; width: 0; border-radius: 3px; }
+.sa-ivl .judge.bad .j-band { background: rgba(207,34,46,.12); outline: 1.5px dashed var(--bad); }
+.sa-ivl .judge.ok .j-band { background: rgba(26,127,55,.12); outline: 1.5px dashed var(--ok); }
+.sa-ivl .j-ticks { position: relative; height: 14px; margin-top: 3px; }
+.sa-ivl .j-ticks span { position: absolute; transform: translateX(-50%); font: 9.5px var(--mono); color: var(--faint); }
+.sa-ivl .j-verdict { padding: 6px 12px 0; font: 700 13.5px var(--mono); min-height: 20px; white-space: nowrap; }
+.sa-ivl .judge.bad .j-verdict { color: var(--bad); } .sa-ivl .judge.ok .j-verdict { color: var(--ok); }
+.sa-ivl .j-why { padding: 2px 12px 0; font-size: 11px; line-height: 1.4; color: var(--ink-2); min-height: 15px; }
+.sa-ivl .j-prog { padding: 4px 12px 0; font: 10px var(--mono); color: var(--faint); }
+
+/* diff overlay: over the comparator/LED columns while the circuit is paused */
+.sa-ivl .diff { background: #fff; z-index: 5; position: absolute; left: 14px; top: 50%; width: 46%; transform: translate(0, -46%); opacity: 0; pointer-events: none;
+  transition: opacity .5s var(--ease-out), transform .5s var(--ease-out); box-shadow: 0 1px 2px rgba(0,0,0,.03), 0 8px 24px -12px rgba(0,0,0,.08); border-top: 2px solid var(--tool); }
+.sa-ivl .diff.on { opacity: 1; transform: translate(0, -50%); }
+.sa-ivl .d-head { display: flex; align-items: center; gap: 8px; padding: 7px 12px; border-bottom: 1px solid var(--line); font-size: 11.5px; background: var(--surface); }
+.sa-ivl .d-head b { font: 600 12px var(--mono); color: var(--ink); }
+.sa-ivl .d-head .grow { flex: 1; }
+.sa-ivl .st { font: 600 11.5px var(--mono); } .sa-ivl .st.add { color: var(--ok); } .sa-ivl .st.del { color: var(--bad); }
+.sa-ivl .d-body { padding: 2px 0 6px; font: 11.5px var(--mono); background: #fff; }
+.sa-ivl .hunk { padding: 3px 12px; color: var(--muted); font-size: 10.5px; background: #fff7ed; }
+.sa-ivl .dl { display: flex; white-space: pre; line-height: 19px; animation: ivlIn .4s var(--ease-out) both; }
+.sa-ivl .dl .nb { width: 30px; flex: 0 0 30px; text-align: right; padding-right: 6px; color: var(--faint); }
+.sa-ivl .dl .sg { width: 16px; flex: 0 0 16px; text-align: center; font-weight: 600; }
+.sa-ivl .dl .code { flex: 1; overflow: hidden; text-overflow: ellipsis; padding-right: 8px; }
+.sa-ivl .dl.add { background: #e6ffec; } .sa-ivl .dl.add .sg, .sa-ivl .dl.add .nb { color: var(--ok); }
+.sa-ivl .dl.del { background: #ffebe9; } .sa-ivl .dl.del .sg, .sa-ivl .dl.del .nb { color: var(--bad); }
+
+@media (max-height: 700px) {
+  .sa-ivl .note p { font-size: 11.5px; line-height: 1.4; }
+}
+.sa-ivl .pins { position: absolute; inset: 0; pointer-events: none; z-index: 2; }
+
+/* tall viewports: the circuit is wide (≈1.9:1), so the rail goes under it instead of beside it */
+@media (min-height: 760px) and (max-aspect-ratio: 17/10) {
+  .sa-ivl .stage { grid-template-columns: minmax(0, 1fr); grid-template-rows: minmax(0, 1fr) auto; }
+  .sa-ivl .rail { flex-direction: row; }
+  .sa-ivl .rail > .panel { flex: 1 1 0; min-width: 0; }
+  .sa-ivl .judge { display: grid; grid-template-columns: 1fr 1.3fr; grid-template-areas: "h h" "n s" "v s" "w p"; column-gap: 8px; }
+  .sa-ivl .judge .r-head { grid-area: h; } .sa-ivl .j-nums { grid-area: n; } .sa-ivl .j-scale { grid-area: s; align-self: center; }
+  .sa-ivl .j-verdict { grid-area: v; } .sa-ivl .j-why { grid-area: w; } .sa-ivl .j-prog { grid-area: p; align-self: end; }
+}
+.sa-ivl .diff .dl { white-space: pre-wrap; }
+.sa-ivl .diff .dl .code { overflow: visible; text-overflow: clip; word-break: break-word; }
+.sa-ivl .diff mark { background: #fde68a; color: inherit; border-radius: 3px; padding: 0 2px; font-weight: 600; }
+.sa-ivl .cp-row span { white-space: normal; line-height: 1.3; }

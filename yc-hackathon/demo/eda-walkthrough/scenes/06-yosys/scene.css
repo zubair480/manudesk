@@ -47,7 +47,8 @@
 [data-scene="06-yosys"] .ys-links line { stroke-width: 2; }
 
 [data-scene="06-yosys"] .ys-wire { fill: none; stroke: var(--tool); stroke-width: 1.7; }
-[data-scene="06-yosys"] .ys-wire.flow { stroke-dasharray: 6 5; animation: ysFlow 1.4s linear infinite; }
+/* perf: no infinite dash animation; repainting this SVG every frame cost ~1 s long tasks (measured) */
+[data-scene="06-yosys"] .ys-wire.flow { stroke-dasharray: 6 5; }
 @keyframes ysFlow { from { stroke-dashoffset: 22; } to { stroke-dashoffset: 0; } }
 [data-scene="06-yosys"] .ys-wirelabel { fill: var(--tool); font: 600 11px var(--mono); opacity: 0; transition: opacity .6s var(--ease-out); paint-order: stroke; stroke: #fff; stroke-width: 5px; stroke-linejoin: round; }
 [data-scene="06-yosys"] .ys-wirelabel.in { opacity: 1; }
@@ -87,5 +88,7 @@
 [data-scene="06-yosys"] .ys-stat.live .ys-sbar i { transition: width 1.1s var(--ease-out); }
 [data-scene="06-yosys"] .bump { animation: ysBump .7s var(--ease-out); display: inline-block; }
 @keyframes ysBump { 0% { transform: none; } 30% { transform: translateY(-3px); } 100% { transform: none; } }
-[data-scene="06-yosys"] .ys-block { transition: opacity .6s var(--ease-out); }
-[data-scene="06-yosys"] .ys-block.dim { opacity: .32; }
+[data-scene="06-yosys"] .ys-block > * { transition: opacity .6s var(--ease-out); }
+/* perf: dim the block's children, not the <g> (group opacity forces an offscreen re-render every frame) */
+[data-scene="06-yosys"] .ys-block.dim > * { opacity: .32; }
+[data-scene="06-yosys"] svg.spotting .ys-wire.flow { animation: none; }

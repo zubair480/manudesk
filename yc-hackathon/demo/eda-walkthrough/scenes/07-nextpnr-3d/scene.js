@@ -35,7 +35,7 @@ export default {
             <div class="term" id="n3d-term"></div>
           </div>
           <div class="panel n3d-stats">
-            <div class="n3d-fmax"><div class="l">Fmax</div><div class="v"><span id="n3d-fmax">0.00</span><small>MHz</small></div><div class="sub" id="n3d-fmax-sub">target 25 MHz</div></div>
+            <div class="n3d-fmax"><div class="l">Fmax</div><div class="v"><span id="n3d-fmax">—</span><small>MHz</small></div><div class="sub" id="n3d-fmax-sub">target 25 MHz · measured after routing</div></div>
             <div class="n3d-bars" id="n3d-bars"></div>
           </div>
         </aside>
@@ -115,12 +115,13 @@ export default {
     $('#n3d-read').classList.add('on');
     const logP = streamLog(ctx, term, chunks[1], 5200);
     await ctx.sleep(1500);
-    ctx.narrate(`150 Yosys cells → ${d.lut4.total} LUTs + ${d.util.TRELLIS_FF.used} flip-flops: 0.18% of the chip`);
     dropCells(4200);
     counter('#r-cells', 0, nCells, 4200, v => `${v}<em>/ ${nCells}</em>`);
     counter('#r-wire', 8955, 352, 4200, v => `${v.toLocaleString()}<em>from 8,955</em>`);   // HeAP random -> SA final (nextpnr.log)
     showScale();
-    await ctx.sleep(2600);
+    await ctx.sleep(700);   // let "The FPGA..." caption hold ~2 s
+    ctx.narrate(`150 Yosys cells → ${d.lut4.total} LUTs + ${d.util.TRELLIS_FF.used} flip-flops: 0.18% of the chip`);
+    await ctx.sleep(1900);
     ['io', 'carry', 'lut', 'ff'].forEach((k, i) => setTimeout(() => showLabel(k), i * 260 / ctx.speed));
     await logP;
 
