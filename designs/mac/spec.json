@@ -2,7 +2,7 @@
   "name": "mac",
   "top": "mac",
   "summary": "32x32 unsigned multiply-accumulate into a 64-bit accumulator. acc <= acc + a*b every cycle, synchronous active-high reset.",
-  "baseline_mhz": 73.9,
+  "baseline_mhz": 74.4,
   "target_mhz": 138,
   "latency_budget": 8,
   "resource_budget": {

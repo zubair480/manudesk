@@ -2,7 +2,7 @@
   "name": "crc32",
   "top": "crc32",
   "summary": "CRC-32 (reflected polynomial 0xEDB88320) over 64 data bits per cycle, LSB first, state reset to 0xFFFFFFFF, raw state output.",
-  "baseline_mhz": 64.9,
+  "baseline_mhz": 61.1,
   "target_mhz": 104,
   "latency_budget": 6,
   "resource_budget": {

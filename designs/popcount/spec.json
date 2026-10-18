@@ -2,7 +2,7 @@
   "name": "popcount",
   "top": "popcount",
   "summary": "Population count of a 256-bit word, 9-bit result, registered.",
-  "baseline_mhz": 65.3,
+  "baseline_mhz": 70.0,
   "target_mhz": 105,
   "latency_budget": 6,
   "resource_budget": {

@@ -2,7 +2,7 @@
   "name": "mandel_step",
   "top": "mandel_step",
   "summary": "One Mandelbrot iteration z' = z^2 + c in signed Q3.14 (18-bit), outputs wrapped to 18 bits, plus escaped = |z|^2 > 4 on the input z.",
-  "baseline_mhz": 81.0,
+  "baseline_mhz": 79.1,
   "target_mhz": 130,
   "latency_budget": 6,
   "resource_budget": {
