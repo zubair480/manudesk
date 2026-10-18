@@ -1,0 +1,25 @@
+{
+  "name": "fir8",
+  "top": "fir8",
+  "summary": "8-tap FIR, signed 16-bit samples, fixed symmetric signed 16-bit coefficients, full-precision 35-bit output.",
+  "baseline_mhz": 66.6,
+  "target_mhz": 107,
+  "latency_budget": 8,
+  "resource_budget": {
+    "DSP": 16,
+    "FF": 2000,
+    "LUT": 4000
+  },
+  "mutants": [
+    {
+      "name": "latency+1",
+      "find": "localparam LATENCY = 2;",
+      "replace": "localparam LATENCY = 3;"
+    },
+    {
+      "name": "wrong-coefficient",
+      "find": "C2 = 16'sd9876,",
+      "replace": "C2 = 16'sd9875,"
+    }
+  ]
+}

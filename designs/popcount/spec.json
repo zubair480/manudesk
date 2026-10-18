@@ -1,0 +1,24 @@
+{
+  "name": "popcount",
+  "top": "popcount",
+  "summary": "Population count of a 256-bit word, 9-bit result, registered.",
+  "baseline_mhz": 65.3,
+  "target_mhz": 105,
+  "latency_budget": 6,
+  "resource_budget": {
+    "FF": 2000,
+    "LUT": 3000
+  },
+  "mutants": [
+    {
+      "name": "latency+1",
+      "find": "localparam LATENCY = 2;",
+      "replace": "localparam LATENCY = 3;"
+    },
+    {
+      "name": "skip-msb",
+      "find": "k < 256; k = k + 1) acc",
+      "replace": "k < 255; k = k + 1) acc"
+    }
+  ]
+}

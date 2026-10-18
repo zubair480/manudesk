@@ -1,0 +1,25 @@
+{
+  "name": "mac",
+  "top": "mac",
+  "summary": "32x32 unsigned multiply-accumulate into a 64-bit accumulator. acc <= acc + a*b every cycle, synchronous active-high reset.",
+  "baseline_mhz": 73.9,
+  "target_mhz": 138,
+  "latency_budget": 8,
+  "resource_budget": {
+    "DSP": 8,
+    "FF": 1200,
+    "LUT": 2000
+  },
+  "mutants": [
+    {
+      "name": "latency+1",
+      "find": "localparam LATENCY = 2;",
+      "replace": "localparam LATENCY = 3;"
+    },
+    {
+      "name": "drop-msb-product",
+      "find": "acc_r + a_r * b_r",
+      "replace": "acc_r + a_r[30:0] * b_r"
+    }
+  ]
+}

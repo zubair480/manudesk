@@ -1,0 +1,24 @@
+{
+  "name": "crc32",
+  "top": "crc32",
+  "summary": "CRC-32 (reflected polynomial 0xEDB88320) over 64 data bits per cycle, LSB first, state reset to 0xFFFFFFFF, raw state output.",
+  "baseline_mhz": 64.9,
+  "target_mhz": 104,
+  "latency_budget": 6,
+  "resource_budget": {
+    "FF": 1000,
+    "LUT": 4000
+  },
+  "mutants": [
+    {
+      "name": "latency+1",
+      "find": "localparam LATENCY = 2;",
+      "replace": "localparam LATENCY = 3;"
+    },
+    {
+      "name": "wrong-init",
+      "find": "crc_r  <= 32'hFFFFFFFF;",
+      "replace": "crc_r  <= 32'hFFFFFFFE;"
+    }
+  ]
+}

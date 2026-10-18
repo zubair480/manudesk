@@ -1,0 +1,24 @@
+{
+  "name": "add64cmp",
+  "top": "add64cmp",
+  "summary": "s = a + b + c (three 64-bit operands, 66-bit result) and gt = (a + b + c) > d, registered.",
+  "baseline_mhz": 85.7,
+  "target_mhz": 149,
+  "latency_budget": 6,
+  "resource_budget": {
+    "FF": 2000,
+    "LUT": 3000
+  },
+  "mutants": [
+    {
+      "name": "latency+1",
+      "find": "localparam LATENCY = 2;",
+      "replace": "localparam LATENCY = 3;"
+    },
+    {
+      "name": "ge-instead-of-gt",
+      "find": "gt_r <= sum > d_r;",
+      "replace": "gt_r <= sum >= d_r;"
+    }
+  ]
+}
