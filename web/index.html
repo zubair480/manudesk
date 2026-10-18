@@ -1,0 +1,139 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ManuDesk</title>
+  <meta name="description" content="Coding agents speeding up Verilog against a hidden testbench and real ECP5 place and route, live on InsForge.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="top">
+    <div class="brand">
+      <span class="logo" aria-hidden="true">
+        <svg viewBox="0 0 24 24" width="22" height="22"><rect x="5" y="5" width="14" height="14" rx="2" fill="none" stroke="currentColor" stroke-width="1.6"/><rect x="9" y="9" width="6" height="6" rx="1" fill="currentColor"/><path d="M9 2v3M15 2v3M9 19v3M15 19v3M2 9h3M2 15h3M19 9h3M19 15h3" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+      </span>
+      <div>
+        <h1>ManuDesk</h1>
+        <p class="sub">Agents speed up Verilog against a hidden testbench and real ECP5 place and route</p>
+      </div>
+    </div>
+    <div class="status">
+      <span class="pill" id="compute-pill"><span class="dot"></span><span id="compute-text">Checker: checking…</span></span>
+      <span class="pill" id="live-pill" title="Runs, iterations and checks arrive over InsForge realtime (md-* channels)"><span class="dot"></span><span id="live-text">Live: connecting…</span></span>
+      <span class="pill muted" title="Everything on this page is served by InsForge: database, realtime, edge functions, AI gateway, schedules and compute">on InsForge</span>
+    </div>
+  </header>
+
+  <main class="grid">
+    <section class="card" id="leaderboard-card">
+      <div class="card-head">
+        <h2>Leaderboard</h2>
+        <span class="hint">Best passing clock speed per design</span>
+      </div>
+      <div class="table-wrap">
+        <table class="board">
+          <thead><tr><th>Design</th><th class="num">Baseline</th><th class="num">Best</th><th class="num">Target</th><th class="bar-col">Progress</th><th>By</th></tr></thead>
+          <tbody id="board-body"><tr><td colspan="6" class="empty">Loading…</td></tr></tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="card" id="start-card">
+      <div class="card-head">
+        <h2>Start a run</h2>
+        <span class="hint">Planner → analyst → engineer → real check, repeated</span>
+      </div>
+      <form id="start-form" class="form">
+        <label>Design
+          <select id="f-design" required></select>
+        </label>
+        <p class="design-summary" id="f-summary"></p>
+        <div class="row2">
+          <label>Target MHz <input id="f-target" type="number" min="1" step="1" placeholder="design target"></label>
+          <label>Max iterations <input id="f-iters" type="number" min="1" max="20" value="6"></label>
+        </div>
+        <label>Goal (optional) <input id="f-goal" type="text" maxlength="400" placeholder="e.g. Reach the target without using more DSPs"></label>
+        <label>Access token
+          <input id="f-token" type="password" autocomplete="off" placeholder="MANUDESK_TOKEN (kept in this browser only)">
+        </label>
+        <div class="actions">
+          <button type="submit" class="btn primary" id="start-btn">Start run</button>
+          <span class="form-msg" id="start-msg" role="status"></span>
+        </div>
+      </form>
+    </section>
+
+    <section class="card" id="runs-card">
+      <div class="card-head">
+        <h2>Runs</h2>
+        <span class="hint">Newest first</span>
+      </div>
+      <ul class="runs" id="runs-list"><li class="empty">Loading…</li></ul>
+    </section>
+
+    <section class="card wide" id="run-card">
+      <div class="card-head">
+        <h2 id="run-title">Pick a run</h2>
+        <div class="run-tools">
+          <label class="toggle" title="Advance this run step after step from your browser instead of once a minute by the schedule">
+            <input type="checkbox" id="drive"> <span>Drive live</span>
+          </label>
+          <span class="pill small" id="drive-state" hidden></span>
+        </div>
+      </div>
+      <div id="run-empty" class="empty big">Start a run or pick one from the list to watch the agents work.</div>
+      <div id="run-body" hidden>
+        <div class="stats" id="run-stats"></div>
+        <div class="chart-wrap">
+          <svg id="chart" viewBox="0 0 640 200" preserveAspectRatio="none" role="img" aria-label="Clock speed per iteration"></svg>
+          <div class="legend"><span class="lg pass"></span>passing check <span class="lg fail"></span>failing check <span class="lg base"></span>baseline <span class="lg tgt"></span>target</div>
+        </div>
+        <section class="live-panel" id="live-panel" aria-label="Real tools, live">
+          <div class="live-head">
+            <div>
+              <h3>Real tools, live</h3>
+              <p class="live-sub" id="live-sub">The actual programs running on the InsForge machine, on this run's design</p>
+            </div>
+            <div class="tabs" id="live-tabs">
+              <button data-live="nextpnr" class="sel">nextpnr · placed and routed chip</button>
+              <button data-live="gtkwave">GTKWave · waveforms</button>
+              <button data-live="kicad">KiCad · PCB board</button>
+            </div>
+            <span class="pill small" id="tool-state">waiting</span>
+          </div>
+          <div class="live-token" id="live-token" hidden>
+            <span>Paste the access token to open the real tools:</span>
+            <input id="live-token-input" type="password" autocomplete="off" placeholder="MANUDESK_TOKEN">
+            <button class="btn primary" id="live-token-go">Open</button>
+          </div>
+          <div class="tool-wrap" tabindex="0" title="Click to use the real program; keys go to it while focused (Esc twice to leave)">
+            <img class="tool-live" id="tool-img" draggable="false" alt="">
+            <div class="tool-empty" id="tool-empty">The real tools open here as soon as the run has a checked version.</div>
+          </div>
+          <div class="tool-hint">Click, right-click, drag, scroll and type into it · Esc Esc to leave the keyboard · use <b>Show in tools</b> on any engineer step to switch version</div>
+        </section>
+        <ol class="timeline" id="timeline"></ol>
+      </div>
+    </section>
+  </main>
+
+  <dialog id="code-dialog">
+    <div class="dlg-head">
+      <h3 id="code-title">Verilog</h3>
+      <div class="tabs" id="code-tabs"></div>
+      <button class="btn ghost" id="code-close" aria-label="Close">✕</button>
+    </div>
+    <pre class="code" id="code-view"></pre>
+  </dialog>
+
+  <footer class="foot">Checks run on InsForge compute (yosys + nextpnr-ecp5, LFE5U-85F-6). Agents run as InsForge edge functions through the AI gateway; results live in the InsForge database.</footer>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.7.5/socket.io.min.js" crossorigin="anonymous"></script>
+  <script src="config.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

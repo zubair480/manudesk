@@ -50,6 +50,21 @@ CANVAS = {"nextpnr": (0.03, 0.18, 0.69, 0.64), "kicad": (0.28, 0.16, 0.80, 0.86)
 # ---------------------------------------------------------------- frames
 
 
+# A fresh container has no KiCad settings, so pcbnew first shows its setup wizard on top of the board. Cancel,
+# then Yes on "default settings will be chosen" (positions on the fixed 1600x1000 Xvfb screen, checked on
+# InsForge with KiCad 10.0.7); KiCad then saves defaults and later launches open the board directly.
+KICAD_WIZARD_AFTER_S = 12
+KICAD_WIZARD_CLICKS = ((0.678, 0.732), (0.404, 0.531))   # Cancel, then Yes
+
+
+def dismiss_kicad_wizard(s) -> None:
+    s.wizard_done = True
+    for x, y in KICAD_WIZARD_CLICKS:
+        capture(s.hwnd)   # refreshes the screen box that input coordinates map into
+        send_input(s.hwnd, x, y, "click")
+        time.sleep(2.0)
+
+
 def region_flat(img, frac) -> bool:
     """A single colour (blank KiCad canvas that has not painted the board yet)."""
     w, h = img.size
@@ -185,6 +200,7 @@ class Session:
     ready: bool = False
     dragging: bool = False
     error: str = ""
+    wizard_done: bool = False   # KiCad first-run setup wizard dismissed
 
     def info(self) -> dict:
         return {"sid": self.sid, "tool": self.tool, "design": self.design, "alive": bool(self.pid) and pid_alive(self.pid),
@@ -235,11 +251,15 @@ class Manager:
     def wait_ready(self, s: Session, timeout: float = READY_TIMEOUT_S) -> bool:
         """nextpnr's GL device pane stays black until the routed json is drawn; GTKWave is ready at once."""
         end, canvas = time.time() + timeout, CANVAS.get(s.tool)
+        t_window = time.time()   # wait_ready runs once the window exists
         while time.time() < end and pid_alive(s.pid):
             self.find_window(s)
             if s.hwnd:
                 if s.tool == "kicad":   # title gains the board name, then the canvas paints; Home = zoom to fit
                     loaded = "—" in s.title or "board" in s.title.lower()
+                    if not loaded and not s.wizard_done and time.time() - t_window > KICAD_WIZARD_AFTER_S:
+                        dismiss_kicad_wizard(s)
+                        continue
                     if loaded and not region_flat(capture(s.hwnd), canvas):
                         time.sleep(1.0)
                         send_key(s.hwnd, key="Home")
