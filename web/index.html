@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Menu Desk · hardware feedback loop for coding agents</title>
+<meta name="description" content="Watch a coding agent close FPGA timing through the Menu Desk MCP: a hidden testbench and real place-and-route on every candidate.">
+<script>try{var t=localStorage.getItem("menudesk.theme")||(matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light");document.documentElement.dataset.theme=t;document.documentElement.style.colorScheme=t}catch(e){}</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@500;600;700&display=swap">
+</head>
+<body>
+<header id="wfTop">
+  <a class="brand" href="/" data-route>MENU DESK<span>hardware feedback loop for coding agents</span></a>
+  <span id="wfRun"></span>
+  <span id="wfSample" class="sample-badge" hidden title="No live rows yet: showing the bundled example run">sample data</span>
+  <span id="wfMeta"></span>
+  <span class="sp"></span>
+  <label class="follow-lbl"><input type="checkbox" id="wfFollow" checked> Follow live</label>
+  <a class="runs-link" href="/" data-route>All runs</a>
+</header>
+<nav id="wfNav" aria-label="Steps"><div id="wfSteps"></div></nav>
+<main id="wfMain"><div class="wf-inner" id="wfInner"></div></main>
+<script type="module" src="/src/main.js"></script>
+</body>
+</html>

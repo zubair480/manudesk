@@ -1,0 +1,143 @@
+{
+  "run_id": "sample-popcount",
+  "design": "popcount",
+  "sample": true,
+  "design_info": {
+    "name": "popcount",
+    "summary": "Population count of a 256-bit word, 9-bit result, registered.",
+    "target_mhz": 105,
+    "baseline_mhz": 70.0,
+    "latency_budget": 6,
+    "resource_budget": {
+      "LUT": 3000,
+      "FF": 2000,
+      "DSP": 0
+    }
+  },
+  "checks": [
+    {
+      "id": "sample-popcount-1",
+      "run_id": "sample-popcount",
+      "design": "popcount",
+      "n": 1,
+      "accepted": true,
+      "stage": "ok",
+      "reasons": [
+        "correct; 70.0 MHz is below target 105: shorten the slowest path",
+        "the 256-input adder chain din_r->count_r is the whole critical path: split it into registered partial sums"
+      ],
+      "fmax_mhz": 70.0,
+      "baseline_mhz": 70.0,
+      "vs_baseline": "1.00x",
+      "latency": 2,
+      "critical_path": "din_r->count_r 14.28ns (21 logic hops, logic 4.85 route 8.90) carryx21 @L10",
+      "resources": {
+        "LUT": 1125,
+        "FF": 265,
+        "DSP": 0
+      },
+      "budgets": {
+        "LUT": 3000,
+        "FF": 2000,
+        "DSP": 0
+      },
+      "seconds": 38.4,
+      "verilog": "// popcount: Population count of a 256-bit word. Naive: count all 256 bits in one cycle.\n// Latency contract: an input applied before clock edge n shows on the outputs after edge n+LATENCY-1.\nmodule popcount (\n    input  wire         clk,\n    input  wire         rst,\n    input  wire [255:0] din,\n    output wire [8:0]   count\n);\n    localparam LATENCY = 2;\n    reg [255:0] din_r;\n    reg [8:0]   count_r;\n    integer k;\n    reg [8:0] acc;\n    always @(*) begin\n        acc = 0;\n        for (k = 0; k < 256; k = k + 1) acc = acc + din_r[k];\n    end\n    always @(posedge clk) begin\n        if (rst) begin\n            din_r <= 0; count_r <= 0;\n        end else begin\n            din_r <= din;\n            count_r <= acc;\n        end\n    end\n    assign count = count_r;\nendmodule\n",
+      "report_key": null,
+      "created_at": "2026-10-18T14:02:11Z"
+    },
+    {
+      "id": "sample-popcount-2",
+      "run_id": "sample-popcount",
+      "design": "popcount",
+      "n": 2,
+      "accepted": true,
+      "stage": "ok",
+      "reasons": [
+        "correct; 118.6 MHz meets target 105 (1.69x baseline)",
+        "slowest path is the 16-way sum g_r->count_r: add another tree level, latency budget 6 allows 3 more stages"
+      ],
+      "fmax_mhz": 118.6,
+      "baseline_mhz": 70.0,
+      "vs_baseline": "1.69x",
+      "latency": 3,
+      "critical_path": "g_r->count_r 8.43ns (14 logic hops, logic 3.02 route 5.12) carryx14 @L12,L22",
+      "resources": {
+        "LUT": 874,
+        "FF": 345,
+        "DSP": 0
+      },
+      "budgets": {
+        "LUT": 3000,
+        "FF": 2000,
+        "DSP": 0
+      },
+      "seconds": 24.9,
+      "verilog": "// popcount, 2-level: sixteen 16-bit group counts, then one 16-way sum.\n// stages: din_r(1) -> g_r: 16 x 5-bit group counts(2) -> count_r(3)\nmodule popcount (\n    input  wire         clk,\n    input  wire         rst,\n    input  wire [255:0] din,\n    output wire [8:0]   count\n);\n    localparam LATENCY = 3;\n    reg [255:0] din_r;\n    reg [79:0]  g_r;     // 16 x 5-bit counts of 16 bits each (0..16)\n    reg [8:0]   count_r;\n    reg [4:0]   g;\n    reg [8:0]   acc;\n    integer i, k;\n    always @(posedge clk) begin\n        if (rst) begin\n            din_r <= 0; g_r <= 0; count_r <= 0;\n        end else begin\n            din_r <= din;\n            for (i = 0; i < 16; i = i + 1) begin\n                g = 0;\n                for (k = 0; k < 16; k = k + 1) g = g + din_r[i*16 + k];\n                g_r[i*5 +: 5] <= g;\n            end\n            acc = 0;\n            for (i = 0; i < 16; i = i + 1) acc = acc + g_r[i*5 +: 5];\n            count_r <= acc;\n        end\n    end\n    assign count = count_r;\nendmodule\n",
+      "report_key": null,
+      "created_at": "2026-10-18T14:04:37Z"
+    },
+    {
+      "id": "sample-popcount-3",
+      "run_id": "sample-popcount",
+      "design": "popcount",
+      "n": 3,
+      "accepted": true,
+      "stage": "ok",
+      "reasons": [
+        "correct; 154.2 MHz meets target 105 (2.20x baseline)",
+        "final 4-way add s2_r->count_r is now the slowest path: split it into two registered 2-way adds"
+      ],
+      "fmax_mhz": 154.2,
+      "baseline_mhz": 70.0,
+      "vs_baseline": "2.20x",
+      "latency": 5,
+      "critical_path": "s2_r->count_r 6.49ns (10 logic hops, logic 2.16 route 3.80) carryx10 @L13,L29",
+      "resources": {
+        "LUT": 698,
+        "FF": 565,
+        "DSP": 0
+      },
+      "budgets": {
+        "LUT": 3000,
+        "FF": 2000,
+        "DSP": 0
+      },
+      "seconds": 17.3,
+      "verilog": "// popcount, pipelined: the design a fresh agent reached through ManuDesk's check() loop.\n// stages: din_r(1) -> nib_r: 64 x 4-bit counts(2) -> s1_r: 16 sums(3) -> s2_r: 4 sums(4) -> count_r(5)\nmodule popcount (\n    input  wire         clk,\n    input  wire         rst,\n    input  wire [255:0] din,\n    output wire [8:0]   count\n);\n    localparam LATENCY = 5;\n    reg [255:0] din_r;\n    reg [191:0] nib_r;   // 64 x 3-bit counts of 4 bits each (0..4)\n    reg [79:0]  s1_r;    // 16 x 5-bit sums of 4 nibble counts (0..16)\n    reg [27:0]  s2_r;    // 4 x 7-bit sums (0..64)\n    reg [8:0]   count_r;\n    integer i;\n    always @(posedge clk) begin\n        if (rst) begin\n            din_r <= 0; nib_r <= 0; s1_r <= 0; s2_r <= 0; count_r <= 0;\n        end else begin\n            din_r <= din;\n            for (i = 0; i < 64; i = i + 1)\n                nib_r[i*3 +: 3] <= din_r[i*4] + din_r[i*4+1] + din_r[i*4+2] + din_r[i*4+3];\n            for (i = 0; i < 16; i = i + 1)\n                s1_r[i*5 +: 5] <= nib_r[(i*4)*3 +: 3] + nib_r[(i*4+1)*3 +: 3]\n                                + nib_r[(i*4+2)*3 +: 3] + nib_r[(i*4+3)*3 +: 3];\n            for (i = 0; i < 4; i = i + 1)\n                s2_r[i*7 +: 7] <= s1_r[(i*4)*5 +: 5] + s1_r[(i*4+1)*5 +: 5]\n                                + s1_r[(i*4+2)*5 +: 5] + s1_r[(i*4+3)*5 +: 5];\n            count_r <= s2_r[6:0] + s2_r[13:7] + s2_r[20:14] + s2_r[27:21];\n        end\n    end\n    assign count = count_r;\nendmodule\n",
+      "report_key": null,
+      "created_at": "2026-10-18T14:06:52Z"
+    },
+    {
+      "id": "sample-popcount-4",
+      "run_id": "sample-popcount",
+      "design": "popcount",
+      "n": 4,
+      "accepted": true,
+      "stage": "ok",
+      "reasons": [
+        "correct; 228.2 MHz meets target 105 (3.26x baseline)",
+        "route delay now dominates (2.61 of 4.38 ns): further gains need placement, not logic depth"
+      ],
+      "fmax_mhz": 228.2,
+      "baseline_mhz": 70.0,
+      "vs_baseline": "3.26x",
+      "latency": 6,
+      "critical_path": "s3_r->count_r 4.38ns (6 logic hops, logic 1.41 route 2.61) carryx6 @L14,L30",
+      "resources": {
+        "LUT": 702,
+        "FF": 581,
+        "DSP": 0
+      },
+      "budgets": {
+        "LUT": 3000,
+        "FF": 2000,
+        "DSP": 0
+      },
+      "seconds": 12.6,
+      "verilog": "// popcount, 6-stage adder tree: 4-bit counts, then 4-way sums, final add split in two.\n// stages: din_r(1) -> nib_r(2) -> s1_r: 16 sums(3) -> s2_r: 4 sums(4) -> s3_r: 2 sums(5) -> count_r(6)\nmodule popcount (\n    input  wire         clk,\n    input  wire         rst,\n    input  wire [255:0] din,\n    output wire [8:0]   count\n);\n    localparam LATENCY = 6;\n    reg [255:0] din_r;\n    reg [191:0] nib_r;   // 64 x 3-bit counts of 4 bits each (0..4)\n    reg [79:0]  s1_r;    // 16 x 5-bit sums of 4 nibble counts (0..16)\n    reg [27:0]  s2_r;    // 4 x 7-bit sums (0..64)\n    reg [15:0]  s3_r;    // 2 x 8-bit sums (0..128)\n    reg [8:0]   count_r;\n    integer i;\n    always @(posedge clk) begin\n        if (rst) begin\n            din_r <= 0; nib_r <= 0; s1_r <= 0; s2_r <= 0; s3_r <= 0; count_r <= 0;\n        end else begin\n            din_r <= din;\n            for (i = 0; i < 64; i = i + 1)\n                nib_r[i*3 +: 3] <= din_r[i*4] + din_r[i*4+1] + din_r[i*4+2] + din_r[i*4+3];\n            for (i = 0; i < 16; i = i + 1)\n                s1_r[i*5 +: 5] <= nib_r[(i*4)*3 +: 3] + nib_r[(i*4+1)*3 +: 3]\n                                + nib_r[(i*4+2)*3 +: 3] + nib_r[(i*4+3)*3 +: 3];\n            for (i = 0; i < 4; i = i + 1)\n                s2_r[i*7 +: 7] <= s1_r[(i*4)*5 +: 5] + s1_r[(i*4+1)*5 +: 5]\n                                + s1_r[(i*4+2)*5 +: 5] + s1_r[(i*4+3)*5 +: 5];\n            s3_r[7:0]  <= s2_r[6:0]   + s2_r[13:7];\n            s3_r[15:8] <= s2_r[20:14] + s2_r[27:21];\n            count_r <= s3_r[7:0] + s3_r[15:8];\n        end\n    end\n    assign count = count_r;\nendmodule\n",
+      "report_key": "fixtures/report.json",
+      "created_at": "2026-10-18T14:08:40Z"
+    }
+  ]
+}

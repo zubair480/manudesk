@@ -1,0 +1,92 @@
+/* Menu Desk viewers: floorplan (critical path on the ECP5 die) and Fmax-per-check chart.
+   Everything is scoped under .mdv and reads the guide's tokens with fallbacks, so the viewers sit inside a
+   glass panel and pick up whatever palette the page uses. Dark tokens follow prefers-color-scheme unless
+   the page forces a theme with data-theme on <html>. */
+.mdv{--v-ink:var(--ink,#0E2135);--v-ink2:var(--ink2,#22374D);--v-muted:var(--muted,rgba(14,33,53,.68));
+  --v-faint:var(--faint,rgba(14,33,53,.5));--v-line:var(--line,rgba(14,33,53,.10));--v-line2:var(--line2,rgba(14,33,53,.06));
+  --v-accent:var(--accent,#1E88F0);--v-accent2:var(--accent2,#0B9BD8);--v-ok:var(--ok,#14A552);--v-bad:var(--bad,#E0352B);
+  --v-warn:var(--warn,#D98A00);--v-io:#7C4DFF;--v-rim:var(--rim,rgba(255,255,255,.8));
+  --v-die:rgba(255,255,255,.42);--v-tile:rgba(14,33,53,.07);--v-tip:rgba(255,255,255,.86);--v-halo:rgba(255,255,255,.9);
+  --v-mono:var(--mono,"JetBrains Mono",ui-monospace,Consolas,monospace);--v-sans:var(--sans,"IBM Plex Sans",system-ui,sans-serif);
+  position:relative;color:var(--v-ink);font-family:var(--v-sans);min-width:0}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]) .mdv{--v-ink:#E8F0FA;--v-ink2:#C3D0E0;--v-muted:rgba(232,240,250,.66);--v-faint:rgba(232,240,250,.45);
+    --v-line:rgba(255,255,255,.12);--v-line2:rgba(255,255,255,.06);--v-accent:#4BA6FF;--v-accent2:#35C2F0;--v-ok:#3DD47F;--v-bad:#FF5A50;
+    --v-warn:#F2B13A;--v-io:#A98BFF;--v-rim:rgba(255,255,255,.14);--v-die:rgba(255,255,255,.04);--v-tile:rgba(255,255,255,.07);
+    --v-tip:rgba(14,22,34,.9);--v-halo:rgba(10,16,26,.9)}}
+:root[data-theme="dark"] .mdv{--v-ink:#E8F0FA;--v-ink2:#C3D0E0;--v-muted:rgba(232,240,250,.66);--v-faint:rgba(232,240,250,.45);
+  --v-line:rgba(255,255,255,.12);--v-line2:rgba(255,255,255,.06);--v-accent:#4BA6FF;--v-accent2:#35C2F0;--v-ok:#3DD47F;--v-bad:#FF5A50;
+  --v-warn:#F2B13A;--v-io:#A98BFF;--v-rim:rgba(255,255,255,.14);--v-die:rgba(255,255,255,.04);--v-tile:rgba(255,255,255,.07);
+  --v-tip:rgba(14,22,34,.9);--v-halo:rgba(10,16,26,.9)}
+
+/* shared head row: big number + mono summary */
+.mdv-head{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 14px;margin:0 0 10px}
+.mdv-big{font:700 26px/1 var(--v-sans);letter-spacing:-.02em;font-variant-numeric:tabular-nums;color:var(--v-ink)}
+.mdv-big small{font:600 12px var(--v-sans);letter-spacing:.04em;color:var(--v-muted);margin-left:3px}
+.mdv-sub{font:600 11.5px/1.45 var(--v-mono);color:var(--v-muted);overflow-wrap:anywhere;min-width:0}
+.mdv-sub b{color:var(--v-ink2);font-weight:700}
+.mdv-tools{margin-left:auto;display:flex;gap:6px}
+.mdv-btn{font:600 11.5px var(--v-mono);color:var(--v-ink);background:linear-gradient(160deg,rgba(255,255,255,.7),rgba(244,249,255,.4));
+  border:1px solid var(--v-rim);border-radius:9px;padding:4px 10px;cursor:pointer;transition:border-color .2s,transform .2s}
+.mdv-btn:hover{border-color:var(--v-accent);transform:translateY(-1px)}
+.mdv-btn[aria-pressed="true"]{background:var(--v-accent);color:#fff;border-color:transparent}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .mdv-btn{background:rgba(255,255,255,.06)}}
+:root[data-theme="dark"] .mdv-btn{background:rgba(255,255,255,.06)}
+.mdv-btn:focus-visible{outline:2px solid var(--v-accent);outline-offset:2px}
+
+/* floorplan */
+.mdv-stage{position:relative;height:var(--mdv-h,340px);border-radius:12px;overflow:hidden;border:1px solid var(--v-rim);
+  background:linear-gradient(160deg,rgba(255,255,255,.34),rgba(225,238,252,.16))}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .mdv-stage{background:linear-gradient(160deg,rgba(255,255,255,.05),rgba(255,255,255,.015))}}
+:root[data-theme="dark"] .mdv-stage{background:linear-gradient(160deg,rgba(255,255,255,.05),rgba(255,255,255,.015))}
+.mdv-stage canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
+.mdv-tip{position:absolute;pointer-events:none;z-index:3;display:none;max-width:min(320px,80%);padding:6px 9px;border-radius:9px;
+  background:var(--v-tip);border:1px solid var(--v-rim);box-shadow:0 10px 26px -12px rgba(20,50,90,.4);backdrop-filter:blur(10px);
+  -webkit-backdrop-filter:blur(10px);font:600 11px/1.45 var(--v-mono);color:var(--v-ink);white-space:pre-wrap;overflow-wrap:anywhere}
+.mdv-legend{display:flex;flex-wrap:wrap;gap:4px 12px;margin:9px 0 0;font:600 11px var(--v-mono);color:var(--v-muted)}
+.mdv-legend span{display:inline-flex;align-items:center;gap:5px}
+.mdv-legend i{width:10px;height:10px;border-radius:3px;display:inline-block}
+.mdv-legend i.ln{height:3px;width:14px;border-radius:2px}
+.mdv-segs{margin-top:8px}
+.mdv-segs summary{cursor:pointer;font:700 11px var(--v-mono);letter-spacing:.08em;color:var(--v-muted);text-transform:uppercase;padding:4px 0}
+.mdv-segs summary:hover{color:var(--v-accent)}
+.mdv-seg{display:grid;grid-template-columns:70px minmax(0,1fr) 58px;gap:8px;padding:3px 6px;border-radius:7px;
+  font:500 11px/1.5 var(--v-mono);color:var(--v-ink2);cursor:default}
+.mdv-seg span:nth-child(2){overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.mdv-seg .d{text-align:right;font-variant-numeric:tabular-nums}
+.mdv-seg.r{color:var(--v-muted)}
+.mdv-seg:hover,.mdv-seg.on{background:rgba(224,53,43,.10);color:var(--v-ink)}
+.mdv-empty{position:absolute;inset:0;display:grid;place-items:center;font:600 12px var(--v-mono);color:var(--v-muted);text-align:center;padding:16px}
+
+/* Fmax chart */
+.mdv-chart{position:relative}
+.mdv-chart svg{display:block;width:100%;height:auto;overflow:visible}
+.mdv-chart .ax{stroke:var(--v-line);stroke-width:1}
+.mdv-chart .grid{stroke:var(--v-line2);stroke-width:1}
+.mdv-chart .tk{fill:var(--v-faint);font:600 10.5px var(--v-mono)}
+.mdv-chart .axl{fill:var(--v-muted);font:700 10px var(--v-mono);letter-spacing:.08em}
+.mdv-chart .ref{stroke-width:1.5;stroke-dasharray:5 5;fill:none}
+.mdv-chart .ref.base{stroke:var(--v-muted)}
+.mdv-chart .ref.tgt{stroke:var(--v-ok)}
+.mdv-chart .refl{font:700 10.5px var(--v-mono);paint-order:stroke;stroke:var(--v-halo);stroke-width:3px}
+.mdv-chart .refl.base{fill:var(--v-muted)}
+.mdv-chart .refl.tgt{fill:var(--v-ok)}
+.mdv-chart .best{fill:none;stroke:var(--v-accent);stroke-width:2.5;stroke-linejoin:round;stroke-linecap:round}
+.mdv-chart .area{fill:url(#mdvArea);stroke:none}
+.mdv-chart .pt{cursor:pointer}
+.mdv-chart .pt circle.dot{fill:var(--v-accent);stroke:var(--v-halo);stroke-width:2}
+.mdv-chart .pt.top circle.dot{fill:var(--v-ok)}
+.mdv-chart .pt .hit{fill:transparent}
+.mdv-chart .pt .val{fill:var(--v-ink);font:700 11px var(--v-mono);paint-order:stroke;stroke:var(--v-halo);stroke-width:3px}
+.mdv-chart .pt.rej path{stroke:var(--v-bad);stroke-width:2.6;stroke-linecap:round}
+.mdv-chart .pt.rej circle.ring{fill:var(--v-halo);stroke:var(--v-bad);stroke-width:1.5}
+.mdv-chart .pt.rej .val{fill:var(--v-bad)}
+.mdv-chart .pt:hover circle.dot,.mdv-chart .pt:focus circle.dot{stroke:var(--v-accent);stroke-width:3}
+.mdv-chart .pt:focus{outline:none}
+.mdv-chart .pulse{fill:none;stroke:var(--v-accent);stroke-width:2;opacity:0}
+.mdv-chart .pt.new .pulse{animation:mdvPulse 1.1s ease-out 1}
+.mdv-chart .pt.rej.new .pulse{stroke:var(--v-bad)}
+@keyframes mdvPulse{0%{opacity:.9;r:5}100%{opacity:0;r:22}}
+.mdv-chart .mdv-tip{display:none}
+@media (prefers-reduced-motion:reduce){.mdv-chart .pt.new .pulse{animation:none}.mdv-btn{transition:none}}
+@media (max-width:520px){.mdv-big{font-size:22px}.mdv-seg{grid-template-columns:58px minmax(0,1fr) 48px}.mdv-stage{height:var(--mdv-h-sm,260px)}}
