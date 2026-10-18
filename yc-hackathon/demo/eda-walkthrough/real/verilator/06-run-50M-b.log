@@ -1,0 +1,8 @@
+$ ./obj_dir/Vpwm_led 50000000
+cycles       50000000
+led0_on      24739808 (49.48% duty, avg)
+led_on_total 197918440 (all 8 LEDs)
+wall_s       12.408
+cycles_per_s 4029542
+sim_time     2.000 s of 25 MHz hardware
+exit 0

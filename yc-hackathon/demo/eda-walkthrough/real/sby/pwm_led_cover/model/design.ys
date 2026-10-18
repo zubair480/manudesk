@@ -1,0 +1,10 @@
+# running in pwm_led_cover/src/
+read_verilog -formal pwm_led_cover_fv.v
+# DIV reduced from 16 to 2 so interesting states are reachable within 48 cycles
+chparam -set DIV 2 pwm_led
+prep -top pwm_led
+
+hierarchy -smtcheck
+rename -witness
+write_jny -no-connections ../model/design.json
+write_rtlil ../model/design.il

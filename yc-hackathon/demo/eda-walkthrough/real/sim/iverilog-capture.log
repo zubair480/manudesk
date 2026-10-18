@@ -1,0 +1,4 @@
+$ iverilog -g2012 -Wall -o sim.vvp rtl/tb_pwm_led.v rtl/pwm_led.v
+rtl/pwm_led.v:2: warning: timescale for pwm_led inherited from another file.
+rtl/tb_pwm_led.v:1: ...: The inherited timescale is here.
+iverilog exit 0

@@ -1,0 +1,7 @@
+$ verilator_bin --version
+Verilator 5.053 devel rev v5.052-448-g1272f7355 (mod)
+$ verilator_bin --lint-only -Wall pwm_led.v
+- V e r i l a t i o n   R e p o r t: Verilator 5.053 devel rev v5.052-448-g1272f7355 (mod)
+- Verilator: Built from 0.033 MB sources in 3 modules, into 0.021 MB in 3 C++ files needing 0.000 MB
+- Verilator: Walltime 0.019 s (elab=0.001, cvt=0.006, bld=0.000); cpu 0.000 s on 1 threads; allocated 13.871 MB
+exit 0

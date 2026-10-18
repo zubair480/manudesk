@@ -1,0 +1,94 @@
+/* Scene 03-verilator (Session A / A3). White base; text strip <=25%, circuit >=75%. Scoped under .sa-vl */
+.sa-vl { --tool: #7c3aed; --tool-soft: #f5f3ff; --ok: #1a7f37; --bad: #cf222e; --wn: #9a6700;
+  --seq: #2563eb; --comb: #f59e0b;
+  position: absolute; inset: 0; padding: 12px 14px; display: grid; grid-template-columns: minmax(260px, 25%) minmax(0, 1fr); gap: 12px; }
+.sa-vl, .sa-vl * { font-variant-ligatures: none; font-feature-settings: "liga" 0, "calt" 0; }
+
+/* ---- text strip */
+.sa-vl .strip { display: flex; flex-direction: column; gap: 12px; min-height: 0; min-width: 0; }
+.sa-vl .term-win { flex: 1 1 auto; min-height: 0; border-top: 2px solid var(--tool); }
+.sa-vl .titlebar .title { text-align: left; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-size: 12px; }
+.sa-vl .chip { font: 500 10.5px var(--mono); padding: 1px 7px; border-radius: 999px; border: 1px solid #ddd6fe; color: var(--tool); background: var(--tool-soft); white-space: nowrap; }
+.sa-vl .term-body { flex: 1; min-height: 0; position: relative; background: #f4f4f5; }
+.sa-vl .out { position: absolute; inset: 0; overflow: auto; font: 11.5px/1.45 var(--mono); padding: 9px 10px 20px; color: var(--ink-2); scrollbar-width: thin; }
+.sa-vl .tl { white-space: pre-wrap; word-break: break-word; }
+.sa-vl .fade-line { animation: vlIn .4s var(--ease-out) both; }
+@keyframes vlIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: none; } }
+.sa-vl .prompt { color: var(--tool); font-weight: 600; }
+.sa-vl .cmd { color: var(--ink); } .sa-vl .bin { color: var(--ink); font-weight: 600; } .sa-vl .flag { color: var(--muted); }
+.sa-vl .cur { display: inline-block; width: 6px; height: 12px; margin: 0 0 -2px 2px; background: var(--tool); }
+.sa-vl .dim { color: var(--faint); }
+.sa-vl .tl.rep { color: var(--ink-2); } .sa-vl .tl b { color: var(--ink); font-weight: 600; }
+.sa-vl .tl b.tool { color: var(--tool); }
+.sa-vl .ok { color: var(--ok); } .sa-vl .ok.b, .sa-vl .tl .ok { font-weight: 600; }
+.sa-vl .rid { color: var(--ink-2); }
+.sa-vl .verdict { display: inline-block; margin-top: 3px; padding: 1px 8px; border-radius: 6px; border: 1px solid #bbf7d0; background: #f0fdf4; color: var(--ok); font-weight: 600; }
+
+.sa-vl .rules { flex: 0 0 auto; padding: 0 0 8px; }
+.sa-vl .r-head { display: flex; justify-content: space-between; align-items: center; height: 30px; padding: 0 10px; border-bottom: 1px solid var(--line); font-size: 12px; font-weight: 500; color: var(--ink); }
+.sa-vl .r-count { font: 600 11.5px var(--mono); color: var(--tool); font-variant-numeric: tabular-nums; }
+.sa-vl .r-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1px 8px; padding: 6px 10px 0; }
+.sa-vl .rule { display: flex; align-items: center; gap: 6px; font: 500 10.5px/18px var(--mono); color: var(--faint); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; transition: color .3s var(--ease-out); }
+.sa-vl .chk { flex: 0 0 11px; width: 11px; height: 11px; border-radius: 50%; border: 1px solid var(--line-2); position: relative; transition: background .3s var(--ease-out), border-color .3s var(--ease-out); }
+.sa-vl .rule.checking { color: var(--tool); } .sa-vl .rule.checking .chk { border-color: var(--tool); }
+.sa-vl .rule.ok { color: var(--ink-2); }
+.sa-vl .rule.ok .chk { background: var(--ok); border-color: var(--ok); }
+.sa-vl .rule.ok .chk::after { content: ''; position: absolute; left: 3.3px; top: 1.2px; width: 2.6px; height: 5.4px; border: solid #fff; border-width: 0 1.3px 1.3px 0; transform: rotate(45deg); }
+
+/* ---- stage: the circuit */
+.sa-vl .stage { min-width: 0; min-height: 0; display: flex; flex-direction: column; border-top: 2px solid var(--tool); }
+.sa-vl .stage .titlebar { gap: 14px; }
+.sa-vl .stage .titlebar .title { flex: 0 1 auto; min-width: 0; }
+.sa-vl .legend { margin-left: auto; display: flex; gap: 14px; font-size: 11.5px; color: var(--muted); white-space: nowrap; overflow: hidden; }
+.sa-vl .lg { display: inline-flex; align-items: center; gap: 6px; opacity: .35; transition: opacity .5s var(--ease-out); }
+.sa-vl .lg i { width: 14px; height: 9px; border-radius: 3px; border: 1.5px solid; display: inline-block; }
+.sa-vl .lg-seq i { border-color: var(--seq); background: #eff6ff; }
+.sa-vl .lg-comb i { border-color: var(--comb); background: #fffbeb; }
+.sa-vl .lg-w i { border: 0; background: var(--tool-soft); box-shadow: inset 0 0 0 1px #c4b5fd; border-radius: 5px; }
+.sa-vl .lg-rule i { border: 1.5px dashed var(--tool); background: none; }
+.sa-vl.show-w .lg-w, .sa-vl.show-kind .lg-seq, .sa-vl.show-kind .lg-comb { opacity: 1; }
+.sa-vl .lg-rule { opacity: 1; }
+.sa-vl .hw { flex: 1 1 auto; min-height: 0; position: relative; }
+
+/* overlay drawn into the hwsim SVG */
+.sa-vl .vl-out { fill: none; stroke-width: 1.75; opacity: 0; pointer-events: none; transition: opacity .5s var(--ease-out); }
+.sa-vl .vl-seq { stroke: var(--seq); }
+.sa-vl .vl-comb { stroke: var(--comb); }
+.sa-vl.show-kind .vl-out { opacity: 1; }
+.sa-vl .vl-w { opacity: 0; transform: translateY(4px); transition: opacity .5s var(--ease-out), transform .5s var(--ease-out); pointer-events: none; }
+.sa-vl .vl-w rect { fill: var(--tool-soft); stroke: #c4b5fd; stroke-width: 1; }
+.sa-vl .vl-w text { font: 600 10.5px var(--mono); fill: var(--tool); }
+.sa-vl .vl-wt { font: 600 10px var(--mono); fill: var(--tool); opacity: 0; transition: opacity .5s var(--ease-out); }
+.sa-vl .vl-brk { fill: none; stroke: #c4b5fd; stroke-width: 1.5; opacity: 0; transition: opacity .5s var(--ease-out); }
+.sa-vl .vl-brk-t { font: 600 10.5px var(--mono); fill: var(--tool); opacity: 0; transition: opacity .5s var(--ease-out); }
+.sa-vl.show-w .vl-w { opacity: 1; transform: none; }
+.sa-vl.show-w .vl-wt, .sa-vl.show-w .vl-brk, .sa-vl.show-w .vl-brk-t { opacity: 1; }
+.sa-vl.model .vl-w, .sa-vl.model .vl-wt, .sa-vl.model .vl-brk, .sa-vl.model .vl-brk-t { opacity: .45; }
+
+/* KPI bar under the circuit */
+.sa-vl .kbar { flex: 0 0 52px; display: flex; align-items: center; gap: 0; border-top: 1px solid var(--line); background: var(--surface); padding: 0 6px; min-width: 0; }
+.sa-vl .kb-mode { padding: 0 12px 0 6px; }
+.sa-vl .kb-tag { font: 600 10.5px var(--mono); padding: 2px 8px; border-radius: 999px; background: var(--tool-soft); color: var(--tool); border: 1px solid #ddd6fe; white-space: nowrap; }
+.sa-vl .k { display: flex; flex-direction: column; justify-content: center; padding: 0 16px; border-left: 1px solid var(--line); min-width: 0; }
+.sa-vl .k b { font: 600 19px/1.1 var(--mono); color: var(--tool); letter-spacing: -.4px; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.sa-vl .k b.pass { color: var(--ok); }
+.sa-vl .k span { font-size: 11px; color: var(--muted); white-space: nowrap; }
+.sa-vl.model .k:nth-child(2) { min-width: 150px; } .sa-vl.model .k:nth-child(3) { min-width: 128px; }
+.sa-vl .kb-note { margin-left: auto; padding: 0 10px; font: 11px var(--mono); color: var(--faint); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-width: 0; }
+
+@media (max-height: 700px) {
+  .sa-vl .rule { line-height: 16px; }
+  .sa-vl .kbar { flex-basis: 44px; } .sa-vl .k b { font-size: 16px; }
+}
+
+/* lint is static: hide hwsim's clock-running cues until the C++ model runs */
+.sa-vl .hwsim .hw-run, .sa-vl .hwsim .hw-run-t, .sa-vl .hwsim .hw-readout, .sa-vl .hwsim .hw-tl { transition: opacity .5s var(--ease-out); }
+.sa-vl:not(.clock) .hwsim .hw-run, .sa-vl:not(.clock) .hwsim .hw-run-t, .sa-vl:not(.clock) .hwsim .hw-readout, .sa-vl:not(.clock) .hwsim .hw-tl { opacity: 0; }
+
+/* KPI bar: never let values overlap on narrow stages */
+.sa-vl .k { flex: 0 0 auto; }
+.sa-vl .kb-note { flex: 1 1 0; text-align: right; }
+@media (max-width: 1100px) {
+  .sa-vl .k { padding: 0 10px; } .sa-vl .k b { font-size: 15px; }
+  .sa-vl.model .k:nth-child(2), .sa-vl.model .k:nth-child(3) { min-width: 0; }
+}

@@ -1,0 +1,286 @@
+
+ /----------------------------------------------------------------------------\
+ |  yosys -- Yosys Open SYnthesis Suite                                       |
+ |  Copyright (C) 2012 - 2026  Claire Xenia Wolf <claire@yosyshq.com>         |
+ |  Distributed under an ISC-like license, type "license" to see terms        |
+ \----------------------------------------------------------------------------/
+ Yosys 0.70+145 (git sha1 a31d95ea0, Release, GNU /usr/bin/x86_64-w64-mingw32-g++ 15.2.1)
+
+-- Executing script file `../model/design.ys' --
+
+1. Executing Verilog-2005 frontend: pwm_led_cover_fv.v
+Parsing formal Verilog input from `pwm_led_cover_fv.v' to AST representation.
+Generating RTLIL representation for module `\pwm_led'.
+Successfully finished Verilog frontend.
+Parameter \DIV = 2
+
+2. Executing AST frontend in derive mode using pre-parsed AST for module `\pwm_led'.
+Parameter \DIV = 2
+Generating RTLIL representation for module `$paramod\pwm_led\DIV=s32'00000000000000000000000000000010'.
+
+3. Executing PREP pass.
+
+3.1. Executing HIERARCHY pass (managing design hierarchy).
+
+3.1.1. Analyzing design hierarchy..
+Top module:  \pwm_led
+
+3.1.2. Analyzing design hierarchy..
+Top module:  \pwm_led
+Removed 0 unused modules.
+Module pwm_led directly or indirectly contains formal properties -> setting "keep" attribute.
+
+3.2. Executing PROC pass (convert processes to netlists).
+
+3.2.1. Executing PROC_CLEAN pass (remove empty switches from decision trees).
+Cleaned up 0 empty switches.
+
+3.2.2. Executing PROC_RMDEAD pass (remove dead branches from decision trees).
+Marked 3 switch rules as full_case in process $pwm_led_cover_fv.v:14$proc$59 in module pwm_led.
+Removed a total of 0 dead cases.
+
+3.2.3. Executing PROC_PRUNE pass (remove redundant assignments in processes).
+Removed 3 redundant assignments.
+Promoted 8 assignments to connections.
+
+3.2.4. Executing PROC_INIT pass (extract init attributes).
+Found init rule in `\pwm_led.$pwm_led_cover.vh:4$proc$106'.
+  Set init value: \past_valid = 1'0
+
+3.2.5. Executing PROC_ARST pass (detect async resets in processes).
+
+3.2.6. Executing PROC_ROM pass (convert switches to ROMs).
+Converted 0 switches.
+<suppressed ~7 debug messages>
+
+3.2.7. Executing PROC_MUX pass (convert decision trees to multiplexers).
+Creating decoders for process `\pwm_led.$pwm_led_cover.vh:4$proc$106'.
+Creating decoders for process `\pwm_led.$pwm_led_cover.vh:18$proc$95'.
+     1/1: \reset_mid_ramp_EN
+Creating decoders for process `\pwm_led.$pwm_led_cover.vh:10$proc$90'.
+     1/2: \first_led_on_EN
+     2/2: \duty_reaches_4_EN
+Creating decoders for process `\pwm_led.$pwm_led_cover.vh:8$proc$87'.
+     1/1: $pwm_led_cover.vh:8$assume$89_EN
+Creating decoders for process `\pwm_led.$pwm_led_cover.vh:5$proc$86'.
+Creating decoders for process `\pwm_led.$pwm_led_cover_fv.v:14$proc$59'.
+     1/12: $0\led[7:0] [7]
+     2/12: $0\led[7:0] [6]
+     3/12: $0\led[7:0] [5]
+     4/12: $0\led[7:0] [4]
+     5/12: $0\led[7:0] [3]
+     6/12: $0\led[7:0] [2]
+     7/12: $0\led[7:0] [1]
+     8/12: $0\led[7:0] [0]
+     9/12: $0\pre[1:0]
+    10/12: $0\pwm_cnt[7:0]
+    11/12: $0\dir[0:0]
+    12/12: $0\duty[7:0]
+
+3.2.8. Executing PROC_DLATCH pass (convert process syncs to latches).
+
+3.2.9. Executing PROC_DFF pass (convert process syncs to FFs).
+Creating register for signal `\pwm_led.$past$pwm_led_cover.vh:18$55$0' using process `\pwm_led.$pwm_led_cover.vh:18$proc$95'.
+  created $dff cell `$procdff$167' with positive edge clock.
+Creating register for signal `\pwm_led.$past$pwm_led_cover.vh:19$56$0' using process `\pwm_led.$pwm_led_cover.vh:18$proc$95'.
+  created $dff cell `$procdff$168' with positive edge clock.
+Creating register for signal `\pwm_led.$past$pwm_led_cover.vh:19$57$0' using process `\pwm_led.$pwm_led_cover.vh:18$proc$95'.
+  created $dff cell `$procdff$169' with positive edge clock.
+Creating register for signal `\pwm_led.$past$pwm_led_cover.vh:19$57$1' using process `\pwm_led.$pwm_led_cover.vh:18$proc$95'.
+  created $dff cell `$procdff$170' with positive edge clock.
+Creating register for signal `\pwm_led.$past$pwm_led_cover.vh:19$58$0' using process `\pwm_led.$pwm_led_cover.vh:18$proc$95'.
+  created $dff cell `$procdff$171' with positive edge clock.
+Creating register for signal `\pwm_led.$past$pwm_led_cover.vh:10$54$0' using process `\pwm_led.$pwm_led_cover.vh:10$proc$90'.
+  created $dff cell `$procdff$172' with positive edge clock.
+Creating register for signal `\pwm_led.\past_valid' using process `\pwm_led.$pwm_led_cover.vh:5$proc$86'.
+  created $dff cell `$procdff$173' with positive edge clock.
+Creating register for signal `\pwm_led.\led' using process `\pwm_led.$pwm_led_cover_fv.v:14$proc$59'.
+  created $dff cell `$procdff$174' with positive edge clock.
+Creating register for signal `\pwm_led.\pwm_cnt' using process `\pwm_led.$pwm_led_cover_fv.v:14$proc$59'.
+  created $dff cell `$procdff$175' with positive edge clock.
+Creating register for signal `\pwm_led.\pre' using process `\pwm_led.$pwm_led_cover_fv.v:14$proc$59'.
+  created $dff cell `$procdff$176' with positive edge clock.
+Creating register for signal `\pwm_led.\duty' using process `\pwm_led.$pwm_led_cover_fv.v:14$proc$59'.
+  created $dff cell `$procdff$177' with positive edge clock.
+Creating register for signal `\pwm_led.\dir' using process `\pwm_led.$pwm_led_cover_fv.v:14$proc$59'.
+  created $dff cell `$procdff$178' with positive edge clock.
+
+3.2.10. Executing PROC_MEMWR pass (convert process memory writes to cells).
+
+3.2.11. Executing PROC_CLEAN pass (remove empty switches from decision trees).
+Removing empty process `pwm_led.$pwm_led_cover.vh:4$proc$106'.
+Found and cleaned up 1 empty switch in `\pwm_led.$pwm_led_cover.vh:18$proc$95'.
+Removing empty process `pwm_led.$pwm_led_cover.vh:18$proc$95'.
+Found and cleaned up 1 empty switch in `\pwm_led.$pwm_led_cover.vh:10$proc$90'.
+Removing empty process `pwm_led.$pwm_led_cover.vh:10$proc$90'.
+Found and cleaned up 1 empty switch in `\pwm_led.$pwm_led_cover.vh:8$proc$87'.
+Removing empty process `pwm_led.$pwm_led_cover.vh:8$proc$87'.
+Removing empty process `pwm_led.$pwm_led_cover.vh:5$proc$86'.
+Found and cleaned up 4 empty switches in `\pwm_led.$pwm_led_cover_fv.v:14$proc$59'.
+Removing empty process `pwm_led.$pwm_led_cover_fv.v:14$proc$59'.
+Cleaned up 7 empty switches.
+
+3.2.12. Executing OPT_EXPR pass (perform const folding).
+Optimizing module pwm_led.
+<suppressed ~3 debug messages>
+
+3.3. Executing FUTURE pass.
+
+3.4. Executing OPT_EXPR pass (perform const folding).
+Optimizing module pwm_led.
+
+3.5. Executing CHECK pass (checking for obvious problems).
+Checking module pwm_led...
+Found and reported 0 problems.
+
+3.6. Executing OPT_CLEAN pass (remove unused cells and wires).
+Finding unused cells or wires in module \pwm_led..
+Removed 1 unused cells and 47 unused wires.
+<suppressed ~2 debug messages>
+
+3.7. Executing OPT pass (performing simple optimizations).
+
+3.7.1. Executing OPT_EXPR pass (perform const folding).
+Optimizing module pwm_led.
+
+3.7.2. Executing OPT_MERGE pass (detect identical cells).
+Finding identical cells in module `\pwm_led'.
+Computing hashes of 72 cells of `\pwm_led'.
+Finding duplicate cells in `\pwm_led'.
+Removed a total of 0 cells.
+
+3.7.3. Executing OPT_MUXTREE pass (detect dead branches in mux trees).
+Running muxtree optimizer on module \pwm_led..
+  Creating internal representation of mux trees.
+  Evaluating internal representation of mux trees.
+  Analyzing evaluation results.
+Removed 0 multiplexer ports.
+<suppressed ~39 debug messages>
+
+3.7.4. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).
+  Optimizing cells in module \pwm_led.
+Performed a total of 0 changes.
+
+3.7.5. Executing OPT_MERGE pass (detect identical cells).
+Finding identical cells in module `\pwm_led'.
+Computing hashes of 72 cells of `\pwm_led'.
+Finding duplicate cells in `\pwm_led'.
+Computing hashes of 71 cells of `\pwm_led'.
+Finding duplicate cells in `\pwm_led'.
+<suppressed ~3 debug messages>
+Removed a total of 1 cells.
+
+3.7.6. Executing OPT_CLEAN pass (remove unused cells and wires).
+Finding unused cells or wires in module \pwm_led..
+
+3.7.7. Executing OPT_EXPR pass (perform const folding).
+Optimizing module pwm_led.
+
+3.7.8. Rerunning OPT passes. (Maybe there is more to do..)
+
+3.7.9. Executing OPT_MUXTREE pass (detect dead branches in mux trees).
+Running muxtree optimizer on module \pwm_led..
+  Creating internal representation of mux trees.
+  Evaluating internal representation of mux trees.
+  Analyzing evaluation results.
+Removed 0 multiplexer ports.
+<suppressed ~37 debug messages>
+
+3.7.10. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).
+  Optimizing cells in module \pwm_led.
+Performed a total of 0 changes.
+
+3.7.11. Executing OPT_MERGE pass (detect identical cells).
+Finding identical cells in module `\pwm_led'.
+Computing hashes of 71 cells of `\pwm_led'.
+Finding duplicate cells in `\pwm_led'.
+Removed a total of 0 cells.
+
+3.7.12. Executing OPT_CLEAN pass (remove unused cells and wires).
+Finding unused cells or wires in module \pwm_led..
+
+3.7.13. Executing OPT_EXPR pass (perform const folding).
+Optimizing module pwm_led.
+
+3.7.14. Finished fast OPT passes. (There is nothing left to do.)
+
+3.8. Executing WREDUCE pass (reducing word size of cells).
+Removed top 7 bits (of 8) from port B of cell pwm_led.$pwm_led_cover_fv.v:22$add$60 ($add).
+Removed top 7 bits (of 8) from port B of cell pwm_led.$pwm_led_cover_fv.v:27$add$68 ($add).
+Removed top 7 bits (of 8) from port B of cell pwm_led.$pwm_led_cover_fv.v:27$sub$69 ($sub).
+Removed top 2 bits (of 8) from port B of cell pwm_led.$pwm_led_cover_fv.v:31$add$72 ($add).
+Removed top 1 bits (of 8) from port B of cell pwm_led.$pwm_led_cover_fv.v:32$add$74 ($add).
+Removed top 1 bits (of 8) from port B of cell pwm_led.$pwm_led_cover_fv.v:33$add$76 ($add).
+Removed top 5 bits (of 8) from port B of cell pwm_led.$pwm_led_cover.vh:12$eq$94 ($eq).
+
+3.9. Executing OPT_CLEAN pass (remove unused cells and wires).
+Finding unused cells or wires in module \pwm_led..
+
+3.10. Executing MEMORY_COLLECT pass (generating $mem cells).
+
+3.11. Executing OPT pass (performing simple optimizations).
+
+3.11.1. Executing OPT_EXPR pass (perform const folding).
+Optimizing module pwm_led.
+
+3.11.2. Executing OPT_MERGE pass (detect identical cells).
+Finding identical cells in module `\pwm_led'.
+Computing hashes of 71 cells of `\pwm_led'.
+Finding duplicate cells in `\pwm_led'.
+Removed a total of 0 cells.
+
+3.11.3. Executing OPT_CLEAN pass (remove unused cells and wires).
+Finding unused cells or wires in module \pwm_led..
+
+3.11.4. Finished fast OPT passes.
+
+3.12. Executing SORT pass.
+
+3.13. Printing statistics.
+
+=== pwm_led ===
+
+        +----------Local Count, excluding submodules.
+        | 
+       63 wires
+      213 wire bits
+       11 public wires
+       33 public wire bits
+        3 ports
+       10 port bits
+       71 cells
+       10   $add
+        4   $check
+       12   $dff
+        2   $eq
+        6   $logic_and
+        4   $logic_not
+        8   $lt
+       22   $mux
+        1   $reduce_and
+        1   $reduce_bool
+        1   $sub
+
+3.14. Executing CHECK pass (checking for obvious problems).
+Checking module pwm_led...
+Found and reported 0 problems.
+
+4. Executing HIERARCHY pass (managing design hierarchy).
+Attribute `top' found on module `pwm_led'. Setting top module to pwm_led.
+
+4.1. Analyzing design hierarchy..
+Top module:  \pwm_led
+
+4.2. Analyzing design hierarchy..
+Top module:  \pwm_led
+Removed 0 unused modules.
+Module pwm_led directly or indirectly contains formal properties -> setting "keep" attribute.
+
+5. Executing jny backend.
+
+6. Executing RTLIL backend.
+Output filename: ../model/design.il
+
+End of script. Logfile hash: 5d6a869670
+Yosys 0.70+145 (git sha1 a31d95ea0, Release, GNU /usr/bin/x86_64-w64-mingw32-g++ 15.2.1)
+Time spent: 3% 6x opt_expr (0 sec), 3% 5x opt_clean (0 sec), ...

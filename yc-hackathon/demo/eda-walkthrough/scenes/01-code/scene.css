@@ -1,0 +1,199 @@
+/* Scene 01-code. Light VS Code ("Light Modern") look with real GitHub-light syntax colors.
+   Restyled by main session for the white theme; scoped under .sa-code */
+.sa-code { position: absolute; inset: 0; padding: 12px 14px; display: flex; }
+.sa-code, .sa-code * { font-variant-ligatures: none; font-feature-settings: "liga" 0, "calt" 0; }
+.sa-code .vs { flex: 1; min-width: 0; min-height: 0; background: #fff; border: 1px solid #e5e7eb; border-radius: 12px; box-shadow: 0 1px 2px rgba(16,24,40,.04), 0 24px 48px -24px rgba(16,24,40,.18); }
+.sa-code .vs > .titlebar { background: #f8f8f8; border-bottom: 1px solid #e5e5e5; color: #616161; }
+.sa-code .vs > .titlebar .dots i:nth-child(1) { background: #ff5f57; } .sa-code .vs > .titlebar .dots i:nth-child(2) { background: #febc2e; } .sa-code .vs > .titlebar .dots i:nth-child(3) { background: #28c840; }
+.sa-code .t-spacer { width: 46px; }
+
+/* GitHub-light syntax tokens */
+.tk-kw  { color: #cf222e; }                 /* module, always, if, begin */
+.tk-ty  { color: #8250df; }                 /* input, reg, wire */
+.tk-num { color: #0550ae; }                 /* 8'd0, 16 */
+.tk-com { color: #6e7781; font-style: italic; }
+.tk-str { color: #0a3069; }
+.tk-sys { color: #8250df; font-weight: 500; } /* $display */
+.tk-dir { color: #953800; }                 /* `timescale */
+.tk-op  { color: #24292f; }
+
+.sa-code .vs-body { flex: 1; display: flex; min-height: 0; }
+.sa-code .vs-act { width: 48px; flex: 0 0 48px; display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 8px 0; background: #f8f8f8; border-right: 1px solid #e5e5e5; color: #9a9a9a; }
+.sa-code .vs-act span { width: 48px; height: 42px; display: grid; place-items: center; border-left: 2px solid transparent; }
+.sa-code .vs-act span.on { color: #1f1f1f; border-left-color: #005fb8; }
+.sa-code .vs-act .grow { flex: 1; }
+
+.sa-code .vs-side { width: 190px; flex: 0 0 190px; background: #f8f8f8; border-right: 1px solid #e5e5e5; font-size: 13px; display: flex; flex-direction: column; min-height: 0; }
+.sa-code .side-h { padding: 12px 16px 8px; font-size: 11px; letter-spacing: .8px; text-transform: uppercase; color: #616161; font-weight: 500; }
+.sa-code .side-ws { padding: 4px 12px; font-size: 11.5px; font-weight: 600; letter-spacing: .4px; color: #3b3b3b; }
+.sa-code .tree { padding: 2px 0 8px; }
+.sa-code .node { height: 26px; display: flex; align-items: center; gap: 6px; padding-left: calc(14px + var(--d) * 16px); color: #3b3b3b; cursor: default; transition: background .3s var(--ease), color .3s; }
+.sa-code .node .chev { width: 10px; color: #8a8a8a; font-size: 12px; }
+.sa-code .node.ghost { color: #8a8a8a; }
+.sa-code .node.sel { background: #e4e6f1; color: #1f1f1f; box-shadow: inset 2px 0 0 #005fb8; }
+.sa-code .ico { display: inline-grid; place-items: center; width: 16px; height: 16px; border-radius: 4px; font: 600 9px var(--mono); }
+.sa-code .i-v { background: #ede9fe; color: #7c3aed; }
+.sa-code .i-dir { width: 14px; height: 11px; border-radius: 2px; background: #dcb67a; }
+.sa-code .outline-h { border-top: 1px solid #e5e5e5; margin-top: 6px; }
+.sa-code .outline { padding: 0 8px 12px; overflow: hidden; font-family: var(--mono); font-size: 12px; }
+.sa-code .ol { display: flex; gap: 8px; padding: 3px 10px; color: #3b3b3b; }
+.sa-code .ol span { color: #0550ae; width: 12px; } .sa-code .ol.mod span { color: #8250df; }
+.sa-code .ol.mod { color: #1f1f1f; font-weight: 600; }
+.sa-code .ol.sig { padding-left: 24px; }
+
+.sa-code .vs-main { flex: 1; min-width: 0; display: flex; flex-direction: column; background: #fff; }
+.sa-code .tabs { height: 36px; flex: 0 0 36px; display: flex; background: #f8f8f8; border-bottom: 1px solid #e5e5e5; }
+.sa-code .tab { display: flex; align-items: center; gap: 8px; padding: 0 16px; font-size: 13px; color: #868686; border-right: 1px solid #e5e5e5; position: relative; }
+.sa-code .tab.on { color: #1f1f1f; background: #fff; margin-bottom: -1px; }
+.sa-code .tab.on::before { content: ''; position: absolute; left: 0; right: 0; top: 0; height: 2px; background: #005fb8; }
+.sa-code .tab .dirty { opacity: 0; color: #1f1f1f; font-size: 10px; transition: opacity .2s; }
+.sa-code .tab.is-dirty .dirty { opacity: .8; }
+.sa-code .tab.saved::after { content: 'Saved'; position: absolute; right: -52px; top: 10px; font-size: 11.5px; color: #1a7f37; font-weight: 500; animation: fadeIn .3s var(--ease-out) both; }
+.sa-code .crumbs { height: 26px; flex: 0 0 26px; display: flex; align-items: center; gap: 6px; padding: 0 18px; font-size: 12.5px; color: #616161; }
+.sa-code .crumbs i { font-style: normal; color: #a0a0a0; }
+.sa-code .crumb-mod { color: #1f1f1f; }
+
+.sa-code .ed-wrap { flex: 1; min-height: 0; position: relative; display: flex; }
+.sa-code .ed-scroll { flex: 1; overflow: hidden; padding-bottom: 40px; }
+.sa-code .ed-lines { font-family: var(--mono); font-size: 12.5px; padding: 6px 0 120px; }
+.sa-code .ln { height: 19px; line-height: 19px; display: flex; white-space: pre; position: relative; transition: background .45s var(--ease), opacity .45s var(--ease); }
+.sa-code .ln .no { width: 58px; flex: 0 0 58px; text-align: right; padding-right: 20px; color: #a8a8a8; user-select: none; }
+.sa-code .ln .tx { color: #24292f; }
+.sa-code .ln:last-child .no { color: #1f1f1f; }
+.sa-code .cur { display: inline-block; width: 2px; height: 17px; margin-bottom: -3px; background: #005fb8; animation: blink 1s steps(1) infinite; }
+.sa-code .ed-lines:has(.ln.hl) .ln:not(.hl):not(.ref) { opacity: .4; }
+.sa-code .ln.hl { background: #fff8c5; }                      /* GitHub highlight yellow */
+.sa-code .ln.hl .no { color: #9a6700; font-weight: 500; }
+.sa-code .ln.hl::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 3px; background: #d4a72c; }
+.sa-code .ln.ref { background: #ddf4ff; }
+.sa-code .ln.ref .no { color: #0969da; }
+
+.sa-code .minimap { width: 92px; flex: 0 0 92px; position: relative; border-left: 1px solid #f0f0f0; padding: 8px 10px; overflow: hidden; }
+.sa-code .mm-lines i { display: block; height: 2px; margin-bottom: 1px; background: #d0d7de; border-radius: 1px; }
+.sa-code .mm-lines i.c { background: #e5e7eb; } .sa-code .mm-lines i.k { background: #ffb3b8; }
+.sa-code .mm-view { position: absolute; left: 0; right: 0; margin-top: 8px; background: rgba(0,0,0,.04); transition: top .3s var(--ease); }
+
+/* explanation cards: white cards with a colored top rule and colorful mini-diagrams */
+.sa-code .callout-layer { position: absolute; inset: 0 108px 0 0; pointer-events: none; }
+.sa-code .cc { position: absolute; right: 24px; width: 360px; padding: 18px 18px 14px; background: #fff; border: 1px solid #e5e7eb; border-top: 3px solid #2563eb; border-radius: 12px; box-shadow: 0 1px 2px rgba(16,24,40,.05), 0 20px 40px -16px rgba(16,24,40,.22); animation: ccIn .6s var(--ease-out) both; transition: top .45s var(--ease-out); color: #374151; }
+.sa-code .cc h4 { color: #111827; font-size: 13.5px; font-weight: 600; margin: 0 0 6px; }
+.sa-code .cc.out { animation: ccOut .35s var(--ease) both; }
+@keyframes ccIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+@keyframes ccOut { to { opacity: 0; transform: translateY(-6px); } }
+.sa-code .cc p { margin: 0 0 12px; color: #4b5563; font-size: 13px; line-height: 1.55; }
+.sa-code .cc code { font-family: var(--mono); font-size: 12px; color: #0550ae; background: #eff6ff; padding: 1px 5px; border-radius: 4px; }
+.sa-code .cc b { color: #111827; font-weight: 600; }
+.sa-code .cc-lines { margin-top: 10px; font: 11px var(--mono); color: #9ca3af; text-align: right; }
+.sa-code .viz { background: #f9fafb; border: 1px solid #eef0f3; border-radius: 10px; padding: 12px; }
+.sa-code .viz svg.w { width: 100%; display: block; overflow: visible; }
+.sa-code .draw { stroke-dasharray: 900; stroke-dashoffset: 900; animation: draw 1.6s var(--ease-out) .15s forwards; }
+@keyframes draw { to { stroke-dashoffset: 0; } }
+.sa-code .saw { fill: none; stroke: #2563eb; stroke-width: 1.6; }
+.sa-code .tick { stroke: #7c3aed; stroke-width: 2; opacity: 0; animation: tickIn .4s var(--ease) forwards; }
+@keyframes tickIn { to { opacity: 1; } }
+.sa-code .pre-ctr { display: flex; align-items: baseline; gap: 10px; margin-bottom: 8px; font-family: var(--mono); font-size: 12px; color: #6b7280; }
+.sa-code .pre-v { color: #111827; font-size: 18px; font-weight: 500; font-variant-numeric: tabular-nums; min-width: 82px; transition: color .15s; }
+.sa-code .pre-v.wrap { color: #7c3aed; }
+.sa-code .pre-hz { margin-left: auto; color: #2563eb; font-weight: 500; }
+.sa-code .tri { fill: none; stroke: #f59e0b; stroke-width: 2.2; }
+.sa-code .dot { fill: #f59e0b; stroke: #fff; stroke-width: 2; }
+.sa-code .lbl { font: 9.5px var(--mono); fill: #9ca3af; } .sa-code .lbl.c { fill: #2563eb; }
+.sa-code .leds { display: flex; justify-content: space-between; margin: 2px 4px 12px; }
+.sa-code .leds i { width: 18px; height: 18px; border-radius: 50%; background: radial-gradient(circle at 38% 32%, #fff 0 18%, #34d399 45%, #059669); animation: breathe 1.44s ease-in-out infinite; }
+@keyframes breathe { 0%, 100% { opacity: .15; box-shadow: 0 0 0 0 rgba(16,185,129,0); } 50% { opacity: 1; box-shadow: 0 0 0 5px rgba(16,185,129,.14); } }
+.sa-code .pwm rect { fill: #10b981; }
+.sa-code .lbl-row { display: flex; justify-content: space-between; margin-top: 6px; font: 10px var(--mono); color: #9ca3af; }
+.sa-code .tests { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.sa-code .tests div { font-size: 12px; color: #374151; padding: 8px 10px; border-radius: 8px; border: 1px solid #e5e7eb; background: #fff; animation: fadeIn .5s var(--ease-out) both; }
+.sa-code .tests b { display: block; font: 600 11px var(--mono); color: #7c3aed; margin-bottom: 2px; }
+
+/* VS Code's real blue status bar */
+.sa-code .vs-status { height: 24px; flex: 0 0 24px; display: flex; align-items: center; gap: 18px; padding: 0 12px; font-size: 12px; color: #fff; background: #005fb8; }
+.sa-code .vs-status * { color: #fff !important; }
+.sa-code .vs-status .grow { flex: 1; }
+
+/* ===== A1 rework: code and hardware side by side (added rules; the VS Code look above is unchanged) ===== */
+.sa-code { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 12px; }
+.sa-code .vs { container-type: inline-size; }
+@container (max-width: 760px) { .sa-code .vs-act { display: none; } }
+.sa-code .ln .no { width: 44px; flex: 0 0 44px; padding-right: 14px; }
+.sa-code .ed-scroll { padding-bottom: 0; }
+.sa-code .ed-lines { padding-bottom: 12px; transition: transform .38s var(--ease-out); will-change: transform; }
+.sa-code .ln.rv { animation: aRise .32s var(--ease-out) backwards; }
+@keyframes aRise { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+.sa-code .vs-side .outline { flex: 1; }
+
+/* hardware panel */
+.sa-code .hw-panel { position: relative; min-width: 0; min-height: 0; background: #fff; border: 1px solid #e5e7eb; border-top: 3px solid var(--tool); border-radius: 12px; overflow: hidden; }
+.sa-code .hw-stage { position: absolute; inset: 8px 10px; }
+.sa-code .hw-cards { position: absolute; inset: 8px 10px; pointer-events: none; }
+.sa-code svg.cz { display: block; width: 100%; height: 100%; overflow: visible; font-family: var(--sans, 'Geist', system-ui, sans-serif); }
+.sa-code .cz text { fill: #3f3f46; }
+.sa-code .cz .cz-h { font: 600 13px var(--mono); fill: #0a0a0a; letter-spacing: -.2px; }
+.sa-code .cz .cz-sub { font-size: 11.5px; fill: #a1a1aa; }
+.sa-code .cz.live .cz-sub { fill: #16a34a; font-weight: 500; }
+.sa-code .cz .cz-ro { font: 500 12px var(--mono); fill: var(--tool); font-variant-numeric: tabular-nums; }
+
+/* progressive reveal: each block fades and rises in, its wires draw on */
+.sa-code .cz .hp { opacity: 0; transform: translateY(6px); transition: opacity .42s var(--ease-out), transform .42s var(--ease-out); }
+.sa-code .cz .hp.in { opacity: 1; transform: none; }
+.sa-code .cz .cw { fill: none; stroke: #d4d4d8; stroke-width: 1.5; stroke-linejoin: round; stroke-dasharray: var(--len, 2000); stroke-dashoffset: var(--len, 2000); transition: stroke .15s; }
+.sa-code .cz .hp.in .cw { animation: aDraw .55s var(--ease-out) .05s forwards; }
+@keyframes aDraw { to { stroke-dashoffset: 0; } }
+.sa-code .cz .cw-bus { stroke-width: 2.25; }
+.sa-code .cz .cw-cnt { stroke: #a5e3ee; } .sa-code .cz .cw-duty { stroke: #b9cdfb; } .sa-code .cz .cw-pre { stroke: #ddd6fe; }
+.sa-code .cz .cw-fb { stroke: #fcd9a0; } .sa-code .cz .cw-clk { stroke: #d4d4d8; } .sa-code .cz .cw-rst { stroke: #fecaca; }
+.sa-code .cz .cw-tick { stroke: #c4b5fd; } .sa-code .cz .cw-tick.on { stroke: #7c3aed; stroke-width: 2; }
+
+.sa-code .cz .cframe { fill: #fcfcfd; stroke: #e4e4e7; stroke-width: 1; }
+.sa-code .cz .ct-mod { font: 600 12px var(--mono); fill: #cf222e; }
+.sa-code .cz .ct-par { font: 11px var(--mono); fill: #0550ae; }
+.sa-code .cz .cpin { fill: #fff; stroke: #a1a1aa; stroke-width: 1.25; }
+.sa-code .cz .ct-pin { font: 500 11.5px var(--mono); fill: #0a0a0a; }
+.sa-code .cz .cbox { fill: #fff; stroke: #e4e4e7; stroke-width: 1; transition: fill .15s, stroke .15s; }
+.sa-code .cz .ct-t { font: 500 10.5px var(--mono); fill: #71717a; }
+.sa-code .cz .ct-v { font-family: var(--mono); font-weight: 500; font-variant-numeric: tabular-nums; letter-spacing: -.3px; }
+.sa-code .cz .ct-s { font: 10.5px var(--mono); fill: #a1a1aa; font-variant-numeric: tabular-nums; }
+.sa-code .cz .ct-n { font: 10px var(--mono); fill: #71717a; }
+.sa-code .cz .ct-r { font: 600 9px var(--mono); fill: #ef4444; }
+.sa-code .cz .ctri { fill: #a1a1aa; }
+.sa-code .cz .cplus { fill: #fff; stroke: #e4e4e7; }
+.sa-code .cz .ct-plus { font: 600 10px var(--mono); fill: #0a0a0a; }
+.sa-code .cz .cgate { fill: #fff; stroke: #c4b5fd; stroke-width: 1.5; transition: fill .12s, stroke .12s; }
+.sa-code .cz .cgate.on { fill: #f5f3ff; stroke: #7c3aed; }
+.sa-code .cz .ct-gate { font: 600 14px var(--mono); fill: #7c3aed; }
+.sa-code .cz .ct-c { font: 500 13px var(--mono); fill: #0a0a0a; font-variant-numeric: tabular-nums; }
+.sa-code .cz .ct-lt { fill: #a1a1aa; }
+.sa-code .cz .cdot { fill: #e4e4e7; transition: fill .1s; }
+.sa-code .cz .ccmp.on .cdot { fill: #10b981; }
+.sa-code .cz .ccmp.on .ccmpbox { fill: #ecfdf5; stroke: #6ee7b7; }
+.sa-code .cz .ct-q { font: 500 11px var(--mono); fill: #a1a1aa; }
+.sa-code .cz .cff.on .ct-q { fill: #059669; font-weight: 600; }
+.sa-code .cz .cff.on .cbox { stroke: #6ee7b7; }
+.sa-code .cz .cled { stroke: #d4d4d8; stroke-width: 1.25; }
+.sa-code .cz .ctb { fill: none; stroke: #93c5fd; stroke-width: 1.25; stroke-dasharray: 5 4; }
+.sa-code .cz .ct-tb { font: 500 10.5px var(--mono); fill: #2563eb; }
+.sa-code .cz .cring { fill: none; stroke: var(--tool); stroke-width: 2; stroke-dasharray: 4 3; animation: aFade .3s var(--ease-out) both; }
+.sa-code .cz .cpill rect { fill: var(--tool); }
+.sa-code .cz .cpill text { fill: #fff; font: 600 9.5px var(--mono); }
+.sa-code .cz .cpill { animation: aFade .3s var(--ease-out) both; transition: opacity .35s var(--ease); }
+.sa-code .cz .cpill.out { animation: aOut .35s var(--ease) forwards; }
+@keyframes aOut { to { opacity: 0; } }
+@keyframes aFade { from { opacity: 0; transform: translateY(3px); } to { opacity: 1; transform: none; } }
+
+/* small callout cards on the circuit */
+.sa-code .hc { position: absolute; width: 236px; padding: 10px 12px 11px; background: #fff; border: 1px solid #e5e7eb; border-top: 3px solid var(--tool); border-radius: 10px; box-shadow: 0 1px 2px rgba(0,0,0,.03), 0 8px 24px -12px rgba(0,0,0,.12); animation: ccIn .4s var(--ease-out) both; }
+.sa-code .hc.out { animation: ccOut .3s var(--ease) both; }
+.sa-code .hc h4 { margin: 0 0 4px; font-size: 12.5px; font-weight: 600; color: #111827; }
+.sa-code .hc p { margin: 0; font-size: 11.5px; line-height: 1.5; color: #4b5563; }
+.sa-code .hc code { font: 11px var(--mono); color: #0550ae; background: #eff6ff; padding: 0 4px; border-radius: 4px; }
+.sa-code .hc b { color: #111827; font-weight: 600; }
+
+/* round 2 (UX audit): code ≤30%, circuit gets the rest */
+.sa-code { grid-template-columns: minmax(300px, 30%) minmax(0, 1fr); }
+@container (max-width: 600px) { .sa-code .vs-side { display: none; } }
+.sa-code .hw-stage, .sa-code .hw-cards { inset: 4px 10px 8px; }
+/* narrow editor column: keep the status bar on one line (bug fix, Session A) */
+.sa-code .vs-status { white-space: nowrap; overflow: hidden; gap: 12px; }
+.sa-code .vs-status > span { flex: 0 0 auto; }
+.sa-code .vs-status > span:nth-last-child(-n+4):not(:last-child) { display: none; }

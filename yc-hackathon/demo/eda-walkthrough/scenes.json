@@ -1,0 +1,13 @@
+[
+  { "id": "01-code",        "tool": "Verilog",     "group": "Design",     "color": "#2563eb" },
+  { "id": "02-iverilog",    "tool": "Icarus",      "group": "Simulate",   "color": "#ea580c" },
+  { "id": "03-verilator",   "tool": "Verilator",   "group": "Verify",     "color": "#7c3aed" },
+  { "id": "04-gtkwave",     "tool": "GTKWave",     "group": "Simulate",   "color": "#059669" },
+  { "id": "05-cocotb",      "tool": "cocotb",      "group": "Verify",     "color": "#0891b2" },
+  { "id": "06-yosys",       "tool": "Yosys",       "group": "Synthesize", "color": "#4f46e5" },
+  { "id": "07-nextpnr-3d",   "tool": "nextpnr",     "group": "Implement",  "color": "#c026d3" },
+  { "id": "08-symbiyosys",  "tool": "SymbiYosys",  "group": "Verify",     "color": "#db2777" },
+  { "id": "09-kicad",       "tool": "KiCad",       "group": "Board",      "color": "#16a34a" },
+  { "id": "10-freerouting", "tool": "Freerouting", "group": "Board",      "color": "#dc2626" },
+  { "id": "11-results",     "tool": "Results",     "group": "Ship",       "color": "#0a0a0a" }
+]

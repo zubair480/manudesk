@@ -1,0 +1,243 @@
+{
+  "workspace": "PWM_LED",
+  "files": [
+    {
+      "name": "pwm_led.v",
+      "path": "real/rtl/pwm_led.v",
+      "role": "design",
+      "step": 200,
+      "gap": 0,
+      "blocks": [
+        {
+          "lines": [
+            1,
+            4
+          ],
+          "hw": "frame"
+        },
+        {
+          "lines": [
+            5,
+            8
+          ],
+          "hw": "pins"
+        },
+        {
+          "lines": [
+            9,
+            13
+          ],
+          "hw": "regs"
+        },
+        {
+          "lines": [
+            14,
+            18
+          ],
+          "hw": "clock"
+        },
+        {
+          "lines": [
+            19,
+            23
+          ],
+          "hw": "count"
+        },
+        {
+          "lines": [
+            24,
+            28
+          ],
+          "hw": "tick",
+          "callout": "ramp"
+        },
+        {
+          "lines": [
+            29,
+            33
+          ],
+          "hw": "cmpA"
+        },
+        {
+          "lines": [
+            34,
+            37
+          ],
+          "hw": "cmpB"
+        },
+        {
+          "lines": [
+            38,
+            40
+          ],
+          "hw": "leds",
+          "callout": "leds"
+        }
+      ]
+    },
+    {
+      "name": "tb_pwm_led.v",
+      "path": "real/rtl/tb_pwm_led.v",
+      "role": "testbench",
+      "step": 120,
+      "gap": 0,
+      "blocks": [
+        {
+          "lines": [
+            1,
+            8
+          ],
+          "tb": "frame"
+        },
+        {
+          "lines": [
+            9,
+            15
+          ],
+          "tb": "reset"
+        },
+        {
+          "lines": [
+            16,
+            20
+          ],
+          "tb": "test1"
+        },
+        {
+          "lines": [
+            21,
+            26
+          ],
+          "tb": "test2"
+        },
+        {
+          "lines": [
+            27,
+            31
+          ],
+          "tb": "test3"
+        },
+        {
+          "lines": [
+            32,
+            36
+          ],
+          "tb": "test4"
+        },
+        {
+          "lines": [
+            37,
+            41
+          ]
+        }
+      ]
+    }
+  ],
+  "tree": [
+    {
+      "name": "rtl",
+      "dir": true,
+      "depth": 0
+    },
+    {
+      "name": "pwm_led.v",
+      "depth": 1,
+      "file": "pwm_led.v"
+    },
+    {
+      "name": "tb_pwm_led.v",
+      "depth": 1,
+      "file": "tb_pwm_led.v"
+    },
+    {
+      "name": "sim",
+      "dir": true,
+      "depth": 0,
+      "closed": true
+    },
+    {
+      "name": "Makefile.fpga",
+      "depth": 0,
+      "ghost": true
+    },
+    {
+      "name": "ulx3s_v20.lpf",
+      "depth": 0,
+      "ghost": true
+    }
+  ],
+  "tbChecks": {
+    "test1": {
+      "part": "duty",
+      "label": "test1 · ramps"
+    },
+    "test2": {
+      "part": "led0",
+      "label": "test2 · on-time"
+    },
+    "test3": {
+      "part": "dir",
+      "label": "test3 · flips"
+    },
+    "test4": {
+      "part": "rst",
+      "label": "test4 · reset"
+    }
+  },
+  "callouts": {
+    "ramp": {
+      "range": [
+        23,
+        28
+      ],
+      "parts": [
+        "pre",
+        "tick",
+        "duty",
+        "dir"
+      ],
+      "anchor": [
+        262,
+        236
+      ],
+      "title": "prescaler → duty ramp",
+      "body": "<code>&amp;pre</code> fires once every 2<sup>16</sup> clocks (~381 Hz). Each tick steps <code>duty</code> by ±1; <code>dir</code> flips at 255 and 0.",
+      "narrate": "A 16-bit prescaler paces the breath: every tick, duty steps one count up or down, and the direction flips at 255 and at 0."
+    },
+    "leds": {
+      "range": [
+        30,
+        37
+      ],
+      "parts": [
+        "cmps",
+        "leds"
+      ],
+      "anchor": [
+        66,
+        214
+      ],
+      "title": "8 phase-shifted LEDs",
+      "body": "One shared 8-bit carrier, offset by <b>32 counts</b> per LED: eight comparators <code>(pwm_cnt + 32·i) &lt; duty</code>, each into an output flop.",
+      "narrate": "Eight comparators share one PWM counter, each offset by 32 counts, so the LEDs fire in a staggered ripple."
+    }
+  },
+  "timing": {
+    "intro": 900,
+    "ramp": 2000,
+    "live": 4200,
+    "ledsCallout": 2200,
+    "outro": 1800,
+    "focusTick": 2.0,
+    "focusLeds": 2.2,
+    "focusLedsAt": 600,
+    "focusLedsHold": 2000
+  },
+  "captions": {
+    "intro": "40 lines of text. Watch them turn into a circuit.",
+    "ramp": "Every 65,536 clocks, a tick nudges brightness up or down by one.",
+    "leds": "Eight comparators, each offset by 32: that's the ripple across the LEDs.",
+    "live": "Replaying the real simulation: the LEDs breathe in a staggered wave.",
+    "outro": "Looks right. But does it actually work? Icarus is about to find out."
+  }
+}

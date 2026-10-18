@@ -1,0 +1,20 @@
+3. Printing statistics.
+
+=== blinky ===
+
+        +----------Local Count, excluding submodules.
+        | 
+       43 wires
+       75 wire bits
+       43 public wires
+       75 public wire bits
+        2 ports
+        9 port bits
+       40 cells
+       13   CCU2C
+        1   LUT4
+       26   TRELLIS_FF
+
+End of script. Logfile hash: 5c4f8d32b8
+Yosys 0.70+145 (git sha1 a31d95ea0, Release, GNU /usr/bin/x86_64-w64-mingw32-g++ 15.2.1)
+Time spent: 1% 21x read_verilog (0 sec), 1% 19x opt_expr (0 sec), ...

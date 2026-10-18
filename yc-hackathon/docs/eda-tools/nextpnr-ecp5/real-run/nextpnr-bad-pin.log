@@ -1,0 +1,16 @@
+Info: constraining clock net 'clk' to 25.00 MHz
+
+Info: Logic utilisation before packing:
+Info:     Total LUT4s:        27/24288     0%
+Info:         logic LUTs:      1/24288     0%
+Info:         carry LUTs:     26/24288     0%
+Info:           RAM LUTs:      0/ 3036     0%
+Info:          RAMW LUTs:      0/ 6072     0%
+
+Info:      Total DFFs:        26/24288     0%
+
+Info: Packing IOs..
+Info: pin 'led[7]$tr_io' constrained to Bel 'X72/Y14/PIOA'.
+ERROR: IO pin 'led[6]$tr_io' constrained to pin 'E17', which does not exist for package 'CABGA256'.
+ERROR: Packing design failed.
+0 warnings, 2 errors
